@@ -12,5 +12,4 @@ using u32 = uint32_t;
 using u64 = uint64_t;
 using u128 = __uint128_t;
 
-
-} // namespace gwen
+}  // namespace gwen
