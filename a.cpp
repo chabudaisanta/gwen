@@ -6,6 +6,7 @@
 #include "gwen/algebra/rolling_hash_monoid.hpp"
 #include "gwen/container/mergesort_tree.hpp"
 #include "gwen/container/segment_tree.hpp"
+#include "gwen/mod/rolling_hash.hpp"
 
 using namespace std;
 

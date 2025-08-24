@@ -12,7 +12,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${workspaceFolder}/exe",
+                "${workspaceFolder}/build/exe",
                 "-I",
                 "/home/chabudaisanta/lib/ac-library-master",
                 "-I",
