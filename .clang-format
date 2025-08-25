@@ -1,6 +1,6 @@
 BasedOnStyle: 'Chromium'
 IndentWidth: 4
-AccessModifierOffset: -2
+AccessModifierOffset: -4
 IncludeBlocks: Regroup
 
 # for competitive programming

@@ -7,11 +7,11 @@
 namespace gwen {
 
 template <typename T> class mergesort_tree {
-  private:
+private:
     int n, bc;
     std::vector<std::vector<T>> d;
 
-  public:
+public:
     explicit mergesort_tree() {}
     explicit mergesort_tree(const std::vector<T>& vec)
         : n(vec.size()), bc(std::bit_ceil(vec.size())) {
@@ -47,7 +47,7 @@ template <typename T> class mergesort_tree {
         return ret;
     }
 
-  private:
+private:
 };
 
 }  // namespace gwen

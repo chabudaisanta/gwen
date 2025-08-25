@@ -1,8 +1,9 @@
 #pragma once
 
-#include <limits>
 #include <algorithm>
 #include <concepts>
+#include <limits>
+
 #include "gwen/algebra/monoid.hpp"
 
 namespace gwen {
