@@ -1,7 +1,8 @@
 #pragma once
 
 #include <limits>
-
+#include <algorithm>
+#include <concepts>
 #include "gwen/algebra/monoid.hpp"
 
 namespace gwen {
@@ -16,6 +17,12 @@ template <typename T> struct max_monoid {
     using S = T;
     S e = std::numeric_limits<S>::min();
     S op(const S& a, const S& b) const { return std::max(a, b); }
+};
+
+template <std::integral T> struct sum_monoid {
+    using S = T;
+    S e = S(0);
+    S op(const S& a, const S& b) const { return a + b; }
 };
 
 }  // namespace gwen
