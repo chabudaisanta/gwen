@@ -4,7 +4,6 @@
 #include <bit>
 #include <cassert>
 #include <algorithm>
-#include <numeric>
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -23,7 +22,7 @@ public:
 
         anc.assign(log * n, -1);
         d.assign(n, -1);
-        
+
         std::vector<int> q;
         q.reserve(n);
         q.push_back(root);

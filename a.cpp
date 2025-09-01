@@ -14,53 +14,17 @@ using namespace std;
 using namespace gwen;
 
 void solve() {
-    int N; cin >> N;
+    int N, Q; cin >> N >> Q;
     vector<vector<int>> G(N);
-    for(int i = 0; i < N-1; ++i) {
+    for(int i = 1; i < N; ++i) {
+        int p; cin >> p;
+        G[p].emplace_back(i);
+        G[i].emplace_back(p);
+    }
+    doubling_tree T(N, 0, G);
+    while(Q--) {
         int u, v; cin >> u >> v;
-        --u; --v;
-        G[u].emplace_back(v);
-        G[v].emplace_back(u);
-    }
-
-    queue<int> Q;
-    int r1 = 0;
-    Q.emplace(0);
-    vector<int> vis(N, -1);
-    while(Q.size()) {
-        int cur = Q.front();
-        Q.pop();
-
-        if(vis[cur] == 0) continue;
-        vis[cur] = 0;
-
-        r1 = cur;
-        for(int v : G[cur]) Q.emplace(v);
-    }
-
-    Q.emplace(r1);
-    int r2 = 0;
-    while(Q.size()) {
-        int cur = Q.front();
-        Q.pop();
-
-        if(vis[cur] == 1) continue;
-        vis[cur] = 1;
-
-        r2 = cur;
-        for(int v : G[cur]) Q.emplace(v);
-    }
-
-    doubling_tree X(N, r1, G), Y(N, r2, G);
-    int T; cin >> T;
-    while(T--) {
-        int u, k; cin >> u >> k;
-        --u;
-
-        int ans = X.kth_anc(u, k);
-        if(ans == -1) ans = Y.kth_anc(u, k);
-
-        cout << (ans == -1 ? -1 : ans + 1) << '\n';
+        cout << T.lca(u, v) << '\n';
     }
 }
 
