@@ -4,6 +4,7 @@
 #include <bit>
 #include <cassert>
 #include <algorithm>
+#include <numeric>
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -15,24 +16,51 @@ private:
     std::vector<int> d;
 
 public:
-    explicit doubling_tree(int n_, int root_, const std::vector<std::vector<int>>& G) : n(n_), log(std::bit_width(static_cast<u32>(n_))), root(root_) {
+    explicit doubling_tree(int n_, int root_, const std::vector<std::vector<int>>& G)
+        : n(n_), log(n_ > 0 ? std::bit_width(static_cast<u32>(n_)) : 0), root(root_) {
         assert(n == ssize(G));
         assert(0 <= root && root < n);
+
         anc.assign(log * n, -1);
         d.assign(n, -1);
+        
+        std::vector<int> q;
+        q.reserve(n);
+        q.push_back(root);
 
         d[root] = 0;
-        build(root, -1, G);
-        
+
+        int head = 0;
+        while(head < ssize(q)) {
+            int v = q[head++];
+            for (int u : G[v]) {
+                if (u != get_anc(v, 0)) {
+                    d[u] = d[v] + 1;
+                    set_anc(u, 0) = v;
+                    q.push_back(u);
+                }
+            }
+        }
+
+        for (int i = 1; i < log; ++i) {
+            for (int v = 0; v < n; ++v) {
+                int parent_half = get_anc(v, i - 1);
+                if (parent_half != -1) {
+                    set_anc(v, i) = get_anc(parent_half, i - 1);
+                }
+            }
+        }
     }
 
     int kth_anc(int v, int k) const {
         assert(0 <= v && v < n);
-        for(int i = 0; i < log; ++i) {
-            if(k & (1 << i)) {
-                v = anc[v * log + i];
-                if(v == -1) return v;
-            }
+        assert(k >= 0);
+        if (k > d[v]) return -1;
+        
+        while (k > 0 && v != -1) {
+            int i = std::countr_zero(static_cast<u32>(k));
+            v = get_anc(v, i);
+            k &= k - 1;
         }
         return v;
     }
@@ -46,12 +74,12 @@ public:
         assert(0 <= u && u < n);
         assert(0 <= v && v < n);
 
-        if(d[u] < d[v]) std::swap(u, v);
+        if (d[u] < d[v]) std::swap(u, v);
         u = kth_anc(u, d[u] - d[v]);
 
-        if(u == v) return u;
-        for(int i = log - 1; i >= 0; --i) {
-            if(get_anc(u, i) != get_anc(v, i)) {
+        if (u == v) return u;
+        for (int i = log - 1; i >= 0; --i) {
+            if (get_anc(u, i) != get_anc(v, i)) {
                 u = get_anc(u, i);
                 v = get_anc(v, i);
             }
@@ -60,26 +88,12 @@ public:
     }
 
 private:
-    void build(int v, int p, auto& G) {
-        set_anc(v, 0) = p;
-        for(int i = 1; i < log; ++i) {
-            int ph = get_anc(v, i - 1);
-            if(ph != -1) set_anc(v, i) = get_anc(ph, i - 1);
-        }
-        for(int u : G[v]) {
-            if(u != p) {
-                d[u] = d[v] + 1;
-                build(u, v, G);
-            }
-        }
-    }
-
     inline int get_anc(int v, int i) const {
-        return anc[v * log + i];
+        return anc[static_cast<size_t>(i) * n + v];
     }
 
     inline int& set_anc(int v, int i) {
-        return anc[v * log + i];
+        return anc[static_cast<size_t>(i) * n + v];
     }
 };
 

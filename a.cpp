@@ -1,3 +1,7 @@
+# pragma GCC target("avx2")
+# pragma GCC optimize("O3")
+# pragma GCC optimize("unroll-loops")
+
 #include <algorithm>
 #include <iostream>
 #include <limits>
@@ -9,7 +13,7 @@
 using namespace std;
 using namespace gwen;
 
-int main() {
+void solve() {
     int N; cin >> N;
     vector<vector<int>> G(N);
     for(int i = 0; i < N-1; ++i) {
@@ -58,5 +62,13 @@ int main() {
 
         cout << (ans == -1 ? -1 : ans + 1) << '\n';
     }
+}
+
+int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    int t = 1;
+    // std::cin >> t;
+    while(t--) solve();
     return 0;
 }
