@@ -1,6 +1,5 @@
 #pragma once
 
-// 参考(ほぼ写経)
 // https://github.com/yosupo06/yosupo-library/blob/main/src/yosupo/container/splaytree.hpp
 
 #include <vector>
@@ -66,7 +65,7 @@ public:
         return tree(f(f, 0, int(v.size())));
     }
 
-        S get(tree& t, int k) {
+    S get(tree& t, int k) {
         assert(0 <= k && k < int(size(t)));
         t.id = splay_k(t.id, k);
         return nodes[t.id].s;
@@ -216,6 +215,13 @@ private:
             if(k == 0) return 0;
             // k--;
             return 1;
+        });
+    }
+
+    int splay_with_key(int id, const S& key) {
+        return splay(id, [&](int l, int id, int r) {
+            const S& cur_key = nodes[id].s;
+            if(!(current_key < key) && !(key < current_key))
         });
     }
 

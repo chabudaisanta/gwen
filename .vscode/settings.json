@@ -52,6 +52,7 @@
         "__debug": "cpp",
         "__split_buffer": "cpp",
         "__tuple": "cpp",
-        "__verbose_abort": "cpp"
+        "__verbose_abort": "cpp",
+        "cctype": "cpp"
     }
 }

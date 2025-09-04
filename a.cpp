@@ -2,30 +2,15 @@
 # pragma GCC optimize("O3")
 # pragma GCC optimize("unroll-loops")
 
-#include <algorithm>
 #include <iostream>
-#include <limits>
-#include <vector>
-#include <queue>
-
-#include "gwen/graph/doubling_tree.hpp"
-
-using namespace std;
-using namespace gwen;
-
+#include <gwen/types.hpp>
+#include <gwen/misc/io.hpp>
+using gwen::cin;
+using i32 = gwen::i32;
 void solve() {
-    int N, Q; cin >> N >> Q;
-    vector<vector<int>> G(N);
-    for(int i = 1; i < N; ++i) {
-        int p; cin >> p;
-        G[p].emplace_back(i);
-        G[i].emplace_back(p);
-    }
-    doubling_tree T(N, 0, G);
-    while(Q--) {
-        int u, v; cin >> u >> v;
-        cout << T.lca(u, v) << '\n';
-    }
+    i32 x;
+    cin >> x;
+    std::cout << x << '\n';
 }
 
 int main() {

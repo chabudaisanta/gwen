@@ -25,7 +25,7 @@ public:
 
         std::vector<int> q;
         q.reserve(n);
-        q.push_back(root);
+        q.emplace_back(root);
 
         d[root] = 0;
 
@@ -36,7 +36,7 @@ public:
                 if (u != get_anc(v, 0)) {
                     d[u] = d[v] + 1;
                     set_anc(u, 0) = v;
-                    q.push_back(u);
+                    q.emplace_back(u);
                 }
             }
         }
