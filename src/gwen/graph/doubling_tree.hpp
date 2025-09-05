@@ -64,7 +64,7 @@ public:
         return v;
     }
 
-    int depth(int v) const {
+    inline int depth(int v) const {
         assert(0 <= v && v < n);
         return d[v];
     }
@@ -84,6 +84,13 @@ public:
             }
         }
         return get_anc(u, 0);
+    }
+
+    int len(int u, int v) const {
+        assert(0 <= u && u < n);
+        assert(0 <= v && v < n);
+
+        return depth(u) + depth(v) - 2 * depth(lca(u, v)) + 1;
     }
 
 private:
