@@ -11,11 +11,13 @@
 
 #include "gwen/types.hpp"
 
+#define D_GWEN_IO_BUF_SIZE 1 << 20
+
 namespace gwen {
 
 class input_stream {
 private:
-    static constexpr u32 INPUT_BUF_SIZE = 1 << 17;
+    static constexpr u32 INPUT_BUF_SIZE = D_GWEN_IO_BUF_SIZE;
     u32 p = INPUT_BUF_SIZE;
     inline static char buf[INPUT_BUF_SIZE];
 
@@ -159,7 +161,7 @@ struct output_precalc_table {
 
 class output_stream {
 private:
-    static constexpr u32 OUTPUT_BUF_SIZE = 1 << 17;
+    static constexpr u32 OUTPUT_BUF_SIZE = D_GWEN_IO_BUF_SIZE;
     inline static char buf[OUTPUT_BUF_SIZE];
     static constexpr output_precalc_table TB = output_precalc_table();
 

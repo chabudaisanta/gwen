@@ -2,6 +2,7 @@
 # pragma GCC optimize("O3")
 # pragma GCC optimize("unroll-loops")
 
+#include "gwen/my_template.hpp"
 #include <iostream>
 #include <vector>
 #include "gwen/types.hpp"
@@ -16,13 +17,7 @@ using gwen::cin;
 using gwen::cout;
 
 void solve() {
-    int n;
-    cin >> n;
-    for(int i = 0; i < n; ++i) {
-        u64 a, b;
-        cin >> a >> b;
-        cout << a + b << '\n';
-    }
+    
 }
 
 int main() {

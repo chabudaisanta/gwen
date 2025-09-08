@@ -5,14 +5,15 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/home/chabudaisanta/lib/ac-library-master",
-                "/home/chabudaisanta/lib/gwen/src"
+                "/home/chabudaisanta/lib/gwen/src",
+                "/usr/include/eigen3/",
             ],
             "defines": [
                 "LOCAL",
                 "CHABY",
                 "CHABU"
             ],
-            "compilerPath": "/usr/bin/gcc-13",
+            "compilerPath": "/usr/bin/gcc-15",
             "cStandard": "c17",
             "cppStandard": "gnu++23",
             "intelliSenseMode": "linux-gcc-x64"

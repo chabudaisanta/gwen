@@ -3,14 +3,14 @@
 # pragma GCC optimize("O3")
 # pragma GCC optimize("unroll-loops")
 
-#include <iostream>
 #include <vector>
+#include "gwen/misc/io.hpp"
 #include "gwen/types.hpp"
 #include "gwen/graph/doubling_tree.hpp"
 
 using i32 = gwen::i32;
-using std::cin;
-using std::cout;
+using gwen::cin;
+using gwen::cout;
 
 void solve() {
     int N, Q;
@@ -41,8 +41,6 @@ void solve() {
 }
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
     int t = 1;
     // std::cin >> t;
     while(t--) solve();
