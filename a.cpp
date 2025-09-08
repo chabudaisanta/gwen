@@ -2,7 +2,6 @@
 # pragma GCC optimize("O3")
 # pragma GCC optimize("unroll-loops")
 
-#include "gwen/my_template.hpp"
 #include <iostream>
 #include <vector>
 #include "gwen/types.hpp"
@@ -21,8 +20,6 @@ void solve() {
 }
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
     int t = 1;
     // std::cin >> t;
     while(t--) solve();

@@ -6,7 +6,7 @@
                 "${workspaceFolder}/**",
                 "/home/chabudaisanta/lib/ac-library-master",
                 "/home/chabudaisanta/lib/gwen/src",
-                "/usr/include/eigen3/",
+                "/usr/include/eigen3/"
             ],
             "defines": [
                 "LOCAL",

@@ -36,6 +36,7 @@
 #include <tuple>
 #include <type_traits>
 #include <variant>
+#include <iomanip>
 
 #include "gwen/types.hpp"
 using gwen::i32;
@@ -46,6 +47,10 @@ using gwen::u64;
 using gwen::u128;
 using ll = long long;
 using ull = unsigned long long;
+
+using std::cin;
+using std::cout;
+using std::vector;
 
 #define rep(i,l,r)      for(int i = (int)(l); i < (int)(r); ++i)
 #define rp(i,n)         for(int i = 0; i < (int)(n); ++i)
