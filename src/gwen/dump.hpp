@@ -15,9 +15,11 @@
 #include <unordered_map>
 
 #ifdef LOCAL
-#define dump(arg)       std::cerr << #arg << ": " << gwen::to_str(arg) << '\n'
+#define DUMP(arg)       std::cerr << #arg << ": " << gwen::to_str(arg) << '\n'
+#define DEBUG(arg)      std::cerr << #arg << ": " << gwen::to_str(arg) << '\n'
 #else
-#define dump(arg)       void(0)
+#define DUMP(arg)       void(0)
+#define DEBUG(arg)      void(0)
 #endif
 
 namespace gwen {
@@ -30,6 +32,17 @@ std::string to_str(const char* s) { return std::string{s}; }
 
 template<std::integral T>
 std::string to_str(T x) { return std::to_string(x); }
+
+template<std::floating_point T>
+std::string to_str(T x) { return std::to_string(x); }
+
+template<typename T>
+requires requires(const T& t) { t.val(); }
+std::string to_str(const T& x) { return to_str(x.val()); }
+
+template<typename T>
+requires requires(const T& t) { t.dump(); }
+std::string to_str(const T& x) { return to_str(x.dump()); }
 
 template<typename T, typename S>
 std::string to_str(const std::pair<T,S>& p) { return std::string{'('} + to_str(p.first) + ", " + to_str(p.second) + ')'; }

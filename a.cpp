@@ -23,7 +23,7 @@ void solve() {
     // auto x = std::make_pair("nekomugi tororo", 3939ll);
     // auto x = std::deque<int>{3,1,4,1,5,9,2};
     auto x = std::map<int,int>{std::make_pair(1, 5), std::make_pair(10, -1), std::make_pair(-100, 3939)};
-    dump(x);
+    DUMP(x);
 }
 
 int main() {

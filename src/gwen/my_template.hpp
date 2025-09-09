@@ -56,13 +56,6 @@ using std::vector;
 #define rall_(a)        a.rbegin(), a.rend()
 
 #ifdef LOCAL
-#define DEBUG(x)        std::cerr << #x << ": " << (x) << '\n'
-#define DUMP(x)                                                      \
-    {                                                                \
-        std::cerr << #x << ": ";                                     \
-        for (auto &&DEBUG_ELEMENT : x) cerr << DEBUG_ELEMENT << ' '; \
-        cerr << '\n';                                                \
-    }
 #define BAR std::cerr << "----------------------------------------------\n"
 #define S_BAR std::cerr << "------------------\n"
 template <typename... TArgs>
@@ -85,8 +78,6 @@ inline void _debug_vars_printer_helper(std::ostream &os, bool &is_first, TArgs &
         }                                                                                       \
     } while (0)
 #else
-#define DEBUG(x)        void(0)
-#define DUMP(x)         void(0)
 #define BAR             void(0)
 #define S_BAR           void(0)
 #define DEBUGS(...)     void(0)
@@ -163,6 +154,8 @@ template <typename Iterator> auto runlength(Iterator begin, Iterator end) {
 #endif
 #if __has_include(<atcoder/all>)
 #include <atcoder/all>
+using mint998 = atcoder::modint998244353;
+using mint107 = atcoder::modint1000000007;
 #endif
 #if __has_include(<gmpxx.h>)
 #include <gmpxx.h>
