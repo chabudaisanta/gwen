@@ -17,6 +17,7 @@
 #include <bitset>
 #include <cassert>
 #include <cctype>
+#include <locale>
 #include <chrono>
 #include <cmath>
 #include <climits>
@@ -29,13 +30,9 @@
 #include <numbers>
 #include <random>
 #include <ranges>
-#include <ratio>
-#include <regex>
-#include <span>
 #include <string>
 #include <tuple>
 #include <type_traits>
-#include <variant>
 #include <iomanip>
 
 #include "gwen/types.hpp"
@@ -147,10 +144,10 @@ template <typename T> constexpr T sq(T x) { return x * x; }
 template <std::integral T1, std::integral T2> constexpr T1 getBit(T1 bit, T2 i) { return bit & (static_cast<T1>(1) << i); }
 template <std::integral T1, std::integral T2> constexpr T1 setBit(T1 bit, T2 i) { return bit | (static_cast<T1>(1) << i); }
 template <std::integral T1, std::integral T2> constexpr T1 clearBit(T1 bit, T2 i) { return bit & ~(static_cast<T1>(1) << i); }
-template <std::integral T1, std::integral T2> constexpr T1 togglerBit(T1 bit, T2 i) { return bit ^ (static_cast<T1>(1) << i); }
+template <std::integral T1, std::integral T2> constexpr T1 toggleBit(T1 bit, T2 i) { return bit ^ (static_cast<T1>(1) << i); }
 
-template <typename ForwardIterator> auto runlength(ForwardIterator begin, ForwardIterator end) {
-    using ValueType = typename std::iterator_traits<ForwardIterator>::value_type;
+template <typename Iterator> auto runlength(Iterator begin, Iterator end) {
+    using ValueType = typename std::iterator_traits<Iterator>::value_type;
     using CountType = int;
     std::vector<std::pair<ValueType, CountType>> ret;
 
