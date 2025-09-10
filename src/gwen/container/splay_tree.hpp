@@ -2,14 +2,13 @@
 
 // https://github.com/yosupo06/yosupo-library/blob/main/src/yosupo/container/splaytree.hpp
 
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "gwen/algebra/monoid.hpp"
 namespace gwen {
 
-template <acted_monoid M>
-class splay_tree {
+template <acted_monoid M> class splay_tree {
 public:
     using S = typename M::S;
     using F = typename M::F;
@@ -52,14 +51,15 @@ public:
     tree build(const S& s) { return build(std::vector<S>{s}); }
     tree build(const std::vector<S>& v) {
         auto f = [&](auto self, int lidx, int ridx) -> int {
-            if(lidx == ridx) return 0;
+            if (lidx == ridx) return 0;
             assert(lidx <= ridx);
-            if(ridx - lidx == 1) {
+            if (ridx - lidx == 1) {
                 int id = new_node(v[lidx], 0, 0);
                 return id;
             }
             int mid = std::midpoint(lidx, ridx);
-            int id = new_node(v[mid], self(self, lidx, mid), self(self, mid + 1, ridx));
+            int id = new_node(v[mid], self(self, lidx, mid),
+                              self(self, mid + 1, ridx));
             return id;
         };
         return tree(f(f, 0, int(v.size())));
@@ -193,13 +193,14 @@ private:
     void update(int id) {
         node& n = nodes[id];
         n.len = nodes[n.l].len + nodes[n.r].len;
-        n.prod = m.monoid.op(m.monoid.op(nodes[n.l].prod, n.prod), nodes[n.r].prod);
+        n.prod =
+            m.monoid.op(m.monoid.op(nodes[n.l].prod, n.prod), nodes[n.r].prod);
     }
 
     // apply f to nodes[id]
     // n is applied, n.l / n.r is not applied
     void all_apply(int id, const F& f) {
-        if(id == 0) return;
+        if (id == 0) return;
         node& n = nodes[id];
         n.s = m.mapping(f, n.s);
         n.prod = m.mapping(f, n.prod);
@@ -210,9 +211,9 @@ private:
     int splay_k(int id, int k) {
         return splay(id, [&](int l, int, int) {
             int lsz = nodes[l].len;
-            if(k < lsz) return -1;
+            if (k < lsz) return -1;
             k -= lsz;
-            if(k == 0) return 0;
+            if (k == 0) return 0;
             // k--;
             return 1;
         });
@@ -221,7 +222,7 @@ private:
     int splay_with_key(int id, const S& key) {
         return splay(id, [&](int l, int id, int r) {
             const S& cur_key = nodes[id].s;
-            if(!(current_key < key) && !(key < current_key))
+            if (!(current_key < key) && !(key < current_key))
         });
     }
 

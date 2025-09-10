@@ -1,118 +1,228 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <concepts>
-#include <utility>
-#include <tuple>
-#include <vector>
+#include <algorithm>
 #include <array>
-#include <list>
+#include <concepts>
 #include <deque>
-#include <set>
+#include <iostream>
+#include <iterator>
 #include <map>
-#include <unordered_set>
+#include <set>
+#include <string>
+#include <tuple>
 #include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
 
-#ifdef LOCAL
-#define DUMP(arg)       std::cerr << #arg << ": " << gwen::to_str(arg) << '\n'
-#define DEBUG(arg)      std::cerr << #arg << ": " << gwen::to_str(arg) << '\n'
-#else
-#define DUMP(arg)       void(0)
-#define DEBUG(arg)      void(0)
-#endif
+#include "gwen/types.hpp"
 
 namespace gwen {
 
-std::string to_str(bool b) { return b ? "true" : "false"; }
-
-std::string to_str(const std::string& str) { return str; }
-std::string to_str(char c) { return std::string{c}; }
-std::string to_str(const char* s) { return std::string{s}; }
-
-template<std::integral T>
-std::string to_str(T x) { return std::to_string(x); }
-
-template<std::floating_point T>
-std::string to_str(T x) { return std::to_string(x); }
-
-template<typename T>
-requires requires(const T& t) { t.val(); }
-std::string to_str(const T& x) { return to_str(x.val()); }
-
-template<typename T>
-requires requires(const T& t) { t.dump(); }
-std::string to_str(const T& x) { return to_str(x.dump()); }
-
-template<typename T, typename S>
-std::string to_str(const std::pair<T,S>& p) { return std::string{'('} + to_str(p.first) + ", " + to_str(p.second) + ')'; }
-
-template<std::size_t I = 0, typename... Ts>
-std::string tuple_to_str_impl(const std::tuple<Ts...>& t) {
-    if constexpr (I == sizeof...(Ts)) {
-        return "";
-    } else {
-        std::string ret = gwen::to_str(std::get<I>(t));
-        if constexpr (I + 1 < sizeof...(Ts)) ret += ", ";
-        return ret + tuple_to_str_impl<I + 1>(t);
-    }
-}
-template<typename... Ts>
-std::string to_str(const std::tuple<Ts...>& t) {
-    return "(" + tuple_to_str_impl(t) + ")";
-}
-
-template<typename Iterator>
-std::string to_str(Iterator begin, Iterator end, const std::string& partition = " ", char pb = '\0', char pe = '\0') {
+//-------------------------
+// standard types
+//-------------------------
+constexpr inline std::string to_str() { return ""; }
+constexpr inline std::string to_str(bool b) { return b ? "true" : "false"; }
+constexpr inline std::string to_str(char c) { return std::string{c}; }
+constexpr inline std::string to_str(const char* cs) { return std::string{cs}; }
+constexpr inline std::string to_str(const std::string& str) { return str; }
+constexpr inline std::string to_str(std::nullptr_t) { return "nullptr"; }
+constexpr inline std::string to_str(u128 x) {
+    if (x == 0) return "0";
     std::string ret;
-    if(pb) ret += pb;
-    for(auto it = begin; it != end; ++it) {
-        if(it != begin) ret += partition;
+    while (x) {
+        ret.push_back(static_cast<char>('0' + (x % 10)));
+        x /= 10;
+    }
+    std::reverse(ret.begin(), ret.end());
+    return ret;
+}
+constexpr inline std::string to_str(i128 x) {
+    if (x < 0) return std::string{'-'} + to_str(static_cast<u128>(-x));
+    return to_str(static_cast<u128>(x));
+}
+
+template <std::integral T> std::string to_str(T x) { return std::to_string(x); }
+template <std::floating_point T> std::string to_str(T f) {
+    return std::to_string(f);
+}
+
+//-------------------------
+// prototype
+//-------------------------
+
+// pair / tuple
+template <typename T1, typename T2>
+std::string to_str(const std::pair<T1, T2>& p);
+template <typename... Ts> std::string to_str(const std::tuple<Ts...>& t);
+
+// input iterator helper
+template <std::input_iterator Iterator>
+std::string to_str(Iterator begin,
+                   Iterator end,
+                   const std::string& partition = ", ",
+                   char pb = '\0',
+                   char pe = '\0');
+
+// sequence containers
+template <typename T> std::string to_str(const std::vector<T>& sc);
+template <typename T, std::size_t N>
+std::string to_str(const std::array<T, N>& sc);
+template <typename T> std::string to_str(const std::deque<T>& sc);
+template <typename T, std::size_t N> std::string to_str(const T (&sc)[N]);
+
+/* さすがに要らなそう
+template<typename T>
+std::string to_str(const std::list<T>& sc);
+template<typename T>
+std::string to_str(const std::forward_list<T>& sc);
+*/
+
+// set containers
+template <typename T> std::string to_str(const std::set<T>& se);
+template <typename T> std::string to_str(const std::multiset<T>& se);
+template <typename T> std::string to_str(const std::unordered_set<T>& se);
+template <typename T> std::string to_str(const std::unordered_multiset<T>& se);
+
+// map containers
+template <typename K, typename V> std::string to_str(const std::map<K, V>& mp);
+template <typename K, typename V>
+std::string to_str(const std::multimap<K, V>& mp);
+template <typename K, typename V>
+std::string to_str(const std::unordered_map<K, V>& mp);
+template <typename K, typename V>
+std::string to_str(const std::unordered_multimap<K, V>& mp);
+template <std::input_iterator Iterator>
+std::string to_str_map_helper(Iterator begin, Iterator end);
+
+//-------------------------
+// implementation
+//-------------------------
+
+// pair / tuple
+template <typename T1, typename T2>
+std::string to_str(const std::pair<T1, T2>& p) {
+    return std::string{'('} + to_str(p.first) + ", " + to_str(p.second) + ')';
+}
+template <typename... Ts> std::string to_str(const std::tuple<Ts...>& t) {
+    std::string ret{'('};
+    bool first = true;
+    std::apply(
+        [&](const auto&... args) {
+            ((ret += (first ? "" : ", "), ret += gwen::to_str(args),
+              first = false),
+             ...);
+        },
+        t);
+    return ret + ')';
+}
+
+template <typename... Args>
+inline std::string to_str_variadic(const Args&... args) {
+    std::string ret;
+    std::size_t index = 0;
+
+    auto process_one = [&](const auto& arg) {
+        if (index++ > 0) {
+            ret += ", ";
+        }
+
+        if constexpr (requires { gwen::to_str(arg); }) {
+            ret += gwen::to_str(arg);
+        } else {
+            ret += "[?]";
+        }
+    };
+
+    (process_one(args), ...);
+
+    return ret;
+}
+
+// input iterator helper
+template <std::input_iterator Iterator>
+std::string to_str(Iterator begin,
+                   Iterator end,
+                   const std::string& partition,
+                   char pb,
+                   char pe) {
+    std::string ret;
+    if (pb) ret += pb;
+    for (auto it = begin; it != end; ++it) {
+        if (it != begin) ret += partition;
         ret += to_str(*it);
     }
-    if(pe) ret += pe;
+    if (pe) ret += pe;
     return ret;
 }
 
-template<typename T>
-std::string to_str(const std::vector<T>& vec) { return to_str(vec.begin(), vec.end(), ", ", '[', ']'); }
-template<typename T, std::size_t N>
-std::string to_str(const std::array<T,N>& arr) { return to_str(arr.begin(), arr.end(),  ", ", '[', ']'); }
-template<typename T>
-std::string to_str(const std::list<T>& ls) { return to_str(ls.begin(), ls.end(), ", ", '[', ']'); }
-template<typename T>
-std::string to_str(const std::deque<T>& dq) { return to_str(dq.begin(), dq.end(), ", ", '[', ']'); }
+// sequence containers
+template <typename T> std::string to_str(const std::vector<T>& sc) {
+    return to_str(sc.begin(), sc.end(), ", ", '[', ']');
+}
+template <typename T, std::size_t N>
+std::string to_str(const std::array<T, N>& sc) {
+    return to_str(sc.begin(), sc.end(), ", ", '[', ']');
+}
+template <typename T> std::string to_str(const std::deque<T>& sc) {
+    return to_str(sc.begin(), sc.end(), ", ", '[', ']');
+}
+template <typename T, std::size_t N> std::string to_str(const T (&sc)[N]) {
+    return to_str(sc.begin(), sc.end(), ", ", '[', ']');
+}
 
-template<typename T>
-std::string to_str(const std::set<T>& se) { return to_str(se.begin(), se.end(), ", ", '{', '}'); }
-template<typename T>
-std::string to_str(const std::multiset<T>& ms) { return to_str(ms.begin(), ms.end(), ", ", '{', '}'); }
-template<typename T>
-std::string to_str(const std::unordered_set<T>& us) { return to_str(us.begin(), us.end(), ", ", '{', '}'); }
-template<typename T>
-std::string to_str(const std::unordered_multiset<T>& um) { return to_str(um.begin(), um.end(), ", ", '{', '}'); }
+// set containers
+template <typename T> std::string to_str(const std::set<T>& se) {
+    return to_str(se.begin(), se.end(), ", ", '{', '}');
+}
+template <typename T> std::string to_str(const std::multiset<T>& se) {
+    return to_str(se.begin(), se.end(), ", ", '{', '}');
+}
+template <typename T> std::string to_str(const std::unordered_set<T>& se) {
+    return to_str(se.begin(), se.end(), ", ", '{', '}');
+}
+template <typename T> std::string to_str(const std::unordered_multiset<T>& se) {
+    return to_str(se.begin(), se.end(), ", ", '{', '}');
+}
 
-template<typename K, typename V>
-std::string to_str(const std::map<K,V>& mp) {
-    std::string ret;
-    ret += '{';
-    for(auto it = mp.begin(); it != mp.end(); ++it) {
-        if(it != mp.begin()) ret += ", ";
-        ret += std::string{'('} + to_str(it->first) + ": " + to_str(it->second) + ')';
+// map containers
+template <typename K, typename V> std::string to_str(const std::map<K, V>& mp) {
+    return to_str_map_helper(mp.begin(), mp.end());
+}
+template <typename K, typename V>
+std::string to_str(const std::multimap<K, V>& mp) {
+    return to_str_map_helper(mp.begin(), mp.end());
+}
+template <typename K, typename V>
+std::string to_str(const std::unordered_map<K, V>& mp) {
+    return to_str_map_helper(mp.begin(), mp.end());
+}
+template <typename K, typename V>
+std::string to_str(const std::unordered_multimap<K, V>& mp) {
+    return to_str_map_helper(mp.begin(), mp.end());
+}
+template <std::input_iterator Iterator>
+std::string to_str_map_helper(Iterator begin, Iterator end) {
+    std::string ret{'{'};
+    for (auto it = begin; it != end; ++it) {
+        if (it != begin) ret += ", ";
+        ret += '(' + to_str(it->first) + ": " + to_str(it->second) + ')';
     }
     ret += '}';
     return ret;
 }
-template<typename K, typename V>
-std::string to_str(const std::unordered_map<K,V>& mp) {
-    std::string ret;
-    ret += '{';
-    for(auto it = mp.begin(); it != mp.end(); ++it) {
-        if(it != mp.begin()) ret += ", ";
-        ret += std::string{'('} + to_str(it->first) + ": " + to_str(it->second) + ')';
-    }
-    ret += '}';
-    return ret;
-}
 
-} // namespace gwen
+}  // namespace gwen
+
+#ifdef LOCAL
+#define DEBUG(...)                                                          \
+    std::cerr << #__VA_ARGS__ << ": " << gwen::to_str_variadic(__VA_ARGS__) \
+              << '\n'
+#define DUMP(...)                                                           \
+    std::cerr << #__VA_ARGS__ << ": " << gwen::to_str_variadic(__VA_ARGS__) \
+              << '\n'
+#else
+#define DEBUG(...) void(0)
+#define DUMP(...) void(0)
+#endif

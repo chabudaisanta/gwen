@@ -1,9 +1,10 @@
 #pragma once
 
-#include <vector>
+#include <algorithm>
 #include <bit>
 #include <cassert>
-#include <algorithm>
+#include <vector>
+
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -15,8 +16,12 @@ private:
     std::vector<int> d;
 
 public:
-    explicit doubling_tree(int n_, int root_, const std::vector<std::vector<int>>& G)
-        : n(n_), log(n_ > 0 ? std::bit_width(static_cast<u32>(n_)) : 0), root(root_) {
+    explicit doubling_tree(int n_,
+                           int root_,
+                           const std::vector<std::vector<int>>& G)
+        : n(n_),
+          log(n_ > 0 ? std::bit_width(static_cast<u32>(n_)) : 0),
+          root(root_) {
         assert(n == ssize(G));
         assert(0 <= root && root < n);
 
@@ -30,7 +35,7 @@ public:
         d[root] = 0;
 
         int head = 0;
-        while(head < ssize(q)) {
+        while (head < ssize(q)) {
             int v = q[head++];
             for (int u : G[v]) {
                 if (u != get_anc(v, 0)) {
@@ -55,7 +60,7 @@ public:
         assert(0 <= v && v < n);
         assert(k >= 0);
         if (k > d[v]) return -1;
-        
+
         while (k > 0 && v != -1) {
             int i = std::countr_zero(static_cast<u32>(k));
             v = get_anc(v, i);
@@ -103,4 +108,4 @@ private:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen
