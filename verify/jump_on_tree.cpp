@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "gwen/graph/doubling_tree.hpp"
-#include "gwen/misc/io.hpp"
+#include "gwen/io.hpp"
 #include "gwen/types.hpp"
 
 using i32 = gwen::i32;

@@ -96,6 +96,14 @@ std::string to_str(const std::unordered_multimap<K, V>& mp);
 template <std::input_iterator Iterator>
 std::string to_str_map_helper(Iterator begin, Iterator end);
 
+// user-defined
+template <typename T>
+    requires requires(const T& t) { gwen::to_str(t.val()); }
+std::string to_str(const T& t);
+template <typename T>
+    requires requires(const T& t) { gwen::to_str(t.dump()); }
+std::string to_str(const T& t);
+
 //-------------------------
 // implementation
 //-------------------------
@@ -211,6 +219,17 @@ std::string to_str_map_helper(Iterator begin, Iterator end) {
     }
     ret += '}';
     return ret;
+}
+
+template <typename T>
+    requires requires(const T& t) { gwen::to_str(t.val()); }
+std::string to_str(const T& t) {
+    return gwen::to_str(t.val());
+}
+template <typename T>
+    requires requires(const T& t) { gwen::to_str(t.dump()); }
+std::string to_str(const T& t) {
+    return gwen::to_str(t.dump());
 }
 
 }  // namespace gwen

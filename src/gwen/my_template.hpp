@@ -10,17 +10,13 @@
 #include <climits>
 #include <cmath>
 #include <compare>
-#include <complex>
 #include <concepts>
-#include <cstdint>
 #include <deque>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <locale>
 #include <map>
-#include <memory>
-#include <numbers>
 #include <numeric>
 #include <queue>
 #include <random>
@@ -29,12 +25,12 @@
 #include <stack>
 #include <string>
 #include <tuple>
-#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 using gwen::i128;
 using gwen::i32;
@@ -54,34 +50,9 @@ using ull = unsigned long long;
 #ifdef LOCAL
 #define BAR std::cerr << "----------------------------------------------\n"
 #define S_BAR std::cerr << "------------------\n"
-template <typename... TArgs>
-inline void _debug_vars_printer_helper(std::ostream& os,
-                                       bool& is_first,
-                                       TArgs&&... args_pack) {
-    auto single_arg_printer = [&](const auto& val) {
-        if (!is_first) {
-            os << ", ";
-        }
-        os << std::boolalpha << val;
-        is_first = false;
-    };
-    (single_arg_printer(std::forward<TArgs>(args_pack)), ...);
-}
-#define DEBUGS(...)                                                      \
-    do {                                                                 \
-        std::string _debug_vars_macro_arg_str = #__VA_ARGS__;            \
-        if (!_debug_vars_macro_arg_str.empty()) {                        \
-            std::cerr << "[" << _debug_vars_macro_arg_str << "]: ";      \
-            bool _debug_vars_macro_is_first_arg = true;                  \
-            _debug_vars_printer_helper(                                  \
-                std::cerr, _debug_vars_macro_is_first_arg, __VA_ARGS__); \
-            std::cerr << std::endl;                                      \
-        }                                                                \
-    } while (0)
 #else
 #define BAR void(0)
 #define S_BAR void(0)
-#define DEBUGS(...) void(0)
 #endif
 
 constexpr std::pair<int, int> mv[] = {{0, 1},   {1, 0},  {0, -1},
