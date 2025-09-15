@@ -221,6 +221,7 @@ std::string to_str_map_helper(Iterator begin, Iterator end) {
     return ret;
 }
 
+// user-defined
 template <typename T>
     requires requires(const T& t) { gwen::to_str(t.val()); }
 std::string to_str(const T& t) {
@@ -245,3 +246,6 @@ std::string to_str(const T& t) {
 #define DEBUG(...) void(0)
 #define DUMP(...) void(0)
 #endif
+
+// std::string += std::string は、atcoder環境なら線形時間でやってくれそう
+// https://atcoder.jp/contests/abc379/submissions/69207872

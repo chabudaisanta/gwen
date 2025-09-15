@@ -32,4 +32,19 @@ i64 inv_mod(i64 a, i64 m = 998244353) {
     return u;
 }
 
+u64 inv_mod_64(u64 a, u64 m) {
+    i128 s = m, t = a;
+    i128 x = 0, y = 1;
+
+    while (t) {
+        i128 u = s / t;
+        s -= t * u;
+        x -= y * u;
+        std::swap(s, t);
+        std::swap(x, y);
+    }
+    // assert(s == 1); // gcd(a,m)が1でなければ逆元は存在しない
+    return (x % m + m) % m;
+}
+
 }  // namespace gwen
