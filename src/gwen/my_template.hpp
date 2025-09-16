@@ -44,8 +44,8 @@ using ull = unsigned long long;
 #define rep(i, l, r) for (int i = (int)(l); i < (int)(r); ++i)
 #define rp(i, n) for (int i = 0; i < (int)(n); ++i)
 #define rrep(i, l, r) for (int i = (int)(r) - 1; i >= 0; --i)
-#define all_(a) a.begin(), a.end()
-#define rall_(a) a.rbegin(), a.rend()
+#define all(a) a.begin(), a.end()
+#define rall(a) a.rbegin(), a.rend()
 
 #ifdef LOCAL
 #define BAR std::cerr << "----------------------------------------------\n"
@@ -161,6 +161,8 @@ using mint107 = atcoder::modint1000000007;
 #include <gmpxx.h>
 using gmp_int = mpz_class;
 #endif
+/*
 #if __has_include(<Eigen/Dense>)
 #include <Eigen/Dense>
 #endif
+*/
