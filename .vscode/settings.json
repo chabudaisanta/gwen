@@ -79,6 +79,8 @@
         "text_encoding": "cpp",
         "__hash_table": "cpp",
         "__tree": "cpp",
-        "forward_list": "cpp"
+        "forward_list": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }

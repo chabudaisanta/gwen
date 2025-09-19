@@ -72,13 +72,6 @@ std::string to_str(const std::array<T, N>& sc);
 template <typename T> std::string to_str(const std::deque<T>& sc);
 template <typename T, std::size_t N> std::string to_str(const T (&sc)[N]);
 
-/* さすがに要らなそう
-template<typename T>
-std::string to_str(const std::list<T>& sc);
-template<typename T>
-std::string to_str(const std::forward_list<T>& sc);
-*/
-
 // set containers
 template <typename T> std::string to_str(const std::set<T>& se);
 template <typename T> std::string to_str(const std::multiset<T>& se);

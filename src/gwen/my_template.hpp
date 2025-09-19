@@ -1,5 +1,7 @@
 #pragma once
-
+#ifdef LOCAL
+#define _GLIBCXX_DEBUG
+#endif
 #include <algorithm>
 #include <array>
 #include <bit>
@@ -67,6 +69,11 @@ constexpr int iINF = (1 << 30) + 1;
 constexpr ll liINF = (1LL << 60) + 1;
 constexpr char EL = '\n', SPA = ' ';
 
+std::pair<int, int> mv_to(int hi, int wi, int dir) {
+    assert(0 <= dir && dir < 9);
+    return std::make_pair(hi + dh[dir], wi + dw[dir]);
+}
+
 template <typename T1, typename T2> inline bool chmax(T1& a, T2 b) {
     return (a < b ? a = b, true : false);
 }
@@ -118,6 +125,16 @@ template <std::integral T> T out_div(T x, T y) {
     T d = x / y;
     return d * y == x ? d : ((x > 0) == (y > 0)) ? d + 1 : d - 1;
 }
+// https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3605r0.pdf
+template <std::unsigned_integral T> constexpr T isqrt(const T n) noexcept {
+    if (n <= T{1}) return n;
+    T i_current{0}, i_next{T(T{1} << ((std::bit_width(T(n - 1)) + 1) >> 1))};
+    do {
+        i_current = i_next;
+        i_next = T((i_current + n / i_current) >> 1);
+    } while (i_next < i_current);
+    return i_current;
+}
 
 template <typename T> constexpr T sq(T x) { return x * x; }
 template <std::integral T1, std::integral T2>
@@ -149,9 +166,6 @@ template <typename Iterator> auto runlength(Iterator begin, Iterator end) {
     return ret;
 }
 
-#ifdef LOCAL
-#define _GLIBCXX_DEBUG
-#endif
 #if __has_include(<atcoder/all>)
 #include <atcoder/all>
 using mint998 = atcoder::modint998244353;

@@ -7,8 +7,8 @@
 
 #include "gwen/dump.hpp"
 #include "gwen/io.hpp"
-#include "gwen/mod/modint.hpp"
 #include "gwen/math/prime.hpp"
+#include "gwen/mod/modint.hpp"
 using i32 = gwen::i32;
 using u32 = gwen::u32;
 using i64 = gwen::i64;
@@ -18,9 +18,11 @@ using gwen::cout;
 using mint = gwen::dynamic_modint64;
 
 void solve() {
-    i32 Q; cin >> Q;
-    while(Q--) {
-        u64 n; cin >> n;
+    i32 Q;
+    cin >> Q;
+    while (Q--) {
+        u64 n;
+        cin >> n;
         cout << (gwen::miller(n) ? "Yes\n" : "No\n");
     }
 }
