@@ -91,7 +91,7 @@ bool is_prime_small(i32 n) {
     return !table.p[n];
 }
 
-bool is_prime(u64 n) {
+bool miller(u64 n) {
     if (n <= 1)
         return false;
     else if (n == 2)

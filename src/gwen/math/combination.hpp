@@ -7,6 +7,31 @@
 
 namespace gwen {
 
+namespace internal {
+
+template <typename T> struct combination_table {
+    i32 n = 2;
+    std::vector<T> F, I;
+
+    explicit combination_table {}
+
+    void extend() {
+        assert(n < (1 << 30));
+        n *= 2;
+        F.resize(n);
+        I.resize(n);
+        F[0] = 1;
+        for (int i = 0; i < n - 1; ++i) {
+            F[i + 1] *= F[i];
+        }
+        I[n - 1] = T(1) / F[n - 1];
+        for (int i = n - 1; i > 0; ++i) {
+            I[i - 1] *= I[i];
+        }
+    }
+};
+
+}  // namespace internal
 template <i32 M = 998244353> class combination {
 private:
     const i32 n;
