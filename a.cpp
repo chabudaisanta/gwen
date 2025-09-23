@@ -5,8 +5,9 @@
 #include <iostream>
 #include <vector>
 
+#include <atcoder/modint>   // static_modintがまだないため
 #include "gwen/algebra/basic_monoid.hpp"
-#include "gwen/container/treap.hpp"
+#include "gwen/container/sorted_treap.hpp"
 #include "gwen/dump.hpp"
 #include "gwen/io.hpp"
 using i32 = gwen::i32;
@@ -16,37 +17,17 @@ using u64 = gwen::u64;
 using gwen::cin;
 using gwen::cout;
 
-template <typename T> struct MAPPING {
-    T operator()(const T& a, const T& b) const { return a ^ b; }
-};
-template <typename T> struct or_monoid {
-    using S = T;
-    S e = 0;
-    S op(const S& a, const S& b) const { return a | b; }
-};
-template <typename T> struct xor_monoid {
-    using S = T;
-    S e = 0;
-    S op(const S& a, const S& b) const { return a ^ b; }
-};
-using AM = gwen::ActedMonoid<xor_monoid<int>, xor_monoid<int>, MAPPING<int>>;
-
-// 合わない...
+using M = gwen::sum_monoid<int>;
+using Compare = std::less<int>;
 void solve() {
-    int N, Q;
-    cin >> N >> Q;
-    std::vector<int> A(N, 0);
-    gwen::treap<AM> T(AM{});
-    auto t = T.build(A);
-    while (Q--) {
-        int l, r;
-        cin >> l >> r;
-        T.apply(t, l - 1, r, 1);
-        // DUMP(T.to_vec(t));
+    gwen::sorted_treap<M,Compare> T(M{});
+    auto arr = T.build();
+    for(int i = 0; i < 10; ++i) {
+        int a = gwen::rand32(100);
+        DUMP(a);
+        T.insert(arr, a);
+        DUMP(T.to_vec(arr));
     }
-    auto v = T.to_vec(t);
-    for (auto x : v) cout << (x ? '1' : '0');
-    cout << '\n';
 }
 
 int main() {

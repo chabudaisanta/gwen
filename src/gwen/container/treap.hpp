@@ -42,13 +42,8 @@ public:
 
         int n = vec.size();
         std::vector<tree> nodes(n);
-        // 1. まず全ノードを生成する
-        for (int i = 0; i < n; ++i) {
-            // new_nodeはvalを受け取ってランダムなpriを振ってくれるはず！
-            nodes[i] = new_node(vec[i]);
-        }
+        for (int i = 0; i < n; ++i) nodes[i] = new_node(vec[i]);
 
-        // 2. スタックでCartesian Treeを構築（lchとrchのリンク）
         std::vector<tree> st;
         for (int i = 0; i < n; ++i) {
             tree curr = nodes[i];
@@ -58,35 +53,25 @@ public:
                 st.pop_back();
             }
 
-            // currの左の子は、最後にpopされたノード
             d[curr].lch = last_popped;
-
-            // スタックに残ったノードがあれば、それが親になる
             if (!st.empty()) {
                 d[st.back()].rch = curr;
             }
 
             st.push_back(curr);
         }
-
-        // 3. 根はスタックの底に残ったノード
         tree root = st[0];
-
-        // 4. 最後に全ノードのcntとprodを計算
-        dfs_update(root);
+        auto f = [&](tree cur, auto self) -> void {
+            if(!cur) return;
+            self(d[cur].lch);
+            self(d[cur].rch);
+            update(cur);
+        };
+        f(root, f);
 
         return root;
     }
-    // updateを再帰的にやるためのヘルパー関数
-    void dfs_update(tree cur) {
-        if (!cur) return;
-        // 子を先に確定させる（後行順）
-        dfs_update(d[cur].lch);
-        dfs_update(d[cur].rch);
-        // 子が確定してから親をupdate
-        update(cur);
-    }
-
+    
     inline int size(tree t) const { return d[t].cnt; }
     inline bool empty(tree t) const { return !d[t].cnt; }
 
@@ -133,6 +118,7 @@ public:
         rights.clear();
         tree cur = t;
         while (size(d[cur].lch) != p) {
+            push(cur);
             if (size(d[cur].lch) < p) {
                 // cur の左の仕切りが p 未満 -> cur は lefts
                 lefts.emplace_back(cur);
@@ -150,6 +136,7 @@ public:
         // のパターンは排除されているので、どちらも少なくとも1要素持つはず
         // -> cur は rights 最左の子
         // -> cur の lch は lefts の最右の子
+        push(cur);
         tree r = cur;
         tree l = d[cur].lch;
         d[cur].lch = NIL;
@@ -199,7 +186,9 @@ public:
         return ret;
     }
 
-    void all_apply(tree t, const F& f) { d[t].lz = am.act.op(f, d[t].lz); }
+    void all_apply(tree t, const F& f) {
+        if(t) d[t].lz = am.act.op(f, d[t].lz);
+    }
 
     void apply(tree t, int l, int r, const F& f) {
         assert(0 <= l && l <= r && r <= size(t));
