@@ -62,7 +62,7 @@ public:
         }
         tree root = st[0];
         auto f = [&](tree cur, auto self) -> void {
-            if(!cur) return;
+            if (!cur) return;
             self(d[cur].lch);
             self(d[cur].rch);
             update(cur);
@@ -71,7 +71,7 @@ public:
 
         return root;
     }
-    
+
     inline int size(tree t) const { return d[t].cnt; }
     inline bool empty(tree t) const { return !d[t].cnt; }
 
@@ -187,7 +187,7 @@ public:
     }
 
     void all_apply(tree t, const F& f) {
-        if(t) d[t].lz = am.act.op(f, d[t].lz);
+        if (t) d[t].lz = am.act.op(f, d[t].lz);
     }
 
     void apply(tree t, int l, int r, const F& f) {

@@ -2,10 +2,10 @@
 #pragma GCC optimize("O2")
 #pragma GCC optimize("unroll-loops")
 
+#include <atcoder/modint>  // static_modintがまだないため
 #include <iostream>
 #include <vector>
 
-#include <atcoder/modint>   // static_modintがまだないため
 #include "gwen/algebra/basic_monoid.hpp"
 #include "gwen/container/sorted_treap.hpp"
 #include "gwen/dump.hpp"
@@ -20,9 +20,9 @@ using gwen::cout;
 using M = gwen::sum_monoid<int>;
 using Compare = std::less<int>;
 void solve() {
-    gwen::sorted_treap<M,Compare> T(M{});
+    gwen::sorted_treap<M, Compare> T(M{});
     auto arr = T.build();
-    for(int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i) {
         int a = gwen::rand32(100);
         DUMP(a);
         T.insert(arr, a);

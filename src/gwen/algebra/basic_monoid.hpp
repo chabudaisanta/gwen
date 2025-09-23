@@ -26,34 +26,28 @@ template <std::integral T> struct sum_monoid {
     S op(const S& a, const S& b) const { return a + b; }
 };
 
-template<std::unsigned_integral T>
-struct xor_monoid {
+template <std::unsigned_integral T> struct xor_monoid {
     using S = T;
-    S op(const S& a, const S& b) const {
-        return a ^ b;
-    }
+    S op(const S& a, const S& b) const { return a ^ b; }
     S e = S{0};
 };
 
-template<typename T>
-struct rangesum_monoid {
+template <typename T> struct rangesum_monoid {
     struct S {
         T val;
         int len;
     };
     S op(const S& a, const S& b) const {
-        return {a.val + b.val, a.len + b.len };
+        return {a.val + b.val, a.len + b.len};
     }
     S e = {T{0}, 0};
 };
-template<typename T, typename U>
-struct rangesum_mapping {
+template <typename T, typename U> struct rangesum_mapping {
     using S = T;
     using F = U;
     S operator()(const F& f, const S& x) const {
         return {f * x.len + x.val, x.len};
     }
 };
-
 
 }  // namespace gwen

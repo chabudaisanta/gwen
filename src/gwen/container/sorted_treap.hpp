@@ -1,13 +1,13 @@
 #pragma once
 
-#include <vector>
-#include <ranges>
 #include <cassert>
 #include <concepts>
+#include <ranges>
+#include <vector>
 
-#include "gwen/types.hpp"
 #include "gwen/algebra/monoid.hpp"
 #include "gwen/misc/xorshift.hpp"
+#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -24,9 +24,11 @@ namespace gwen {
 // - lower_bound
 // - upper_bound
 template <monoid M, typename Compare = std::less<typename M::S>>
-requires requires(const Compare& comp, const typename M::S& a, const typename M::S& b) {
-    { comp(a, b) } -> std::same_as<bool>;
-}
+    requires requires(const Compare& comp,
+                      const typename M::S& a,
+                      const typename M::S& b) {
+        { comp(a, b) } -> std::same_as<bool>;
+    }
 class sorted_treap {
 private:
     using S = M::S;
@@ -57,7 +59,7 @@ public:
 
     tree build() { return NIL; }
     tree build(const S& x) { return new_node(x); }
-        
+
     inline int size(tree t) const { return d[t].cnt; }
     inline bool empty(tree t) const { return !d[t].cnt; }
 
@@ -68,13 +70,15 @@ public:
     }
     void erase_key(tree& t, const S& x) {
         auto [l, mr] = split_key(t, x);
-        if(!mr) {
+        if (!mr) {
             t = l;
             return;
         }
         auto [m, r] = split_at(mr, 1);
-        if(m && equal(x, d[m].val)) t = merge(l, r);
-        else t = merge3(l, m, r);
+        if (m && equal(x, d[m].val))
+            t = merge(l, r);
+        else
+            t = merge3(l, m, r);
     }
     void erase_at(tree& t, int p) {
         assert(0 <= p && p <= size(t));
@@ -121,8 +125,7 @@ private:
     void update(tree t) {
         node& nt = d[t];
         nt.cnt = size(nt.lch) + 1 + size(nt.rch);
-        nt.prod = m.op(m.op(d[nt.lch].prod, nt.val),
-                               d[nt.rch].prod);
+        nt.prod = m.op(m.op(d[nt.lch].prod, nt.val), d[nt.rch].prod);
     }
 
     // merge
@@ -175,7 +178,7 @@ private:
                 cur = d[cur].lch;
             }
         }
-        
+
         tree r = cur;
         tree l = d[cur].lch;
         d[cur].lch = NIL;
@@ -193,20 +196,20 @@ private:
         return {l, r};
     }
 
-    // comp(d[cur].val, x) (d[cur].val < x) を満たさない (x <= d[cur].val) 最左のcurを求める
+    // comp(d[cur].val, x) (d[cur].val < x) を満たさない (x <= d[cur].val)
+    // 最左のcurを求める
     std::pair<tree, tree> split_key(tree t, const S& x) {
-        if(!t) return {NIL, NIL};
+        if (!t) return {NIL, NIL};
         static std::vector<tree> lefts, rights;
         lefts.clear();
         rights.clear();
 
         tree cur = t;
-        while(cur) {
-            if(comp(d[cur].val, x)) {
+        while (cur) {
+            if (comp(d[cur].val, x)) {
                 lefts.emplace_back(cur);
                 cur = d[cur].rch;
-            }
-            else {
+            } else {
                 rights.emplace_back(cur);
                 cur = d[cur].lch;
             }
@@ -217,21 +220,21 @@ private:
         // -> return {t, NIL}
         // lefts が空なら?
         // -> return {NIL, t}
-        if(rights.empty()) return {t, NIL};
-        if(lefts.empty()) return {NIL, t};
+        if (rights.empty()) return {t, NIL};
+        if (lefts.empty()) return {NIL, t};
 
         // rights.back() が右側の最左かつ pri 最小のノード
         // lefts.back() が左側の最右かつ pri 最小のノード
         tree r = NIL;
-        for(tree rgt : rights | std::views::reverse) {
+        for (tree rgt : rights | std::views::reverse) {
             // rights[i]の左子をrights[i+1]にする
             d[rgt].lch = r;
             update(rgt);
             r = rgt;
         }
         tree l = NIL;
-        for(tree lft : lefts | std::views::reverse) {
-            //lefts[i]の右子をlefts[i+1]にする
+        for (tree lft : lefts | std::views::reverse) {
+            // lefts[i]の右子をlefts[i+1]にする
             d[lft].rch = l;
             update(lft);
             l = lft;
@@ -240,4 +243,4 @@ private:
     }
 };
 
-}// namespace gwen
+}  // namespace gwen
