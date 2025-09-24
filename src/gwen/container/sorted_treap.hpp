@@ -44,10 +44,12 @@ private:
     //------------------------------------
 public:
     explicit sorted_treap(const M& m_) : m(m_) {
-        // NIL
-        // 書き換え厳禁
+        // NIL 書き換え厳禁
         new_node(m.e, 0, 0u);
     }
+    sorted_treap(const sorted_treap&) = delete;
+    sorted_treap& operator=(const sorted_treap&) = delete;
+    ~sorted_treap() = default;
 
     //------------------------------------
     // make node/tree
