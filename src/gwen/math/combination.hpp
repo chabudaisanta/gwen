@@ -9,7 +9,8 @@ namespace gwen {
 
 namespace internal {
 
-template <typename T> struct combination_table {
+template <typename T>
+struct combination_table {
     i32 n = 2;
     std::vector<T> F, I;
 
@@ -32,7 +33,8 @@ template <typename T> struct combination_table {
 };
 
 }  // namespace internal
-template <i32 M = 998244353> class combination {
+template <i32 M = 998244353>
+class combination {
 private:
     const i32 n;
     std::vector<i64> F, I;

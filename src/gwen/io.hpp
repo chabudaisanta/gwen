@@ -151,16 +151,19 @@ public:
         return *this;
     }
 
-    template <std::signed_integral INT> is_type& operator>>(INT& dest) {
+    template <std::signed_integral INT>
+    is_type& operator>>(INT& dest) {
         dest = static_cast<INT>(get_i64());
         return *this;
     }
-    template <std::unsigned_integral UINT> is_type& operator>>(UINT& dest) {
+    template <std::unsigned_integral UINT>
+    is_type& operator>>(UINT& dest) {
         dest = static_cast<UINT>(get_u64());
         return *this;
     }
 
-    template <typename T> is_type& operator>>(std::vector<T>& vec) {
+    template <typename T>
+    is_type& operator>>(std::vector<T>& vec) {
         for (T& dest : vec) (*this) >> dest;
         return *this;
     }
@@ -196,7 +199,8 @@ private:
     static constexpr u32 P10(u32 d) { return d ? P10(d - 1) * 10 : 1; }
     static constexpr u64 P10L(u32 d) { return d ? P10L(d - 1) * 10 : 1; }
 
-    template <class T, class U> static void fil(T& m, U& l, U x) noexcept {
+    template <class T, class U>
+    static void fil(T& m, U& l, U x) noexcept {
         m = l / x;
         l -= m * x;
     }
@@ -232,17 +236,20 @@ public:
             fil(y, x, P10(9));
             push_token(TB.NLZ[y]);
             push_dig9(x);
-        } else if (x >= P10(6)) {
+        }
+        else if (x >= P10(6)) {
             fil(y, x, P10(6));
             push_token(TB.NLZ[y]);
             fil(y, x, P10(3));
             push_token(TB.LZ[y]);
             push_token(TB.LZ[x]);
-        } else if (x >= P10(3)) {
+        }
+        else if (x >= P10(3)) {
             fil(y, x, P10(3));
             push_token(TB.NLZ[y]);
             push_token(TB.LZ[x]);
-        } else if (x >= 1)
+        }
+        else if (x >= 1)
             push_token(TB.NLZ[x]);
         else
             push_1byte('0');
@@ -265,11 +272,13 @@ public:
             fil(y, x, P10L(9));
             push_dig9(y);
             push_dig9(static_cast<u32>(x));
-        } else if (x >= P10L(9)) {
+        }
+        else if (x >= P10L(9)) {
             fil(y, x, P10L(9));
             push_u32(y);
             push_dig9(static_cast<u32>(x));
-        } else
+        }
+        else
             push_u32(x);
     }
 
@@ -321,16 +330,19 @@ public:
         return *this;
     }
 
-    template <std::signed_integral INT> os_type& operator<<(INT tg) {
+    template <std::signed_integral INT>
+    os_type& operator<<(INT tg) {
         push_i64(tg);
         return *this;
     }
-    template <std::unsigned_integral UINT> os_type& operator<<(UINT tg) {
+    template <std::unsigned_integral UINT>
+    os_type& operator<<(UINT tg) {
         push_u64(tg);
         return *this;
     }
 
-    template <typename T> os_type& operator<<(const std::vector<T>& vec) {
+    template <typename T>
+    os_type& operator<<(const std::vector<T>& vec) {
         auto it = vec.begin(), end = vec.end();
         if (it == end) return *this;
         *this << *(it++);

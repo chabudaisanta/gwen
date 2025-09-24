@@ -81,6 +81,7 @@
         "__tree": "cpp",
         "forward_list": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "__locale": "cpp"
     }
 }

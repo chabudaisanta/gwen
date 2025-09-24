@@ -9,7 +9,8 @@
 
 namespace gwen {
 
-template <acted_monoid AM> class treap {
+template <acted_monoid AM>
+class treap {
 private:
     using S = AM::S;
     using F = AM::F;
@@ -88,7 +89,8 @@ public:
                 path.emplace_back(l, true);
 
                 l = d[l].rch;
-            } else {
+            }
+            else {
                 push(r);
                 path.emplace_back(r, false);
                 r = d[r].lch;
@@ -124,7 +126,8 @@ public:
                 lefts.emplace_back(cur);
                 p -= size(d[cur].lch) + 1;
                 cur = d[cur].rch;
-            } else {  // p < size(d[cur].lch)
+            }
+            else {  // p < size(d[cur].lch)
                 rights.emplace_back(cur);
                 cur = d[cur].lch;
             }

@@ -29,7 +29,8 @@ struct NoOpMonoid {
     S op(const S&, const S&) { return S{}; }
 };
 
-template <monoid Monoid> struct ReversibleMonoid {
+template <monoid Monoid>
+struct ReversibleMonoid {
     struct S {
         typename Monoid::S val;
         typename Monoid::S rev;
@@ -61,7 +62,8 @@ concept acted_monoid =
     };
 
 struct IdentityRight {
-    template <class S, class T> T operator()(const S&, T a) {
+    template <class S, class T>
+    T operator()(const S&, T a) {
         return std::move(a);
     }
 };
@@ -104,15 +106,19 @@ concept static_top_tree_dp = requires(T t,
 };
 
 // useful monoids
-template <class S> using Sum = Monoid<S, std::plus<S>>;
-template <class S> using Prod = Monoid<S, std::multiplies<S>>;
-template <class _S> struct Max {
+template <class S>
+using Sum = Monoid<S, std::plus<S>>;
+template <class S>
+using Prod = Monoid<S, std::multiplies<S>>;
+template <class _S>
+struct Max {
     using S = _S;
     Max(S _e = std::numeric_limits<S>::min()) : e(_e) {}
     S op(const S& a, const S& b) const { return std::max(a, b); }
     S e;
 };
-template <class _S> struct Min {
+template <class _S>
+struct Min {
     using S = _S;
     Min(S _e = std::numeric_limits<S>::max()) : e(_e) {}
     S op(const S& a, const S& b) const { return std::min(a, b); }

@@ -8,11 +8,13 @@
 #include "gwen/algebra/monoid.hpp"
 namespace gwen {
 
-template <acted_monoid M> class splay_tree {
+template <acted_monoid M>
+class splay_tree {
 public:
     using S = typename M::S;
     using F = typename M::F;
 
+private:
     struct node {
         int l, r;
         int len;
@@ -149,7 +151,8 @@ public:
         t = merge3(std::move(t1), std::move(t2), std::move(t3));
     }
 
-    template <class F> int max_right(tree& t, F f) {
+    template <class F>
+    int max_right(tree& t, F f) {
         assert(f(m.monoid.e));
         if (f(all_prod(t))) return nodes[t.id].len;
         S s = m.monoid.e;
@@ -226,7 +229,8 @@ private:
         });
     }
 
-    template <class Cond> int splay(int id, Cond cond) {
+    template <class Cond>
+    int splay(int id, Cond cond) {
         static std::vector<int> lefts, rights;
         lefts.clear();
         rights.clear();
@@ -267,12 +271,14 @@ private:
                     update(p);
                     nodes[id].r = p;
                     zig = 0;
-                } else {
+                }
+                else {
                     zig = -1;
                 }
                 rights.push_back(id);
                 id = l;
-            } else {
+            }
+            else {
                 if (zig == 1) {
                     // zig-zig
                     int p = lefts.back();
@@ -281,7 +287,8 @@ private:
                     update(p);
                     nodes[id].l = p;
                     zig = 0;
-                } else {
+                }
+                else {
                     zig = 1;
                 }
                 lefts.push_back(id);

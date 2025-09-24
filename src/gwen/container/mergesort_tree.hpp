@@ -6,7 +6,8 @@
 
 namespace gwen {
 
-template <typename T> class mergesort_tree {
+template <typename T>
+class mergesort_tree {
 private:
     int n, bc;
     std::vector<std::vector<T>> d;
