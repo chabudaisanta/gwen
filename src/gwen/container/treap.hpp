@@ -11,11 +11,12 @@ namespace gwen {
 
 template <acted_monoid AM>
 class treap {
-private:
+public:
     using S = AM::S;
     using F = AM::F;
-
     using tree = int;
+
+private:
     struct node {
         tree lch;
         tree rch;
