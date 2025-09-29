@@ -19,11 +19,11 @@ using gwen::cout;
 
 using M = gwen::sum_monoid<int>;
 using Compare = std::less<int>;
+using MULTISET = gwen::sorted_treap<M,Compare>;
 void solve() {
-    for(int i = 0; i < 10; ++i) {
-        int a = gwen::rand32(1, 20);
-        std::cerr << "-----------------\n";
-    }
+    MULTISET::init(M{}, Compare{});
+    MULTISET ms;
+    DUMP(ms.size());
 }
 
 int main() {
