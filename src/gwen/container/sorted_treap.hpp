@@ -2,9 +2,9 @@
 
 #include <cassert>
 #include <concepts>
+#include <memory>
 #include <ranges>
 #include <vector>
-#include <memory>
 
 #include "gwen/algebra/monoid.hpp"
 #include "gwen/misc/xorshift.hpp"
@@ -34,21 +34,18 @@ private:
     static constexpr tree NIL = 0;
     M m;
     Compare comp;
-    bool equal(const S& a, const S& b) const {
-        return !comp(a, b) && !comp(b, a);
-    }
 
-//------------------------------------
-// constructor
-//------------------------------------
+    //------------------------------------
+    // constructor
+    //------------------------------------
 public:
     explicit sorted_treap_impl(const M& m_, const Compare& comp_) : m(m_), comp(comp_) {
-        d.emplace_back(new_node(m.e, 0, 0u)); // NIL 用ダミーノード、書き換え厳禁。
+        d.emplace_back(new_node(m.e, 0, 0u));  // NIL 用ダミーノード、書き換え厳禁。
     }
 
-//------------------------------------
-//  make node/tree
-//------------------------------------
+    //------------------------------------
+    //  make node/tree
+    //------------------------------------
 public:
     tree build() { return NIL; }
     tree build(const S& x) { return new_node(x); }
@@ -67,9 +64,9 @@ private:
         return ret;
     }
 
-//------------------------------------
-//  utility
-//------------------------------------
+    //------------------------------------
+    //  utility
+    //------------------------------------
 public:
     inline int size(tree t) const { return d[t].cnt; }
     inline bool empty(tree t) const { return !d[t].cnt; }
@@ -87,9 +84,17 @@ public:
         return ret;
     }
 
-//------------------------------------
-//  internal utility
-//------------------------------------
+    bool equal(const S& a, const S& b) const {
+        return !comp(a, b) && !comp(b, a);
+    }
+
+    S get_val(tree t) const {
+        return d[t].val;
+    }
+
+    //------------------------------------
+    //  internal utility
+    //------------------------------------
 private:
     void update(tree t) {
         node& nt = d[t];
@@ -99,6 +104,7 @@ private:
 
     inline int pos(tree t) const { return size(d[t].lch); }
 
+public:
     std::tuple<tree, int, S> search(tree t, auto cond) const {
         tree ret = NIL;
         int lower = 0;
@@ -120,9 +126,23 @@ private:
         return {ret, lower, sml};
     }
 
-//------------------------------------
-//  interval query
-//------------------------------------
+    tree at(tree t, int p) const {
+        assert(0 <= p && p <= size(t));
+        while (pos(t) != p) {
+            if (p < pos(t)) {
+                t = d[t].lch;
+            }
+            else {
+                p -= pos(t) + 1;
+                t = d[t].rch;
+            }
+        }
+        return t;
+    }
+
+    //------------------------------------
+    //  interval query
+    //------------------------------------
 public:
     S all_prod(tree t) const { return d[t].prod; }
     S prod(tree t, int p, int q) {
@@ -134,10 +154,9 @@ public:
         return ret;
     }
 
-
-//------------------------------------
-//  merge
-//------------------------------------
+    //------------------------------------
+    //  merge
+    //------------------------------------
 public:
     tree merge(tree l, tree r) {
         if (!l || !r) return l ? l : r;
@@ -166,9 +185,9 @@ public:
     }
     tree merge3(tree l, tree m, tree r) { return merge(l, merge(m, r)); }
 
-//------------------------------------
-//  split
-//------------------------------------
+    //------------------------------------
+    //  split
+    //------------------------------------
 public:
     std::pair<tree, tree> split_at(tree t, int p) {
         assert(0 <= p && p <= size(t));
@@ -176,9 +195,6 @@ public:
         if (p == size(t)) return {t, NIL};
 
         return split(t, [&](int cur) -> int {
-            // if(!cur) return 0; // split 内の cond 評価前に NIL
-            // チェックを行うため
-
             if (p <= pos(cur)) {
                 return -1;
             }
@@ -194,9 +210,6 @@ public:
     // 最左のcurを求める
     std::pair<tree, tree> split_key(tree t, const S& x) {
         if (!t) return {NIL, NIL};
-        static std::vector<tree> lefts, rights;
-        lefts.clear();
-        rights.clear();
 
         return split(t, [&](int cur) -> int {
             // !comp(d[cur].val, x)  <=>  !(d[cur].val < x)  <=>  x <=
@@ -204,9 +217,8 @@ public:
             return !comp(d[cur].val, x) ? -1 : 1;
         });
     }
-    
-private:
-std::pair<tree, tree> split(tree t, auto cond) {
+
+    std::pair<tree, tree> split(tree t, auto cond) {
         static std::vector<tree> lefts, rights;
         lefts.clear();
         rights.clear();
@@ -244,7 +256,7 @@ std::pair<tree, tree> split(tree t, auto cond) {
     }
 };
 
-} // namespace internal
+}  // namespace internal
 
 template <monoid M, typename Compare>
     requires requires(const Compare& comp,
@@ -256,21 +268,22 @@ class sorted_treap {
 public:
     static void init(const M& m, const Compare& comp) {
         assert(!impl);
-        if(!impl) {
+        if (!impl) {
             impl = std::make_unique<treap>(m, comp);
         }
     }
 
 private:
-    using treap = internal::sorted_treap_impl<M,Compare>;
+    using treap = internal::sorted_treap_impl<M, Compare>;
     using tree = treap::tree;
+    using S = M::S;
 
     static inline std::unique_ptr<treap> impl;
     int id;
 
-//------------------------------------
-// constructor
-//------------------------------------
+    //------------------------------------
+    //  constructor
+    //------------------------------------
 public:
     explicit sorted_treap() {
         assert(impl);
@@ -281,14 +294,59 @@ public:
     sorted_treap(const sorted_treap&) = delete;
     sorted_treap& operator=(const sorted_treap&) = delete;
 
-//------------------------------------
-// utility
-//------------------------------------
+    //------------------------------------
+    //  utility
+    //------------------------------------
+public:
     int size() const {
         return impl->size(id);
     }
     bool empty() const {
         return impl->empty(id);
+    }
+
+    S at(int p) const {
+        return impl->get_val(impl->at(id, p));
+    }
+
+    S prod(int l, int r) {
+        return impl->prod(id, l, r);
+    }
+    S all_prod() {
+        return impl->all_prod(id);
+    }
+    //------------------------------------
+    //  insert
+    //------------------------------------
+public:
+    void insert(const S& x) {
+        auto [l, r] = impl->split_key(id, x);
+        tree m = impl->build(x);
+        id = impl->merge3(l, m, r);
+    }
+
+    void insert_unique(const S& x) {
+        auto [t, p, prod] = impl->search(x);
+        if (impl->equal(impl->get_val(t), x)) return;
+        insert(x);
+    }
+
+    //------------------------------------
+    //  erase
+    //------------------------------------
+public:
+    void erase(const S& x) {
+        auto [l, mr] = impl->split_key(id, x);
+        if (impl->size(mr) == 0) {
+            id = impl->merge(l, mr);
+            return;
+        }
+        auto [m, r] = impl->split_at(mr, 1);
+        if (impl->equal(impl->get_val(m), x)) {
+            id = impl->merge(l, r);
+            return;
+        }
+        id = impl->merge3(l, m, r);
     }
 };
 
