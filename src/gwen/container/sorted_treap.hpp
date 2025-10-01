@@ -105,25 +105,29 @@ private:
     inline int pos(tree t) const { return size(d[t].lch); }
 
 public:
-    std::tuple<tree, int, S> search(tree t, auto cond) const {
-        tree ret = NIL;
+    std::tuple<tree, tree, int, S, S> bound_detail(tree t, auto cond) const {
+        tree tl = NIL;
+        tree tr = NIL;
         int lower = 0;
         S sml = m.e;
+        S smr = m.e;
         while (t) {
             auto dir = cond(t);
             if (!dir) break;
 
             if (dir > 0) {
                 lower += pos(t) + 1;
-                sml = m.op(sml, m.op(all_prod(d[t].lch), all_prod(t)));
+                tl = t;
+                sml = m.op(sml, m.op(all_prod(d[t].lch), d[t].val));
                 t = d[t].rch;
             }
             else {
-                ret = t;
+                tr = t;
+                smr = m.op(m.op(d[t].val, all_prod(d[t].rch)), smr);
                 t = d[t].lch;
             }
         }
-        return {ret, lower, sml};
+        return {tl, tr, lower, sml, smr};
     }
 
     tree at(tree t, int p) const {
@@ -323,12 +327,6 @@ public:
         auto [l, r] = impl->split_key(id, x);
         tree m = impl->build(x);
         id = impl->merge3(l, m, r);
-    }
-
-    void insert_unique(const S& x) {
-        auto [t, p, prod] = impl->search(x);
-        if (impl->equal(impl->get_val(t), x)) return;
-        insert(x);
     }
 
     //------------------------------------
