@@ -45,7 +45,7 @@ using ull = unsigned long long;
 
 #define rep(i, l, r)  for (int i = (int)(l); i < (int)(r); ++i)
 #define rp(i, n)      for (int i = 0; i < (int)(n); ++i)
-#define rrep(i, l, r) for (int i = (int)(r) - 1; i >= 0; --i)
+#define rrep(i, l, r) for (int i = (int)(r) - 1; i >= (int)(l); --i)
 #define all(a)        a.begin(), a.end()
 #define rall(a)       a.rbegin(), a.rend()
 
