@@ -4,6 +4,7 @@
 #include <concepts>
 #include <memory>
 #include <ranges>
+#include <utility>
 #include <vector>
 
 #include "gwen/algebra/monoid.hpp"
@@ -49,6 +50,33 @@ public:
 public:
     tree build() { return NIL; }
     tree build(const S& x) { return new_node(x); }
+    tree build(const std::vector<S>& sorted_vec) {
+        if (sorted_vec.empty()) return NIL;
+
+        std::vector<tree> nodes;
+        nodes.reserve(sorted_vec.size());
+        for (const auto& val : sorted_vec) {
+            nodes.push_back(new_node(val));
+        }
+
+        std::vector<tree> st;
+        for (tree cur_node : nodes) {
+            tree last_popped = NIL;
+            while (!st.empty() && d[st.back()].pri < d[cur_node].pri) {
+                update(st.back());  // 子が変わる前にupdate
+                last_popped = st.back();
+                st.pop_back();
+            }
+
+            d[cur_node].lch = last_popped;
+            if (!st.empty()) d[st.back()].rch = cur_node;
+            st.push_back(cur_node);
+        }
+
+        // 最後に残ったスタックのノード情報をすべて更新する
+        for (tree node : st | std::views::reverse) update(node);
+        return st.front();
+    }
 
 private:
     tree new_node(const S& x, int c = 1, u32 p = rand32()) {
@@ -73,7 +101,7 @@ public:
 
     // O(N)
     std::vector<S> to_vec(tree t) const {
-        static std::vector<S> ret;
+        std::vector<S> ret;
         ret.clear();
         auto dfs = [&](int cur, auto self) -> void {
             if (d[cur].lch) self(d[cur].lch, self);
@@ -84,8 +112,14 @@ public:
         return ret;
     }
 
-    bool equal(const S& a, const S& b) const {
+    inline bool equal(const S& a, const S& b) const {
         return !comp(a, b) && !comp(b, a);
+    }
+    inline bool lower(const S& a, const S& b) const {
+        return !comp(a, b);
+    }
+    inline bool upper(const S& a, const S& b) const {
+        return comp(b, a);
     }
 
     S get_val(tree t) const {
@@ -128,6 +162,49 @@ public:
             }
         }
         return {tl, tr, lower, sml, smr};
+    }
+
+    std::tuple<tree, tree, int, S, S> lower_bound_detail(tree t, const S& x) const {
+        return bound_detail(t, [&](tree t) {
+            return lower(d[t].val, x) ? -1 : 1;
+        });
+    }
+    std::tuple<tree, tree, int, S, S> upper_bound_detail(tree t, const S& x) const {
+        return bound_detail(t, [&](tree t) {
+            return upper(d[t].val, x) ? -1 : 1;
+        });
+    }
+
+    std::tuple<tree, tree, int> bound(tree t, auto cond) const {
+        tree tl = NIL;
+        tree tr = NIL;
+        int lower = 0;
+        while (t) {
+            auto dir = cond(t);
+            if (!dir) break;
+
+            if (dir > 0) {
+                lower += pos(t) + 1;
+                tl = t;
+                t = d[t].rch;
+            }
+            else {
+                tr = t;
+                t = d[t].lch;
+            }
+        }
+        return {tl, tr, lower};
+    }
+
+    std::tuple<tree, tree, int> lower_bound(tree t, const S& x) const {
+        return bound(t, [&](tree t) {
+            return lower(d[t].val, x) ? -1 : 1;
+        });
+    }
+    std::tuple<tree, tree, int> upper_bound(tree t, const S& x) const {
+        return bound(t, [&](tree t) {
+            return upper(d[t].val, x) ? -1 : 1;
+        });
     }
 
     tree at(tree t, int p) const {
@@ -210,15 +287,16 @@ public:
         });
     }
 
-    // comp(d[cur].val, x) (d[cur].val < x) を満たさない (x <= d[cur].val)
-    // 最左のcurを求める
-    std::pair<tree, tree> split_key(tree t, const S& x) {
+    std::pair<tree, tree> split_key_lower(tree t, const S& x) {
         if (!t) return {NIL, NIL};
-
         return split(t, [&](int cur) -> int {
-            // !comp(d[cur].val, x)  <=>  !(d[cur].val < x)  <=>  x <=
-            // d[cur].val
-            return !comp(d[cur].val, x) ? -1 : 1;
+            return lower(d[cur].val, x) ? -1 : 1;
+        });
+    }
+    std::pair<tree, tree> split_key_upper(tree t, const S& x) {
+        if (!t) return {NIL, NIL};
+        return split(t, [&](int cur) -> int {
+            return upper(d[cur].val, x) ? -1 : 1;
         });
     }
 
@@ -283,6 +361,7 @@ private:
     using S = M::S;
 
     static inline std::unique_ptr<treap> impl;
+    // static constexpr tree NIL = 0;
     int id;
 
     //------------------------------------
@@ -293,10 +372,30 @@ public:
         assert(impl);
         id = impl->build();
     }
+    explicit sorted_treap(const S& x) {
+        assert(impl);
+        id = impl->build(x);
+    }
+    explicit sorted_treap(const std::vector<S>& vec) {
+        assert(impl);
+        id = impl->build(vec);
+    }
     // TODO いろんなコンストラクタを作る
 
     sorted_treap(const sorted_treap&) = delete;
     sorted_treap& operator=(const sorted_treap&) = delete;
+
+    sorted_treap(sorted_treap&& rval) noexcept {
+        id = std::exchange(rval.id, impl->build());
+    }
+    sorted_treap& operator=(sorted_treap&& rval) noexcept {
+        id = std::exchange(rval.id, impl->build());
+        return *this;
+    }
+
+    void swap(sorted_treap& other) noexcept {
+        std::swap(id, other.id);
+    }
 
     //------------------------------------
     //  utility
@@ -313,18 +412,32 @@ public:
         return impl->get_val(impl->at(id, p));
     }
 
-    S prod(int l, int r) {
+    S prod(int l, int r) const {
         return impl->prod(id, l, r);
     }
-    S all_prod() {
+    S all_prod() const {
         return impl->all_prod(id);
+    }
+
+    std::pair<int, int> equal_range(const S& x) const {
+        auto [tl0, tr0, upper] = impl->upper_bound(id, x);
+        auto [tl1, tr1, lower] = impl->lower_bound(id, x);
+        return {lower, upper};
+    }
+    int count(const S& x) const {
+        auto [lower, upper] = equal_range(x);
+        return upper - lower;
+    }
+
+    std::vector<S> dump() const {
+        return impl->to_vec(id);
     }
     //------------------------------------
     //  insert
     //------------------------------------
 public:
     void insert(const S& x) {
-        auto [l, r] = impl->split_key(id, x);
+        auto [l, r] = impl->split_key_lower(id, x);
         tree m = impl->build(x);
         id = impl->merge3(l, m, r);
     }
@@ -333,8 +446,8 @@ public:
     //  erase
     //------------------------------------
 public:
-    void erase(const S& x) {
-        auto [l, mr] = impl->split_key(id, x);
+    void erase_key(const S& x) {
+        auto [l, mr] = impl->split_key_lower(id, x);
         if (impl->size(mr) == 0) {
             id = impl->merge(l, mr);
             return;
@@ -345,6 +458,52 @@ public:
             return;
         }
         id = impl->merge3(l, m, r);
+    }
+    void erase_at(int p) {
+        assert(0 <= p && p <= impl->size(id));
+        auto [l, mr] = impl->split_at(id, p);
+        auto [m, r] = impl->split_at(mr, 1);
+        id = impl->merge(l, r);
+    }
+
+    //------------------------------------
+    //  query
+    //------------------------------------
+public:
+    std::pair<S, S> split_prod_lower(const S& x) const {
+        auto [tl, tr, lower, sml, smr] = impl->lower_bound_detail(id, x);
+        return {sml, smr};
+    }
+
+    std::pair<S, S> split_prod_upper(const S& x) const {
+        auto [tl, tr, lower, sml, smr] = impl->upper_bound_detail(id, x);
+        return {sml, smr};
+    }
+
+    S lower_bound(const S& x) const {
+        auto [tl, tr, lower] = impl->lower_bound(id, x);
+        return impl->get_val(tr);
+    }
+    S lower_bound_left(const S& x) const {
+        auto [tl, tr, lower] = impl->lower_bound(id, x);
+        return impl->get_val(tl);
+    }
+    S upper_bound(const S& x) const {
+        auto [tl, tr, lower] = impl->upper_bound(id, x);
+        return impl->get_val(tr);
+    }
+    S upper_bound_left(const S& x) const {
+        auto [tl, tr, lower] = impl->upper_bound(id, x);
+        return impl->get_val(tl);
+    }
+
+    i32 lower_bound_pos(const S& x) const {
+        auto [tl, tr, lower] = impl->lower_bound(id, x);
+        return lower;
+    }
+    i32 upper_bound_pos(const S& x) const {
+        auto [tl, tr, lower] = impl->upper_bound(id, x);
+        return lower;
     }
 };
 

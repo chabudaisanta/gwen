@@ -145,6 +145,8 @@ constexpr T isqrt(const T n) noexcept {
 
 template <typename T>
 constexpr T sq(T x) { return x * x; }
+template <std::integral T>
+constexpr T choose2(T x) { return x * (x - 1) / 2; }
 template <std::integral T1, std::integral T2>
 constexpr T1 getBit(T1 bit, T2 i) {
     return bit & (static_cast<T1>(1) << i);
