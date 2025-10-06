@@ -15,9 +15,7 @@ private:
     int n, bc;
 
     using S = M::S;
-    using MULTISET = gwen::
-    sorted_treap<M, std::less<S>>
-    ;
+    using MULTISET = gwen::sorted_treap<M, std::less<S>>;
     M m;
     struct initialize {
         explicit initialize(i32) {

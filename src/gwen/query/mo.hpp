@@ -1,10 +1,10 @@
 #pragma once
 
-#include <vector>
 #include <algorithm>
-#include <cassert>
 #include <bit>
+#include <cassert>
 #include <numeric>
+#include <vector>
 
 #include "gwen/types.hpp"
 
@@ -14,8 +14,8 @@ namespace internal {
 i64 hilbert_order(i64 x, i64 y, u64 n) {
     assert(std::has_single_bit(n));
     i64 rx, ry, d = 0;
-    for (i64 s=n>>1; s; s>>=1) {
-        rx = (x & s)>0, ry = (y & s)>0;
+    for (i64 s = n >> 1; s; s >>= 1) {
+        rx = (x & s) > 0, ry = (y & s) > 0;
         d += s * s * ((rx * 3) ^ ry);
         if (ry) continue;
         if (rx) {
@@ -27,7 +27,7 @@ i64 hilbert_order(i64 x, i64 y, u64 n) {
     return d;
 }
 
-} // namespace internal
+}  // namespace internal
 
 class mo_algorithm {
 private:
@@ -35,6 +35,7 @@ private:
     i32 n, bc;
     std::vector<i32> L, R;
     std::vector<i64> ord;
+
 public:
     explicit mo_algorithm(i32 n_) : n(n_), bc(std::bit_ceil(static_cast<u32>(n))) {}
 
@@ -50,22 +51,22 @@ public:
     auto solve(auto&& increment_l, auto&& decrement_l, auto&& increment_r, auto&& decrement_r, auto&& get_res) -> std::vector<decltype(get_res())> {
         std::vector<i32> query(q);
         std::iota(query.begin(), query.end(), 0);
-        std::sort(query.begin(), query.end(), [&](i32 a, i32 b){
+        std::sort(query.begin(), query.end(), [&](i32 a, i32 b) {
             return ord[a] < ord[b];
         });
 
         using S = decltype(get_res());
         std::vector<S> ret(q);
         i32 l = 0, r = 0;
-        for(i32 idx : query) {
+        for (i32 idx : query) {
             i32 nl = L[idx], nr = R[idx];
 
             // 先に拡張
-            while(nl < l) decrement_l(--l, r);
-            while(r < nr) increment_r(l, r++);
+            while (nl < l) decrement_l(--l, r);
+            while (r < nr) increment_r(l, r++);
             // 後から縮小
-            while(l < nl) increment_l(l++, r);
-            while(nr < r) decrement_r(l, --r);
+            while (l < nl) increment_l(l++, r);
+            while (nr < r) decrement_r(l, --r);
 
             ret[idx] = get_res();
         }
@@ -73,4 +74,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen
