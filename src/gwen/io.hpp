@@ -151,19 +151,16 @@ public:
         return *this;
     }
 
-    template <std::signed_integral INT>
-    is_type& operator>>(INT& dest) {
+    template <std::signed_integral INT> is_type& operator>>(INT& dest) {
         dest = static_cast<INT>(get_i64());
         return *this;
     }
-    template <std::unsigned_integral UINT>
-    is_type& operator>>(UINT& dest) {
+    template <std::unsigned_integral UINT> is_type& operator>>(UINT& dest) {
         dest = static_cast<UINT>(get_u64());
         return *this;
     }
 
-    template <typename T>
-    is_type& operator>>(std::vector<T>& vec) {
+    template <typename T> is_type& operator>>(std::vector<T>& vec) {
         for (T& dest : vec) (*this) >> dest;
         return *this;
     }
@@ -199,8 +196,7 @@ private:
     static constexpr u32 P10(u32 d) { return d ? P10(d - 1) * 10 : 1; }
     static constexpr u64 P10L(u32 d) { return d ? P10L(d - 1) * 10 : 1; }
 
-    template <class T, class U>
-    static void fil(T& m, U& l, U x) noexcept {
+    template <class T, class U> static void fil(T& m, U& l, U x) noexcept {
         m = l / x;
         l -= m * x;
     }
@@ -330,19 +326,16 @@ public:
         return *this;
     }
 
-    template <std::signed_integral INT>
-    os_type& operator<<(INT tg) {
+    template <std::signed_integral INT> os_type& operator<<(INT tg) {
         push_i64(tg);
         return *this;
     }
-    template <std::unsigned_integral UINT>
-    os_type& operator<<(UINT tg) {
+    template <std::unsigned_integral UINT> os_type& operator<<(UINT tg) {
         push_u64(tg);
         return *this;
     }
 
-    template <typename T>
-    os_type& operator<<(const std::vector<T>& vec) {
+    template <typename T> os_type& operator<<(const std::vector<T>& vec) {
         auto it = vec.begin(), end = vec.end();
         if (it == end) return *this;
         *this << *(it++);

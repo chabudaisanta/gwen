@@ -9,8 +9,7 @@
 
 namespace gwen {
 
-template <acted_monoid AM>
-class treap {
+template <acted_monoid AM> class treap {
 public:
     using S = AM::S;
     using F = AM::F;

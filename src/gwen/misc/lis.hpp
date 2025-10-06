@@ -3,7 +3,9 @@
 #include <limits>
 #include <vector>
 namespace gwen {
-template <typename T, T min = std::numeric_limits<T>::min(), T max = std::numeric_limits<T>::max()>
+template <typename T,
+          T min = std::numeric_limits<T>::min(),
+          T max = std::numeric_limits<T>::max()>
 std::vector<T> LIS(const std::vector<T>& vec) {
     int n = vec.size();
     std::vector<T> dp(n, max), prv(n, min);
@@ -27,7 +29,9 @@ std::vector<T> LIS(const std::vector<T>& vec) {
     return ret;
 }
 
-template <typename T, T min = std::numeric_limits<T>::min(), T max = std::numeric_limits<T>::max()>
+template <typename T,
+          T min = std::numeric_limits<T>::min(),
+          T max = std::numeric_limits<T>::max()>
 std::vector<T> LIS_strict(const std::vector<T>& vec) {
     int n = vec.size();
     std::vector<T> dp(n, max), prv(n, min);

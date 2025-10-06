@@ -57,7 +57,9 @@ using ull = unsigned long long;
 #define S_BAR void(0)
 #endif
 
-constexpr std::pair<int, int> mv[] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}, {0, 0}};
+constexpr std::pair<int, int> mv[] = {{0, 1},   {1, 0},  {0, -1},
+                                      {-1, 0},  {1, 1},  {1, -1},
+                                      {-1, -1}, {-1, 1}, {0, 0}};
 constexpr int dw[] = {0, 0, -1, 1, -1, -1, 1, 1, 0};
 constexpr int dh[] = {-1, 1, 0, 0, -1, 1, -1, 1, 0};
 constexpr int mod998 = 998244353, mod107 = 1000000007, mod109 = 1000000009,
@@ -72,21 +74,17 @@ std::pair<int, int> mv_to(int hi, int wi, int dir) {
     return std::make_pair(hi + dh[dir], wi + dw[dir]);
 }
 
-template <typename T1, typename T2>
-inline bool chmax(T1& a, T2 b) {
+template <typename T1, typename T2> inline bool chmax(T1& a, T2 b) {
     return (a < b ? a = b, true : false);
 }
-template <typename T1, typename T2>
-inline bool chmin(T1& a, T2 b) {
+template <typename T1, typename T2> inline bool chmin(T1& a, T2 b) {
     return (a > b ? a = b, true : false);
 }
 
-template <std::integral T>
-inline bool isIn(T x, T l, T r) {
+template <std::integral T> inline bool isIn(T x, T l, T r) {
     return (l <= x) && (x < r);
 }
-template <std::integral T>
-inline bool isOut(T x, T l, T r) {
+template <std::integral T> inline bool isOut(T x, T l, T r) {
     return (x < l) || (r <= x);
 }
 
@@ -112,28 +110,23 @@ std::vector<int> idxsort(const std::vector<T>& vec, bool rev = false) {
     });
     return ret;
 }
-template <std::integral T>
-T ceil_div(T x, T y) {
+template <std::integral T> T ceil_div(T x, T y) {
     assert(y != 0);
     T d = x / y;
     return d * y == x ? d : d + ((x > 0) ^ (y < 0));
 }
-template <std::integral T>
-T floor_div(T x, T y) {
+template <std::integral T> T floor_div(T x, T y) {
     assert(y != 0);
     T d = x / y;
     return d * y == x ? d : d - ((x < 0) ^ (y < 0));
 }
-template <std::integral T>
-T out_div(T x, T y) {
+template <std::integral T> T out_div(T x, T y) {
     assert(y != 0);
     T d = x / y;
-    return d * y == x ? d : ((x > 0) == (y > 0)) ? d + 1
-                                                 : d - 1;
+    return d * y == x ? d : ((x > 0) == (y > 0)) ? d + 1 : d - 1;
 }
 // https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3605r0.pdf
-template <std::unsigned_integral T>
-constexpr T isqrt(const T n) noexcept {
+template <std::unsigned_integral T> constexpr T isqrt(const T n) noexcept {
     if (n <= T{1}) return n;
     T i_current{0}, i_next{T(T{1} << ((std::bit_width(T(n - 1)) + 1) >> 1))};
     do {
@@ -143,10 +136,8 @@ constexpr T isqrt(const T n) noexcept {
     return i_current;
 }
 
-template <typename T>
-constexpr T sq(T x) { return x * x; }
-template <std::integral T>
-constexpr T choose2(T x) { return x * (x - 1) / 2; }
+template <typename T> constexpr T sq(T x) { return x * x; }
+template <std::integral T> constexpr T choose2(T x) { return x * (x - 1) / 2; }
 template <std::integral T1, std::integral T2>
 constexpr T1 getBit(T1 bit, T2 i) {
     return bit & (static_cast<T1>(1) << i);
@@ -164,8 +155,7 @@ constexpr T1 toggleBit(T1 bit, T2 i) {
     return bit ^ (static_cast<T1>(1) << i);
 }
 
-template <typename Iterator>
-auto runlength(Iterator begin, Iterator end) {
+template <typename Iterator> auto runlength(Iterator begin, Iterator end) {
     using ValueType = typename std::iterator_traits<Iterator>::value_type;
     using CountType = int;
     std::vector<std::pair<ValueType, CountType>> ret;

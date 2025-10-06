@@ -2,8 +2,7 @@
 #include <algorithm>
 #include <vector>
 namespace gwen {
-template <typename T>
-std::vector<int> compress(const std::vector<T>& vec) {
+template <typename T> std::vector<int> compress(const std::vector<T>& vec) {
     std::vector<T> copy = vec;
     std::sort(copy.begin(), copy.end());
     copy.erase(std::unique(copy.begin(), copy.end()), copy.end());

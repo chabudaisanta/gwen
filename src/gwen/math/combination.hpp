@@ -9,13 +9,11 @@ namespace gwen {
 
 namespace internal {
 
-template <typename T>
-struct combination_table {
+template <typename T> struct combination_table {
     i32 n;
     std::vector<T> F, I;
 
-    explicit combination_table() : n(1), F({T(1)}), I({T(1)}) {
-    }
+    explicit combination_table() : n(1), F({T(1)}), I({T(1)}) {}
 
     void extend() {
         assert(n < (1 << 30));
@@ -35,22 +33,19 @@ struct combination_table {
 
 }  // namespace internal
 
-template <typename T>
-T fact(int n) {
+template <typename T> T fact(int n) {
     static internal::combination_table<T> table;
     while (table.n <= n) table.extend();
     return table.F[n];
 }
 
-template <typename T>
-T fact_inv(int n) {
+template <typename T> T fact_inv(int n) {
     static internal::combination_table<T> table;
     while (table.n <= n) table.extend();
     return table.I[n];
 }
 
-template <i32 M = 998244353>
-class combination {
+template <i32 M = 998244353> class combination {
 private:
     const i32 n;
     std::vector<i64> F, I;

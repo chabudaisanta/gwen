@@ -30,5 +30,5 @@ BraceWrapping:
   SplitEmptyRecord: false
 
 PointerAlignment: Left
-ColumnLimit: 0
+# ColumnLimit: 0
 AlignConsecutiveMacros: true

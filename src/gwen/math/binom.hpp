@@ -3,15 +3,12 @@
 #include <vector>
 namespace gwen {
 
-template <typename T>
-struct binom {
+template <typename T> struct binom {
     std::vector<std::vector<T>> d;
 
     explicit binom() : d(1, {T(1)}) {}
 
-    inline int size() const {
-        return d.size();
-    }
+    inline int size() const { return d.size(); }
     void extend() {
         assert(size() <= 30000);  // 9e8
         std::vector<T>& prv = d.back();
@@ -30,9 +27,7 @@ struct binom {
         return d[n][k];
     }
 
-    T operator()(int n, int k) {
-        return get(n, k);
-    }
+    T operator()(int n, int k) { return get(n, k); }
 };
 
 }  // namespace gwen

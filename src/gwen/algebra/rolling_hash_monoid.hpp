@@ -12,8 +12,7 @@ using gwen::hash::calc_mod;
 using gwen::hash::mul_mod;
 using gwen::hash::sub_mod;
 
-template <class T, u64 (*conv)(const T&)>
-struct rolling_hash_monoid {
+template <class T, u64 (*conv)(const T&)> struct rolling_hash_monoid {
     using S = gwen::hash::hash_segment;
     const u64 base = (std::random_device{}() | 2);
     S e = S();
@@ -23,8 +22,7 @@ struct rolling_hash_monoid {
 
     S make_single(const T& x) const { return S(calc_mod(conv(x)), base); }
 
-    template <typename Iterator>
-    S make_range(Iterator begin, Iterator end) {
+    template <typename Iterator> S make_range(Iterator begin, Iterator end) {
         S ret = e;
         for (auto it = begin; it != end; ++it) {
             S cur = make_single(*it);

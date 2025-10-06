@@ -9,8 +9,7 @@
 
 namespace gwen {
 
-template <monoid M>
-class mergesort_tree {
+template <monoid M> class mergesort_tree {
 private:
     int n, bc;
 
@@ -18,16 +17,18 @@ private:
     using MULTISET = gwen::sorted_treap<M, std::less<S>>;
     M m;
     struct initialize {
-        explicit initialize(i32) {
-            MULTISET::init(M{}, std::less<S>{});
-        }
+        explicit initialize(i32) { MULTISET::init(M{}, std::less<S>{}); }
     } dummy;
     std::vector<MULTISET> d;
 
 public:
     explicit mergesort_tree() {}
     explicit mergesort_tree(const std::vector<S>& vec)
-        : n(vec.size()), bc(std::bit_ceil(vec.size())), m(M{}), dummy(0), d(bc * 2) {
+        : n(vec.size()),
+          bc(std::bit_ceil(vec.size())),
+          m(M{}),
+          dummy(0),
+          d(bc * 2) {
         std::vector<std::vector<S>> buf(2 * bc);
         for (i32 i = 0; i < n; ++i) {
             buf[i + bc].emplace_back(vec[i]);

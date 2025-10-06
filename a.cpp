@@ -14,8 +14,7 @@ using gwen::cin;
 using gwen::cout;
 
 #include "gwen/query/mo.hpp"
-template <std::integral T>
-constexpr T choose2(T x) { return x * (x - 1) / 2; }
+template <std::integral T> constexpr T choose2(T x) { return x * (x - 1) / 2; }
 
 void solve() {
     i32 N, Q;
@@ -43,8 +42,7 @@ void solve() {
     auto f3 = [&](i32, i32 r) {
 
     };
-    auto get_res = [&]() {
-    };
+    auto get_res = [&]() {};
     auto res = mo.solve(f0, f1, f2, f3, get_res);
     for (auto x : res) {
         cout << x << '\n';

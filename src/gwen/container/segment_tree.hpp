@@ -8,8 +8,7 @@
 
 namespace gwen {
 
-template <monoid M>
-class segment_tree {
+template <monoid M> class segment_tree {
 private:
     using S = M::S;
     int n, bc;
@@ -57,8 +56,7 @@ public:
 
     S all_prod() const { return d[1]; }
 
-    template <class F>
-    int max_right(int l, F f) const {
+    template <class F> int max_right(int l, F f) const {
         assert(0 <= l && l <= n && "max_right()");
         assert(f(m.e) && "max_right()");
 
@@ -83,8 +81,7 @@ public:
         return n;
     }
 
-    template <class F>
-    int min_left(int r, F f) const {
+    template <class F> int min_left(int r, F f) const {
         assert(0 <= r && r <= n && "min_left()");
         assert(f(m.e) && "min_left()");
 

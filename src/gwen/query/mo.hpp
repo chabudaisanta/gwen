@@ -37,7 +37,8 @@ private:
     std::vector<i64> ord;
 
 public:
-    explicit mo_algorithm(i32 n_) : n(n_), bc(std::bit_ceil(static_cast<u32>(n))) {}
+    explicit mo_algorithm(i32 n_)
+        : n(n_), bc(std::bit_ceil(static_cast<u32>(n))) {}
 
     void add_query(i32 l, i32 r) {
         // [l, r)
@@ -48,12 +49,15 @@ public:
         q++;
     }
 
-    auto solve(auto&& increment_l, auto&& decrement_l, auto&& increment_r, auto&& decrement_r, auto&& get_res) -> std::vector<decltype(get_res())> {
+    auto solve(auto&& increment_l,
+               auto&& decrement_l,
+               auto&& increment_r,
+               auto&& decrement_r,
+               auto&& get_res) -> std::vector<decltype(get_res())> {
         std::vector<i32> query(q);
         std::iota(query.begin(), query.end(), 0);
-        std::sort(query.begin(), query.end(), [&](i32 a, i32 b) {
-            return ord[a] < ord[b];
-        });
+        std::sort(query.begin(), query.end(),
+                  [&](i32 a, i32 b) { return ord[a] < ord[b]; });
 
         using S = decltype(get_res());
         std::vector<S> ret(q);
