@@ -15,7 +15,8 @@ namespace gwen {
 
 namespace internal {
 
-template <monoid M, typename Compare> class sorted_treap_impl {
+template <monoid M, typename Compare>
+class sorted_treap_impl {
 public:
     using S = M::S;
     using tree = int;
@@ -39,10 +40,8 @@ private:
     // constructor
     //------------------------------------
 public:
-    explicit sorted_treap_impl(const M& m_, const Compare& comp_)
-        : m(m_), comp(comp_) {
-        d.emplace_back(
-            new_node(m.e, 0, 0u));  // NIL 用ダミーノード、書き換え厳禁。
+    explicit sorted_treap_impl(const M& m_, const Compare& comp_) : m(m_), comp(comp_) {
+        new_node(m.e, 0, 0u);  // NIL 用ダミーノード、書き換え厳禁。
     }
 
     //------------------------------------
@@ -116,10 +115,16 @@ public:
     inline bool equal(const S& a, const S& b) const {
         return !comp(a, b) && !comp(b, a);
     }
-    inline bool lower(const S& a, const S& b) const { return !comp(a, b); }
-    inline bool upper(const S& a, const S& b) const { return comp(b, a); }
+    inline bool lower(const S& a, const S& b) const {
+        return !comp(a, b);
+    }
+    inline bool upper(const S& a, const S& b) const {
+        return comp(b, a);
+    }
 
-    S get_val(tree t) const { return d[t].val; }
+    S get_val(tree t) const {
+        return d[t].val;
+    }
 
     //------------------------------------
     //  internal utility
@@ -134,7 +139,8 @@ private:
     inline int pos(tree t) const { return size(d[t].lch); }
 
 public:
-    std::tuple<tree, tree, int, S, S> bound_detail(tree t, auto cond) const {
+    std::tuple<tree, tree, int, S, S>
+    bound_detail(tree t, auto cond) const {
         tree tl = NIL;
         tree tr = NIL;
         int lower = 0;
@@ -159,15 +165,17 @@ public:
         return {tl, tr, lower, sml, smr};
     }
 
-    std::tuple<tree, tree, int, S, S> lower_bound_detail(tree t,
-                                                         const S& x) const {
-        return bound_detail(
-            t, [&](tree t) { return lower(d[t].val, x) ? -1 : 1; });
+    std::tuple<tree, tree, int, S, S>
+    lower_bound_detail(tree t, const S& x) const {
+        return bound_detail(t, [&](tree t) {
+            return lower(d[t].val, x) ? -1 : 1;
+        });
     }
-    std::tuple<tree, tree, int, S, S> upper_bound_detail(tree t,
-                                                         const S& x) const {
-        return bound_detail(
-            t, [&](tree t) { return upper(d[t].val, x) ? -1 : 1; });
+    std::tuple<tree, tree, int, S, S>
+    upper_bound_detail(tree t, const S& x) const {
+        return bound_detail(t, [&](tree t) {
+            return upper(d[t].val, x) ? -1 : 1;
+        });
     }
 
     std::tuple<tree, tree, int> bound(tree t, auto cond) const {
@@ -192,14 +200,18 @@ public:
     }
 
     std::tuple<tree, tree, int> lower_bound(tree t, const S& x) const {
-        return bound(t, [&](tree t) { return lower(d[t].val, x) ? -1 : 1; });
+        return bound(t, [&](tree t) {
+            return lower(d[t].val, x) ? -1 : 1;
+        });
     }
     std::tuple<tree, tree, int> upper_bound(tree t, const S& x) const {
-        return bound(t, [&](tree t) { return upper(d[t].val, x) ? -1 : 1; });
+        return bound(t, [&](tree t) {
+            return upper(d[t].val, x) ? -1 : 1;
+        });
     }
 
     tree at(tree t, int p) const {
-        assert(0 <= p && p <= size(t));
+        assert(0 <= p && p < size(t));
         while (pos(t) != p) {
             if (p < pos(t)) {
                 t = d[t].lch;
@@ -280,13 +292,15 @@ public:
 
     std::pair<tree, tree> split_key_lower(tree t, const S& x) {
         if (!t) return {NIL, NIL};
-        return split(
-            t, [&](int cur) -> int { return lower(d[cur].val, x) ? -1 : 1; });
+        return split(t, [&](int cur) -> int {
+            return lower(d[cur].val, x) ? -1 : 1;
+        });
     }
     std::pair<tree, tree> split_key_upper(tree t, const S& x) {
         if (!t) return {NIL, NIL};
-        return split(
-            t, [&](int cur) -> int { return upper(d[cur].val, x) ? -1 : 1; });
+        return split(t, [&](int cur) -> int {
+            return upper(d[cur].val, x) ? -1 : 1;
+        });
     }
 
     std::pair<tree, tree> split(tree t, auto cond) {
@@ -338,7 +352,7 @@ template <monoid M, typename Compare>
 class sorted_treap {
 public:
     static void init(const M& m, const Compare& comp) {
-        // assert(!impl);
+        //assert(!impl);
         if (!impl) {
             impl = std::make_unique<treap>(m, comp);
         }
@@ -382,19 +396,31 @@ public:
         return *this;
     }
 
-    void swap(sorted_treap& other) noexcept { std::swap(id, other.id); }
+    void swap(sorted_treap& other) noexcept {
+        std::swap(id, other.id);
+    }
 
     //------------------------------------
     //  utility
     //------------------------------------
 public:
-    int size() const { return impl->size(id); }
-    bool empty() const { return impl->empty(id); }
+    int size() const {
+        return impl->size(id);
+    }
+    bool empty() const {
+        return impl->empty(id);
+    }
 
-    S at(int p) const { return impl->get_val(impl->at(id, p)); }
+    S at(int p) const {
+        return impl->get_val(impl->at(id, p));
+    }
 
-    S prod(int l, int r) const { return impl->prod(id, l, r); }
-    S all_prod() const { return impl->all_prod(id); }
+    S prod(int l, int r) const {
+        return impl->prod(id, l, r);
+    }
+    S all_prod() const {
+        return impl->all_prod(id);
+    }
 
     std::pair<int, int> equal_range(const S& x) const {
         auto [tl0, tr0, upper] = impl->upper_bound(id, x);
@@ -406,7 +432,9 @@ public:
         return upper - lower;
     }
 
-    std::vector<S> dump() const { return impl->to_vec(id); }
+    std::vector<S> dump() const {
+        return impl->to_vec(id);
+    }
     //------------------------------------
     //  insert
     //------------------------------------

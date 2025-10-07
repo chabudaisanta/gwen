@@ -20,6 +20,7 @@ using gwen::cout;
 using M = gwen::sum_monoid<i64>;
 using COMP = std::less<i64>;
 using MULTISET = gwen::sorted_treap<M, COMP>;
+
 void solve() {
     i32 N;
     cin >> N;
