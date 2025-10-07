@@ -16,8 +16,19 @@ using gwen::cout;
 #include "gwen/query/mo.hpp"
 template <std::integral T> constexpr T choose2(T x) { return x * (x - 1) / 2; }
 
+struct o {
+    i32 a, b;
+    std::string c;
+
+    std::tuple<i32, i32, std::string> dump() const { return {a, b, c}; }
+};
 void solve() {
-    std::vector<int> d{1, 2, 3};
+    std::vector<o> d{o{
+        .a = 114,
+        .b = 514,
+        .c = "810",
+    }};
+    DUMP(d);
 }
 
 int main() {
