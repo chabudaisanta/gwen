@@ -12,23 +12,19 @@ using i64 = gwen::i64;
 using u64 = gwen::u64;
 using gwen::cin;
 using gwen::cout;
-
-#include "gwen/query/mo.hpp"
-template <std::integral T> constexpr T choose2(T x) { return x * (x - 1) / 2; }
-
-struct o {
-    i32 a, b;
-    std::string c;
-
-    std::tuple<i32, i32, std::string> dump() const { return {a, b, c}; }
+#include "gwen/container/splay_tree.hpp"
+#include "gwen/algebra/monoid.hpp"
+struct MAPPING {
+    using S = i64;
+    using F = i64;
+    S operator()(const F& f, const S& x) const {
+        return f + x;
+    }
 };
+using AM = gwen::ActedMonoid<gwen::Max<i64>,gwen::Sum<i64>,MAPPING>;
+using splaytree = gwen::splay_tree<AM>;
 void solve() {
-    std::vector<o> d{o{
-        .a = 114,
-        .b = 514,
-        .c = "810",
-    }};
-    DUMP(d);
+    splaytree::init(AM{gwen::Max<i64>{}, gwen::Sum<i64>{0},MAPPING{}});
 }
 
 int main() {

@@ -2,6 +2,8 @@
 
 #include <utility>
 #include <vector>
+#include <memory>
+#include <tuple>
 
 #include "gwen/algebra/monoid.hpp"
 #include "gwen/types.hpp"
@@ -10,8 +12,8 @@ namespace internal {
 
 template <acted_monoid AM> class splay_tree_impl {
 public:
-    using S = AM::monoid::S;
-    using F = AM::act::S;
+    using S = AM::S;
+    using F = AM::S;
 
 private:
     static constexpr i32 NIL = 0;
@@ -199,7 +201,7 @@ public:
     std::tuple<tree, tree, tree> split3(tree t, i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size(t));
         auto [lt, mrt] = split(t, l);
-        auto [mt, rt] = split(mr, r - l);
+        auto [mt, rt] = split(mrt, r - l);
         return {lt, mt, rt};
     }
 
@@ -280,5 +282,22 @@ private:
     inline i32 pos(tree t) const { return d[d[t].lch].cnt; }
 };
 }  // namespace internal
+
+template<acted_monoid AM>
+class splay_tree {
+public:
+    static void init(const AM& am_) {
+        if(!impl) {
+            impl = std::make_unique<splaytree>(am_);
+        }
+    }
+
+private:
+    using splaytree = internal::splay_tree_impl<AM>;
+    using S = AM::S;
+    using F = AM::F;
+
+    static inline std::unique_ptr<splaytree> impl;
+};
 
 }  // namespace gwen
