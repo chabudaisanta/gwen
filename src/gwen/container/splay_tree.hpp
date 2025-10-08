@@ -180,8 +180,7 @@ public:
         return splay(bound(t, [](tree) { return 1; }).first);
     }
     tree splay_at(tree t, i32 p) {
-        assert(0 <= p && p <= size(t));
-        if(p == size(t)) return t;
+        assert(0 <= p && p < size(t));
         return splay(bound(t, [&](tree cur) {
             if (p < pos(cur)) return -1;
             p -= pos(cur);

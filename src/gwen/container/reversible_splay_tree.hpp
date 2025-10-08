@@ -182,8 +182,7 @@ public:
         return splay(bound(t, [](tree) { return 1; }).first);
     }
     tree splay_at(tree t, i32 p) {
-        assert(0 <= p && p <= size(t));
-        if(p == size(t)) return t;
+        assert(0 <= p && p < size(t));
         return splay(bound(t, [&](tree cur) {
             if (p < pos(cur)) return -1;
             p -= pos(cur);
@@ -386,7 +385,7 @@ private:
         if (g) (d[g].lch == p ? d[g].lch : d[g].rch) = t;
         d[p].par = t;
         d[p].rch = d[t].lch;
-        d[d[t].lch].par = p;
+        if(d[t].lch) d[d[t].lch].par = p;
         d[t].par = g;
         d[t].lch = p;
     }
@@ -396,7 +395,7 @@ private:
         if (g) (d[g].lch == p ? d[g].lch : d[g].rch) = t;
         d[p].par = t;
         d[p].lch = d[t].rch;
-        d[d[t].rch].par = p;
+        if(d[t].rch) d[d[t].rch].par = p;
         d[t].par = g;
         d[t].rch = p;
     }
