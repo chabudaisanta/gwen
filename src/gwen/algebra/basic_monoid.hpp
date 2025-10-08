@@ -32,8 +32,7 @@ template <std::unsigned_integral T> struct xor_monoid {
     S e = S{0};
 };
 
-template <typename T>
-struct rangesum_monoid {
+template <typename T> struct rangesum_monoid {
     struct S {
         T val;
         i32 len;
@@ -46,38 +45,36 @@ struct rangesum_monoid {
     S e = {T{0}, 0};
 };
 
-template <class Monoid, class Act>
-struct rangesum_mapping {
-    typename Monoid::S operator()(const typename Act::S& f, const typename Monoid::S& x) const {
+template <class Monoid, class Act> struct rangesum_mapping {
+    typename Monoid::S operator()(const typename Act::S& f,
+                                  const typename Monoid::S& x) const {
         return {f * x.len + x.val, x.len};
     }
 };
 
 template <typename T>
-struct rangesum_acted_monoid : ActedMonoid<
-    rangesum_monoid<T>,
-    Sum<T>,
-    rangesum_mapping<rangesum_monoid<T>, Sum<T>>
-> {
-    using base = ActedMonoid<
-        rangesum_monoid<T>,
-        Sum<T>,
-        rangesum_mapping<rangesum_monoid<T>, Sum<T>>
-    >;
+struct rangesum_acted_monoid
+    : ActedMonoid<rangesum_monoid<T>,
+                  Sum<T>,
+                  rangesum_mapping<rangesum_monoid<T>, Sum<T>>> {
+    using base = ActedMonoid<rangesum_monoid<T>,
+                             Sum<T>,
+                             rangesum_mapping<rangesum_monoid<T>, Sum<T>>>;
 
     // デフォルトコンストラクタをちゃんと定義してあげる！
-    rangesum_acted_monoid() : base(
-        rangesum_monoid<T>{},            // rangesum_monoidをデフォルト構築
-        Sum<T>{T{0}},                   // Sum<T>の単位元は0だよ、と明示的に指定！
-        rangesum_mapping<rangesum_monoid<T>, Sum<T>>{} // mappingをデフォルト構築
-    ) {}
+    rangesum_acted_monoid()
+        : base(rangesum_monoid<T>{},  // rangesum_monoidをデフォルト構築
+               Sum<T>{T{0}},          // Sum<T>の単位元は0だよ、と明示的に指定！
+               rangesum_mapping<rangesum_monoid<T>, Sum<T>>{}
+               // mappingをデフォルト構築
+          ) {}
 
     using S = typename rangesum_monoid<T>::S;
-    template<typename Itr>
+    template <typename Itr>
     static std::vector<S> make_range(Itr begin, Itr end) {
         int N = end - begin;
         std::vector<S> ret(N);
-        for(auto it = begin; auto& e : ret) {
+        for (auto it = begin; auto& e : ret) {
             e = {*(it++), 1};
         }
         return ret;

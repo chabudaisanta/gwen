@@ -1,12 +1,12 @@
 #pragma once
 
-#include <utility>
-#include <vector>
-#include <memory>
-#include <tuple>
 #include <cassert>
 #include <concepts>
 #include <iterator>
+#include <memory>
+#include <tuple>
+#include <utility>
+#include <vector>
 
 #include "gwen/algebra/monoid.hpp"
 #include "gwen/types.hpp"
@@ -63,11 +63,10 @@ private:
 public:
     tree build() { return NIL; }
     tree build(const S& x) { return new_node(x); }
-    template<std::random_access_iterator Itr>
-    tree build(Itr begin, Itr end) {
+    template <std::random_access_iterator Itr> tree build(Itr begin, Itr end) {
         auto dist = std::distance(begin, end);
-        if(dist == 1) return build(*begin);
-        if(dist == 0) return build();
+        if (dist == 1) return build(*begin);
+        if (dist == 0) return build();
 
         Itr mid = begin + (dist / 2);
         tree root = build(*mid);
@@ -182,12 +181,12 @@ public:
     tree splay_at(tree t, i32 p) {
         assert(0 <= p && p < size(t));
         return splay(bound(t, [&](tree cur) {
-            if (p < pos(cur)) return -1;
-            p -= pos(cur);
-            if (p == 0) return 0;
-            p--;
-            return 1;
-        }).second);
+                         if (p < pos(cur)) return -1;
+                         p -= pos(cur);
+                         if (p == 0) return 0;
+                         p--;
+                         return 1;
+                     }).second);
     }
     //------------------------------------
     //  split
@@ -255,26 +254,26 @@ public:
 public:
     tree set(tree t, i32 p, const S& x) {
         assert(0 <= p && p < size(t));
-        t = splay_at(t, p); // d[t].lz = am.act.e
+        t = splay_at(t, p);  // d[t].lz = am.act.e
         d[t].val = x;
         update(t);
         return t;
     }
-    std::pair<tree,S> at(tree t, i32 p) {
+    std::pair<tree, S> at(tree t, i32 p) {
         assert(0 <= p && p < size(t));
-        t = splay_at(t, p); // d[t].lz = am.act.e
+        t = splay_at(t, p);  // d[t].lz = am.act.e
         return {t, d[t].val};
     }
 
     inline S all_prod(tree t) const { return am.mapping(d[t].lz, d[t].prod); }
-    std::pair<tree,S> prod(tree t, i32 l, i32 r) {
+    std::pair<tree, S> prod(tree t, i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size(t));
         auto [lt, mt, rt] = split3(t, l, r);
         S ret = all_prod(mt);
         return {merge3(lt, mt, rt), ret};
     }
-    
-    std::tuple<tree,S,S> prod_bound(tree t, i32 p) {
+
+    std::tuple<tree, S, S> prod_bound(tree t, i32 p) {
         assert(0 <= p && p <= size(t));
         t = splay_at(t, p);
         // t.lch, t, t.rch は push済み
@@ -299,7 +298,7 @@ public:
 
     tree rotate(tree t, i32 p) {
         assert(0 <= p && p <= size(t));
-        if(p == 0 || p == size(t)) return t;
+        if (p == 0 || p == size(t)) return t;
         auto [l, r] = split_at(t, p);
         return merge(r, l);
     }
@@ -316,10 +315,10 @@ public:
 
     tree erase_at(tree t, i32 p) {
         assert(0 <= p && p < size(t));
-        auto [l, m, r] = split3(t, p, p+1);
+        auto [l, m, r] = split3(t, p, p + 1);
         return merge(l, r);
     }
-    
+
     tree erase_range(tree t, i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size(t));
         auto [lt, mt, rt] = split3(t, l, r);
@@ -375,11 +374,10 @@ private:
 };
 }  // namespace internal
 
-template<acted_monoid AM>
-class splay_tree {
+template <acted_monoid AM> class splay_tree {
 public:
     static void init(const AM& am_) {
-        if(!impl) {
+        if (!impl) {
             impl = std::make_unique<splaytree>(am_);
         }
     }
@@ -393,6 +391,7 @@ private:
 
     using tree = i32;
     tree id;
+
 public:
     splay_tree() {
         assert(impl && "constructor called without initialize");
@@ -404,12 +403,12 @@ public:
     }
     splay_tree(const std::vector<S>& vec) {
         assert(impl && "constructor called without initialize");
-        id = impl->build(vec.begin(),vec.end());
+        id = impl->build(vec.begin(), vec.end());
     }
-    template<typename Itr>
-    splay_tree(Itr begin, Itr end) {
+    template <typename Itr> splay_tree(Itr begin, Itr end) {
         using category = typename std::iterator_traits<Itr>::iterator_category;
-        if constexpr (std::is_base_of_v<std::random_access_iterator_tag, category>) {
+        if constexpr (std::is_base_of_v<std::random_access_iterator_tag,
+                                        category>) {
             id = impl->build(begin, end);
         }
         else {
@@ -418,53 +417,31 @@ public:
         }
     }
 
-    i32 size() const {
-        return impl->size(id);
-    }
-    bool empty() const {
-        return impl->empty(id);
-    }
+    i32 size() const { return impl->size(id); }
+    bool empty() const { return impl->empty(id); }
 
-    void set(i32 p, const S& x) {
-        id = impl->set(id, p, x);
-    }
+    void set(i32 p, const S& x) { id = impl->set(id, p, x); }
     S at(i32 p) {
         auto [new_id, ret] = impl->at(id, p);
         id = new_id;
         return ret;
     }
 
-    void insert_at(i32 p, const S& x) {
-        id = impl->insert_at(id, p, x);
-    }
-    void erase_at(i32 p) {
-        id = impl->erase_at(id, p);
-    }
-    void erase_range(i32 l, i32 r) {
-        id = impl->erase_range(id, l, r);
-    }
-    void rotate(i32 p) {
-        id = impl->rotate(id, p);
-    }
-    void apply(i32 p, const F& f) {
-        id = impl->apply(id, p, f);
-    }
-    void apply(i32 l, i32 r, const F& f) {
-        id = impl->apply(id, l, r, f);
-    }
-    void all_apply(const F& f) {
-        impl->all_apply(id, f);
-    }
+    void insert_at(i32 p, const S& x) { id = impl->insert_at(id, p, x); }
+    void erase_at(i32 p) { id = impl->erase_at(id, p); }
+    void erase_range(i32 l, i32 r) { id = impl->erase_range(id, l, r); }
+    void rotate(i32 p) { id = impl->rotate(id, p); }
+    void apply(i32 p, const F& f) { id = impl->apply(id, p, f); }
+    void apply(i32 l, i32 r, const F& f) { id = impl->apply(id, l, r, f); }
+    void all_apply(const F& f) { impl->all_apply(id, f); }
 
     S prod(i32 l, i32 r) {
         auto [new_id, ret] = impl->prod(id, l, r);
         id = new_id;
         return ret;
     }
-    S all_prod() const {
-        return impl->all_prod(id);
-    }
-    std::pair<S,S> prod_bound(i32 p) {
+    S all_prod() const { return impl->all_prod(id); }
+    std::pair<S, S> prod_bound(i32 p) {
         auto [new_id, sml, smr] = impl->prod_bound(id, p);
         id = new_id;
         return {sml, smr};
