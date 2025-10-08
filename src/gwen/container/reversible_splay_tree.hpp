@@ -13,7 +13,7 @@
 namespace gwen {
 namespace internal {
 
-template <acted_monoid AM> class splay_tree_impl {
+template <acted_monoid AM> class reversible_splay_tree_impl {
 public:
     using S = AM::S;
     using F = AM::F;
@@ -27,8 +27,10 @@ private:
         tree rch;
         S val;
         S prod;
+        S rev_prod;
         F lz;
         i32 cnt;
+        bool rev;
     };
     std::vector<node> d;
     AM am;
@@ -37,7 +39,7 @@ public:
     //------------------------------------
     //  constructor
     //------------------------------------
-    splay_tree_impl(const AM& am_, i32 max_size = 1 << 20) : am(am_) {
+    reversible_splay_tree_impl(const AM& am_, i32 max_size = 1 << 20) : am(am_) {
         d.reserve(max_size);
         d[new_node(am.monoid.e)].cnt = 0;  // NIL
     }
@@ -54,8 +56,10 @@ private:
             .rch = NIL,
             .val = x,
             .prod = x,
+            .rev_prod = x,
             .lz = am.act.e,
             .cnt = 1,
+            .rev = false,
         });
         return ret;
     }
@@ -123,19 +127,16 @@ private:
             tree p = d[t].par;
             if (!d[p].par) {
                 // zig
-                d[t].cnt = std::move(d[p].cnt);
-                d[t].prod = std::move(d[p].prod);
                 if (d[p].lch == t)
                     rotr(t);
                 else
                     rotl(t);
                 update(p);
+                update(t);
                 return t;
             }
 
             tree g = d[p].par;
-            d[t].cnt = std::move(d[g].cnt);
-            d[t].prod = std::move(d[g].prod);
             if (d[p].lch == t) {
                 if (d[g].lch == p) {
                     // zig-zig
@@ -168,6 +169,7 @@ private:
                     update(p);
                 }
             }
+            update(t);
         }
         return t;
     }
@@ -267,7 +269,7 @@ public:
         return {t, d[t].val};
     }
 
-    inline S all_prod(tree t) const { return am.mapping(d[t].lz, d[t].prod); }
+    inline S all_prod(tree t) const { return am.mapping(d[t].lz, d[t].rev ? d[t].prod : d[t].rev_prod); }
     std::pair<tree,S> prod(tree t, i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size(t));
         auto [lt, mt, rt] = split3(t, l, r);
@@ -305,6 +307,17 @@ public:
         return merge(r, l);
     }
 
+    void all_reverse(tree t) {
+        d[t].rev ^= true;
+    }
+
+    tree reverse(tree t, i32 l, i32 r) {
+        assert(0 <= l && l <= r && r <= size(t));
+        auto [lt, mt, rt] = split3(t, l, r);
+        all_reverse(mt);
+        return merge3(lt, mt, rt);
+    }
+
     //------------------------------------
     //  insert / erase
     //------------------------------------
@@ -333,22 +346,38 @@ public:
 private:
     inline void push(tree t) {
         node& nt = d[t];
+        if(nt.rev) {
+            std::swap(nt.lch, nt.rch);
+            std::swap(nt.prod, nt.rev_prod);
+        }
         nt.val = am.mapping(nt.lz, nt.val);
         nt.prod = am.mapping(nt.lz, nt.prod);
+        nt.rev_prod = am.mapping(nt.lz, nt.rev_prod);
 
-        if (nt.lch) d[nt.lch].lz = am.act.op(nt.lz, d[nt.lch].lz);
-        if (nt.rch) d[nt.rch].lz = am.act.op(nt.lz, d[nt.rch].lz);
+        if (nt.lch) {
+            d[nt.lch].lz = am.act.op(nt.lz, d[nt.lch].lz);
+            if(nt.rev) d[nt.lch].rev ^= true;
+        }
+        if (nt.rch) {
+            d[nt.rch].lz = am.act.op(nt.lz, d[nt.rch].lz);
+            if(nt.rev) d[nt.rch].rev ^= true;
+        }
         nt.lz = am.act.e;
+        nt.rev = false;
     }
 
     inline S op3(const S& a, const S& b, const S& c) const {
         return am.monoid.op(am.monoid.op(a, b), c);
     }
     inline void update(tree t) {
-        // nt.lz must be am.act.e
+        // nt.lz must be am.act.e, nt.rev = false
         node& nt = d[t];
         nt.cnt = d[nt.lch].cnt + 1 + d[nt.rch].cnt;
         nt.prod = op3(all_prod(nt.lch), nt.val, all_prod(nt.rch));
+        nt.rev_prod = op3(all_rev_prod(nt.lch), nt.val, all_rev_prod(nt.rch));
+    }
+    S all_rev_prod(tree t) {
+        return am.mapping(d[t].lz, d[t].rev ? d[t].rev_prod : d[t].prod);
     }
 
     inline void rotl(tree t) {
@@ -376,8 +405,9 @@ private:
 };
 }  // namespace internal
 
+
 template<acted_monoid AM>
-class splay_tree {
+class reversible_splay_tree {
 public:
     static void init(const AM& am_) {
         if(!impl) {
@@ -386,7 +416,7 @@ public:
     }
 
 private:
-    using splaytree = internal::splay_tree_impl<AM>;
+    using splaytree = internal::reversible_splay_tree_impl<AM>;
     using S = AM::S;
     using F = AM::F;
 
@@ -395,20 +425,20 @@ private:
     using tree = i32;
     tree id;
 public:
-    splay_tree() {
+    reversible_splay_tree() {
         assert(impl && "constructor called without initialize");
         id = impl->build();
     }
-    splay_tree(const S& x) {
+    reversible_splay_tree(const S& x) {
         assert(impl && "constructor called without initialize");
         id = impl->build(x);
     }
-    splay_tree(const std::vector<S>& vec) {
+    reversible_splay_tree(const std::vector<S>& vec) {
         assert(impl && "constructor called without initialize");
         id = impl->build(vec.begin(),vec.end());
     }
     template<typename Itr>
-    splay_tree(Itr begin, Itr end) {
+    reversible_splay_tree(Itr begin, Itr end) {
         using category = typename std::iterator_traits<Itr>::iterator_category;
         if constexpr (std::is_base_of_v<std::random_access_iterator_tag, category>) {
             id = impl->build(begin, end);
@@ -469,6 +499,13 @@ public:
         auto [new_id, sml, smr] = impl->prod_bound(id, p);
         id = new_id;
         return {sml, smr};
+    }
+
+    void all_reverse() {
+        impl->all_reverse(id);
+    }
+    void reverse(i32 l, i32 r) {
+        id = impl->reverse(id, l, r);
     }
 };
 
