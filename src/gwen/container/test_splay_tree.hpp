@@ -46,8 +46,10 @@ struct range_apply_reverse_prod_node_policy {
     S val;
     S prod;
     S rev_prod;
-    F lz;
+    F lz = Act::e;
     bool rev = false;
+
+    range_apply_reverse_prod_node_policy(const S& x) : val(x), prod(x), rev_prod(x) {}
 
     inline void update(const mytype& a, const mytype& b) noexcept {
         // a, b and *this has pushed <=> lz = id(), rev = false
@@ -300,7 +302,8 @@ public:
         if(!t) return t; // not assert(for erase by key)
         tree lt = d[t].lch, rt = d[t].rch;
         d[t].lch = d[t].rch = NIL;
-        // no need to update t
+        if(lt) d[lt].par = NIL;
+        if(rt) d[rt].par = NIL;
         // lt and rt is valid
         return merge(lt, rt);
     }
@@ -312,7 +315,7 @@ public:
 
         tree p = NIL;
         push(t);
-        int dir = 0; // 妥協.
+        auto dir = 0; // ここでは宇宙演算子は使えません...
         while (t) {
             push(d[t].lch);
             push(d[t].rch);

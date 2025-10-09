@@ -23,8 +23,7 @@ struct mapping {
 };
 
 void solve() {
-    i32 a, b; cin >> a >> b;
-    cout << mapping::op(a, b) << EL;
+    
 }
 
 int main() {
