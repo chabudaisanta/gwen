@@ -30,5 +30,6 @@ BraceWrapping:
   SplitEmptyRecord: false
 
 PointerAlignment: Left
-# ColumnLimit: 0
+ColumnLimit: 120
 AlignConsecutiveMacros: true
+SpaceBeforeRangeBasedForLoopColon: true

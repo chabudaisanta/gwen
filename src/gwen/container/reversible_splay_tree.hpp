@@ -389,6 +389,7 @@ private:
         d[t].par = g;
         d[t].lch = p;
     }
+    
     inline void rotr(tree t) {
         tree p = d[t].par;
         tree g = d[p].par;
