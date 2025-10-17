@@ -39,13 +39,13 @@ combination_table<T>& get_comb_table() {
 }  // namespace internal
 
 template <typename T> T fact(i32 n) {
-    auto& table = internal::get_comb_table();
+    auto& table = internal::get_comb_table<T>();
     while (table.n <= n) table.extend();
     return table.F[n];
 }
 
 template <typename T> T fact_inv(i32 n) {
-    auto& table = internal::get_comb_table();
+    auto& table = internal::get_comb_table<T>();
     while (table.n <= n) table.extend();
     return table.I[n];
 }
