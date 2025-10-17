@@ -164,7 +164,7 @@ public:
         for (T& dest : vec) (*this) >> dest;
         return *this;
     }
-} cin;
+} input;
 
 struct output_precalc_table {
     char LZ[1000][4] = {};
@@ -342,6 +342,6 @@ public:
         for (; it != end; ++it) (*this) << ' ' << *it;
         return *this;
     }
-} cout;
+} output;
 
 }  // namespace gwen

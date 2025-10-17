@@ -10,18 +10,18 @@ namespace gwen {
 namespace internal {
 
 struct prime_factorize_table {
-    i32 n = 2;
-    std::vector<i32> p{0, 0};  // p[i] = 0: i is prime (or 1/0)
+    i32 n;
+    std::vector<i32> p;  // p[i] = 0: i is prime (or 1/0)
 
-    prime_factorize_table() {}
+    prime_factorize_table() : n(2), p(2, 0) {}
 
     void extend() {
         assert(n < (1 << 30));
-        n *= 2;
+        n <<= 1;
         p.resize(n, 0);
         for (int i = 2; i < n; ++i)
             if (!p[i]) {
-                for (i64 j = u64(i) * i; j < n; j += i) {
+                for (i64 j = i64(i) * i; j < n; j += i) {
                     p[j] = i;
                 }
             }
@@ -33,6 +33,20 @@ struct prime_factorize_table {
 };
 
 }  // namespace internal
+
+std::vector<i32> factorize(i32 x) {
+    assert(0 < x && x < (1 << 30));
+    static gwen::internal::prime_factorize_table table;
+    while (table.max() < x) table.extend();
+    std::vector<i32> ret;
+    while (table.p[x] != 0) {
+        // if p[x] = 0, x is prime
+        ret.emplace_back(table.p[x]);
+        x /= table.p[x];
+    }
+    if (x != 1) ret.emplace_back(x);
+    return ret;
+}
 
 bool miller32(u32 n) {
     assert(n < 4759123141u);
@@ -106,18 +120,5 @@ bool miller(u64 n) {
         return miller64(n);
 }
 
-std::vector<i32> factorize(i32 x) {
-    assert(0 < x && x < (1 << 30));
-    static gwen::internal::prime_factorize_table table;
-    while (table.max() < x) table.extend();
-    std::vector<i32> ret;
-    while (table.p[x] != 0) {
-        // if p[x] = 0, x is prime
-        ret.emplace_back(table.p[x]);
-        x /= table.p[x];
-    }
-    if (x != 1) ret.emplace_back(x);
-    return ret;
-}
 
 }  // namespace gwen

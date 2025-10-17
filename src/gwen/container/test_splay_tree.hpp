@@ -50,26 +50,6 @@ struct range_apply_reverse_prod_node_policy {
     bool rev = false;
 
     range_apply_reverse_prod_node_policy(const S& x) : val(x), prod(x), rev_prod(x) {}
-
-    inline void update(const mytype& a, const mytype& b) noexcept {
-        // a, b and *this has pushed <=> lz = id(), rev = false
-        // but rev is difficult(especially swap), it is processed on the data structure
-        // rev is always false
-        prod = Mapping::op(Mapping::op(a.prod, val), b.prod);
-        rev_prod = Mapping::op(Mapping::op(b.rev_prod, val), a.rev_prod);
-    }
-    inline void eval() noexcept {
-        val = Mapping::op(lz, val);
-        prod = Mapping::op(lz, prod);
-        rev_prod = Mapping::op(lz, rev_prod);
-    }
-    inline void push(mytype& child) noexcept {
-        // why push lz for each child? -> to check NIL
-        child.lz = Mapping::op(lz, child.lz);
-    }
-    inline void clear_lz() noexcept {
-        lz = Act::e;
-    }
 };
 
 namespace internal {
@@ -91,14 +71,18 @@ public:
     
     static inline std::vector<Node> d;
 
-    // constructor
+    //------------------------------------
+    //  constructor
+    //------------------------------------
     explicit splay_tree_base() {
         if(d.size()) return;
         // NIL
         d.emplace_back(Node());
     }
 
-    // make node / build tree
+    //------------------------------------
+    // make node / tree
+    //------------------------------------
     static tree new_node(const S& x) {
         tree ret = d.size();
         d.emplace_back(Node(x));
@@ -127,8 +111,9 @@ public:
         return root;
     }
 
-
-    // basic utility
+    //------------------------------------
+    //  basic utility
+    //------------------------------------
     static inline i32 size(tree t) noexcept {
         return d[t].cnt;
     }
@@ -136,7 +121,9 @@ public:
         return !t;
     }
 
-    // bound
+    //------------------------------------
+    //  bound
+    //------------------------------------
 protected:
     static std::pair<tree, tree> bound(tree t, auto&& cond) {
         tree lt = NIL, rt = NIL;
@@ -144,7 +131,7 @@ protected:
         while (t) {
             push(d[t].lch);
             push(d[t].rch);
-            auto dir = cond(t);
+            i32 dir = cond(t);
             if (dir == 0) {
                 return {lt, t};
             }
@@ -164,6 +151,17 @@ protected:
     // ancestors of k-1th or kth and their children has pushed (https://qiita.com/ngtkana/items/4d0b84d45210771aa074)
     // tree structure remains unchanged
     // return k-1th element node and kth element node
+
+    static std::pair<tree, tree> bound_at(tree t, i32 p) {
+        assert(0 <= p && p <= size(t));
+        return bound(t, [&](tree cur) {
+            if(p < pos(cur)) return -1;
+            p -= pos(cur);
+            if(p == 0) return 0;
+            p--;
+            return 1;
+        });
+    }
 
     // splay
 protected:
@@ -215,43 +213,38 @@ protected:
 
     // bound -> splay
     static tree splay_head(tree t) {
-        return splay(bound(t, [](tree){ return -1; }).second);
+        assert(t);
+        auto [l, r] = bound(t, [](tree){ return -1; });
+        return splay(r);
     }
     static tree splay_tail(tree t) {
-        return splay(bound(t, [](tree){ return 1; }).second);
+        assert(t);
+        auto [l, r] = bound(t, [](tree){ return 1; });
+        return splay(l);
     }
     static tree splay_at(tree t, i32 p) {
         assert(0 <= p && p < size(t));
-        return splay(bound(t, [&](tree cur) {
-            if(p < pos(cur)) return -1;
-            p -= pos(cur);
-            if(p == 0) return 0;
-            p--;
-            return 1;
-        }).second);
+        auto [l, r] = bound_at(t, p);
+        return splay(r);
     }
 
     // merge
 public:
     static tree merge(tree lt, tree rt){
-        if(!lt || !rt) return lt ? lt : rt;
         assert(!d[lt].par && !d[rt].par);
         if(size(lt) < size(rt)) {
-            rt = splay_head(rt); // include bound(push)
-            // rt has pushed
-            // rt.lch is NIL
-            d[rt].lch = lt;
-            d[lt].par = rt;
-            update(rt);
-            return rt;
+            tree head = splay_head(rt);
+            d[lt].par = head;
+            d[head].lch = lt;
+            update(head);
+            return head;
         }
         else {
-            lt = splay_tail(lt);
-            // same as above
-            d[lt].rch = rt;
-            d[rt].par = lt;
-            update(lt);
-            return lt;
+            tree tail = splay_tail(lt);
+            d[rt].par = tail;
+            d[tail].rch = rt;
+            update(tail);
+            return tail;
         }
     }
     static tree merge3(tree lt, tree mt, tree rt) {
@@ -260,96 +253,34 @@ public:
 
     // split
 public:
-    static std::pair<tree,tree> split(tree t, auto&& cond) {
-        assert(!d[t].par);
-        tree rt = bound(t, cond).second;
-        if(!rt) return {t, NIL};
-        splay(rt); // rt becomes the new root of the subtree originally represented as t
-        // rt has pushed
-        if(!d[rt].lch) return {NIL, rt};
-
-        tree lt = d[rt].lch;
-        d[lt].par = NIL;
-        d[rt].lch = NIL;
-        update(rt);
-        return {lt, rt};
+    static std::pair<tree,tree> split_cond(tree t, auto&& cond) {
+        
     }
 
     static std::pair<tree,tree> split_at(tree t, i32 p) {
         assert(0 <= p && p <= size(t));
-        if(p == 0) return {NIL, t};
-        if(p == size(t)) return {t, NIL};
-
-        return split(t, [&](tree cur) {
-            if (p < pos(cur)) return -1;
-            p -= pos(cur);
-            if (p == 0) return 0;
-            p--;
-            return 1;
-        });
     }
     static std::tuple<tree,tree,tree> split3_at(tree t, i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size(t));
-        auto [lt, mrt] = split_at(t, l);
-        auto [mt, rt] = split_at(mrt, r - l);
-        return {lt, mt, rt};
+
     }
 
     // erase
     static tree erase(tree t, auto&& cond) {
-        assert(t); // erase on NIL(empty tree) is invalid
-        t = splay(bound(t, cond).second);
-        if(!t) return t; // not assert(for erase by key)
-        tree lt = d[t].lch, rt = d[t].rch;
-        d[t].lch = d[t].rch = NIL;
-        if(lt) d[lt].par = NIL;
-        if(rt) d[rt].par = NIL;
-        // lt and rt is valid
-        return merge(lt, rt);
+        
     }
 
     // insert
     static tree insert(tree t, auto&& cond, const S& x) {
-        tree newbie = new_node(x);
-        if(!t) return newbie;
 
-        tree p = NIL;
-        push(t);
-        auto dir = 0; // ここでは宇宙演算子は使えません...
-        while (t) {
-            push(d[t].lch);
-            push(d[t].rch);
-            p = t;
-            dir = cond(t);
-
-            if (dir < 0) {
-                t = d[t].lch;
-            }
-            else {
-                t = d[t].rch;
-            }
-        }
-        if(dir < 0) {
-            d[p].lch = newbie;
-        }
-        else {
-            d[p].rch = newbie;
-        }
-        d[newbie].par = p;
-        update(p);
-        return splay(newbie);
     }
 
     // query
     static inline void all_reverse(tree t) requires algebra::has_reverse<NodePolicy> {
-        d[t].rev ^= true;
+
     }
     static tree reverse(tree t, i32 l, i32 r) requires algebra::has_reverse<NodePolicy> {
-        assert(0 <= l && l <= r && r <= size(t));
-        if(l >= r) return t;
-        auto [lt, mt, rt] = split3_at(t, l, r);
-        all_reverse(mt);
-        return merge3(lt, mt, rt);
+
     }
 
     static inline void all_prod(tree t) requires algebra::has_prod<NodePolicy> {
@@ -391,29 +322,15 @@ private:
     }
 
     static inline void update(tree t) noexcept {
-        if constexpr (algebra::can_update<NodePolicy>) d[t].update(d[d[t].lch], d[d[t].rch]);
-        d[t].cnt = d[d[t].lch].cnt + 1 + d[d[t].rch].cnt;
+
     }
     static inline void push(tree t) noexcept {
         if(!t) return;
-        if constexpr (algebra::has_reverse<NodePolicy>) if(d[t].rev) {
-            std::swap(d[t].lch, d[t].rch);
-            if constexpr (algebra::has_prod<NodePolicy>) std::swap(d[t].prod, d[t].rev_prod);
-            if(d[t].lch) d[d[t].lch].rev ^= true;
-            if(d[t].rch) d[d[t].rch].rev ^= true;
-            d[t].rev = false;
-            // push rev is complete
-        }
-        if constexpr (algebra::has_lazy<NodePolicy>) {
-            d[t].eval();
-            if(d[t].lch) d[t].push(d[d[t].lch]);
-            if(d[t].rch) d[t].push(d[d[t].rch]);
-            d[t].clear_lz();
-        }
+
     }
 
-    static inline i32 pos(tree t) noexcept {
-        return size(d[t].lch);
+    static inline i32 pos(tree t) {
+        
     }
 };
 } // namespace internal
