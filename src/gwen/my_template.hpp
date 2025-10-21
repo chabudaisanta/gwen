@@ -1,6 +1,8 @@
 #pragma once
 #ifdef LOCAL
 #define _GLIBCXX_DEBUG
+#else
+#define NDEBUG
 #endif
 #include <algorithm>
 #include <array>

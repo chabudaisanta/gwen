@@ -41,8 +41,6 @@ public:
         : n(n_), bc(std::bit_ceil(static_cast<u32>(n))) {}
 
     void add_query(i32 l, i32 r) {
-        // [l, r)
-        // assert(0 <= l && l <= r && r <= n);
         L.emplace_back(l);
         R.emplace_back(r);
         ord.emplace_back(internal::hilbert_order(l, r, bc));
@@ -65,10 +63,10 @@ public:
         for (i32 idx : query) {
             i32 nl = L[idx], nr = R[idx];
 
-            // 先に拡張
+            // 先に拡張.
             while (nl < l) decrement_l(--l, r);
             while (r < nr) increment_r(l, r++);
-            // 後から縮小
+            // 後から縮小.
             while (l < nl) increment_l(l++, r);
             while (nr < r) decrement_r(l, --r);
 

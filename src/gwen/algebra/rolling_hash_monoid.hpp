@@ -3,7 +3,7 @@
 #include <random>
 
 #include "gwen/algebra/monoid.hpp"
-#include "gwen/mod/rolling_hash.hpp"
+#include "gwen/hash/rolling_hash.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {

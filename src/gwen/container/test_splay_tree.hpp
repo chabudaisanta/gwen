@@ -254,6 +254,12 @@ public:
     // split
 public:
     static std::pair<tree,tree> split_cond(tree t, auto&& cond) {
+        if(!t) return {NIL, NIL};
+        auto [lt, rt] = bound(t, cond);
+        if(!rt) return {splay(lt), NIL};
+        if(!lt) return {NIL, splay(rt)};
+        splay(rt);
+        lt = d[rt].lch;
         
     }
 

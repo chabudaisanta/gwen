@@ -17,11 +17,6 @@ using gwen::output;
 constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
 
-#include "gwen/container/test_splay_tree.hpp"
-struct mapping {
-    static i32 op(i32 a, i32 b) { return a + b; }
-};
-
 void solve() {
     
 }
