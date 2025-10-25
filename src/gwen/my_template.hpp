@@ -159,8 +159,7 @@ constexpr T1 toggleBit(T1 bit, T2 i) {
 
 template <typename Iterator> auto runlength(Iterator begin, Iterator end) {
     using ValueType = typename std::iterator_traits<Iterator>::value_type;
-    using CountType = int;
-    std::vector<std::pair<ValueType, CountType>> ret;
+    std::vector<std::pair<ValueType, i32>> ret;
 
     for (auto it = begin; it != end; ++it) {
         if (ret.empty() || ret.back().first != *it) ret.emplace_back(*it, 0);

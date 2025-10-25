@@ -1,3 +1,6 @@
+#ifndef LOCAL
+#define NDEBUG
+#endif
 // # pragma GCC target("avx2")
 #pragma GCC optimize("O2")
 #pragma GCC optimize("unroll-loops")
@@ -18,7 +21,6 @@ constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
 
 void solve() {
-    
 }
 
 int main() {

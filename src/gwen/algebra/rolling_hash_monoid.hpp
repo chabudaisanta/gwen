@@ -14,15 +14,18 @@ using gwen::hash::sub_mod;
 
 template <class T, u64 (*conv)(const T&)> struct rolling_hash_monoid {
     using S = gwen::hash::hash_segment;
-    const u64 base = (std::random_device{}() | 2);
-    S e = S();
-    S op(const S& a, const S& b) const {
+    static inline u64 base = (std::random_device{}() | 2);
+    static inline S e = S();
+    static S op(const S& a, const S& b) {
         return S(add_mod(mul_mod(b.v, a.p), a.v), mul_mod(a.p, b.p));
     }
+    static S e_fp() { return e; }
+    
 
-    S make_single(const T& x) const { return S(calc_mod(conv(x)), base); }
+    static S make_single(const T& x) { return S(calc_mod(conv(x)), base); }
 
-    template <typename Iterator> S make_range(Iterator begin, Iterator end) {
+    template <typename Iterator>
+    static S make_range(Iterator begin, Iterator end) {
         S ret = e;
         for (auto it = begin; it != end; ++it) {
             S cur = make_single(*it);
