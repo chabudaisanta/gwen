@@ -7,22 +7,17 @@
 #include "gwen/types.hpp"
 
 namespace gwen {
-using gwen::hash::add_mod;
-using gwen::hash::calc_mod;
-using gwen::hash::mul_mod;
-using gwen::hash::sub_mod;
 
 template <class T, u64 (*conv)(const T&)> struct rolling_hash_monoid {
     using S = gwen::hash::hash_segment;
     static inline u64 base = (std::random_device{}() | 2);
     static inline S e = S();
     static S op(const S& a, const S& b) {
-        return S(add_mod(mul_mod(b.v, a.p), a.v), mul_mod(a.p, b.p));
+        return S(mod61::add_mod(mod61::mul_mod(b.v, a.p), a.v), mod61::mul_mod(a.p, b.p));
     }
     static S e_fp() { return e; }
-    
 
-    static S make_single(const T& x) { return S(calc_mod(conv(x)), base); }
+    static S make_single(const T& x) { return S(mod61::calc_mod(conv(x)), base); }
 
     template <typename Iterator>
     static S make_range(Iterator begin, Iterator end) {
