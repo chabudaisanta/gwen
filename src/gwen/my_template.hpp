@@ -44,6 +44,10 @@ using gwen::u32;
 using gwen::u64;
 using ll = long long;
 using ull = unsigned long long;
+using gwen::operator""_i32;
+using gwen::operator""_u32;
+using gwen::operator""_i64;
+using gwen::operator""_u64;
 
 #define rep(i, l, r)  for (int i = (int)(l); i < (int)(r); ++i)
 #define rp(i, n)      for (int i = 0; i < (int)(n); ++i)
