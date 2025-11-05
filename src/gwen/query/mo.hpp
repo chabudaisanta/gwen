@@ -11,10 +11,10 @@
 namespace gwen {
 namespace internal {
 // https://take44444.github.io/Algorithm-Book/range/mo/main.html
-i64 hilbert_order(i64 x, i64 y, u64 n) {
+u64 hilbert_order(u64 x, u64 y, u64 n) {
     assert(std::has_single_bit(n));
-    i64 rx, ry, d = 0;
-    for (i64 s = n >> 1; s; s >>= 1) {
+    u64 rx, ry, d = 0;
+    for (u64 s = n >> 1; s; s >>= 1) {
         rx = (x & s) > 0, ry = (y & s) > 0;
         d += s * s * ((rx * 3) ^ ry);
         if (ry) continue;
@@ -70,7 +70,7 @@ public:
             while (l < nl) increment_l(l++, r);
             while (nr < r) decrement_r(l, --r);
 
-            ret[idx] = get_res();
+            ret[idx] = get_res(idx);
         }
         return ret;
     }
