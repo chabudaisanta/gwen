@@ -100,6 +100,7 @@ bool miller64(u64 n) {
 }
 
 bool is_prime_small(i32 n) {
+    assert(n <= 1e8);
     static gwen::internal::prime_factorize_table table;
     while (table.max() < n) table.extend();
     return !table.p[n];

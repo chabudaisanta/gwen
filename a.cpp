@@ -22,27 +22,22 @@ using gwen::output;
 #define rp(i, n) for (i32 i = 0; i < (i32)(n); ++i)
 constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
-#include <unordered_map>
+#include "gwen/algebra/monoid.hpp"
+#include "gwen/algebra/basic_monoid.hpp"
+#include "gwen/container/segment_tree.hpp"
+
+namespace gwen {
+
 void solve() {
-    std::unordered_map<u64,u64> MP(2e6);
-    i32 Q; input >> Q;
-    while(Q--) {
-        i32 t; input >> t;
-        if(t == 0) {
-            u64 k, v; input >> k >> v;
-            MP[k] = v;
-        }
-        else {
-            u64 k; input >> k;
-            output << MP[k] << EL;
-        }
-    }
+    DUMP(std::bit_width(5u));
+}
+
 }
 
 int main() {
     int t = 1;
     // std::cin >> t;
-    while (t--) solve();
+    while (t--) gwen::solve();
     std::cerr << "execution time: " << 1.0 * clock() / CLOCKS_PER_SEC * 1000
               << "(ms)\n";
     return 0;
