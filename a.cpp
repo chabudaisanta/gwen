@@ -12,7 +12,6 @@
 #include "gwen/dump.hpp"
 #include "gwen/io.hpp"
 #include "gwen/types.hpp"
-#include "gwen/container/hash_map.hpp"
 using i32 = gwen::i32;
 using u32 = gwen::u32;
 using i64 = gwen::i64;
@@ -22,9 +21,6 @@ using gwen::output;
 #define rp(i, n) for (i32 i = 0; i < (i32)(n); ++i)
 constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
-#include "gwen/algebra/monoid.hpp"
-#include "gwen/algebra/basic_monoid.hpp"
-#include "gwen/container/segment_tree.hpp"
 
 namespace gwen {
 

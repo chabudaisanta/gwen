@@ -51,13 +51,13 @@ public:
                auto&& decrement_l,
                auto&& increment_r,
                auto&& decrement_r,
-               auto&& get_res) -> std::vector<decltype(get_res())> {
+               auto&& get_res) -> std::vector<decltype(get_res(0))> {
         std::vector<i32> query(q);
         std::iota(query.begin(), query.end(), 0);
         std::sort(query.begin(), query.end(),
                   [&](i32 a, i32 b) { return ord[a] < ord[b]; });
 
-        using S = decltype(get_res());
+        using S = decltype(get_res(0));
         std::vector<S> ret(q);
         i32 l = 0, r = 0;
         for (i32 idx : query) {

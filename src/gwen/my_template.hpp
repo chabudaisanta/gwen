@@ -71,7 +71,7 @@ constexpr int dh[] = {-1, 1, 0, 0, -1, 1, -1, 1, 0};
 constexpr int mod998 = 998244353, mod107 = 1000000007, mod109 = 1000000009,
               mod31 = 2147483647;
 constexpr ll mod61 = (1LL << 61) - 1;
-constexpr int iINF = (1 << 30) + 1;
+constexpr int iINF = 1001001001;
 constexpr ll liINF = (1LL << 60) + 1;
 constexpr char EL = '\n', SPA = ' ';
 
