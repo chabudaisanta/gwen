@@ -12,20 +12,28 @@
 #include "gwen/dump.hpp"
 #include "gwen/io.hpp"
 #include "gwen/types.hpp"
-using i32 = gwen::i32;
-using u32 = gwen::u32;
-using i64 = gwen::i64;
-using u64 = gwen::u64;
-using gwen::input;
-using gwen::output;
 #define rp(i, n) for (i32 i = 0; i < (i32)(n); ++i)
 constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
-
+#include <atcoder/modint>
+using mint998 = atcoder::modint998244353;
+#include "gwen/container/wrapper/range_add_update_sum.hpp"
 namespace gwen {
 
 void solve() {
-    DUMP(std::bit_width(5u));
+    i32 N, M; input >> N >> M;
+    std::vector<mint998> A(N);
+    rp(i,N) {
+        i32 a; input >> a;
+        A[i] = a;
+    }
+    range_add_update_sum<mint998> seg(A);
+    while(M--) {
+        i32 l, r, x; input >> l >> r >> x; --l;
+        mint998 n = r - l, inv = n.inv();
+        seg.affine(l, r, 1 - inv, inv * x);
+    }
+    rp(i,N) output << seg.get(i).val() << ' ';
 }
 
 }
