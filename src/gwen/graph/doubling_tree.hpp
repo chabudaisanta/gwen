@@ -16,12 +16,8 @@ private:
     std::vector<int> d;
 
 public:
-    explicit doubling_tree(int n_,
-                           int root_,
-                           const std::vector<std::vector<int>>& G)
-        : n(n_),
-          log(n_ > 0 ? std::bit_width(static_cast<u32>(n_)) : 0),
-          root(root_) {
+    explicit doubling_tree(int n_, int root_, const std::vector<std::vector<int>>& G)
+        : n(n_), log(n_ > 0 ? std::bit_width(static_cast<u32>(n_)) : 0), root(root_) {
         assert(n == ssize(G));
         assert(0 <= root && root < n);
 
@@ -99,13 +95,9 @@ public:
     }
 
 private:
-    inline int get_anc(int v, int i) const {
-        return anc[static_cast<size_t>(i) * n + v];
-    }
+    inline int get_anc(int v, int i) const { return anc[static_cast<size_t>(i) * n + v]; }
 
-    inline int& set_anc(int v, int i) {
-        return anc[static_cast<size_t>(i) * n + v];
-    }
+    inline int& set_anc(int v, int i) { return anc[static_cast<size_t>(i) * n + v]; }
 };
 
 }  // namespace gwen

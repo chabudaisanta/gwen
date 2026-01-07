@@ -44,31 +44,23 @@ constexpr inline std::string to_str(i128 x) {
 }
 
 template <std::integral T> std::string to_str(T x) { return std::to_string(x); }
-template <std::floating_point T> std::string to_str(T f) {
-    return std::to_string(f);
-}
+template <std::floating_point T> std::string to_str(T f) { return std::to_string(f); }
 
 //-------------------------
 // prototype
 //-------------------------
 
 // pair / tuple
-template <typename T1, typename T2>
-std::string to_str(const std::pair<T1, T2>& p);
+template <typename T1, typename T2> std::string to_str(const std::pair<T1, T2>& p);
 template <typename... Ts> std::string to_str(const std::tuple<Ts...>& t);
 
 // input iterator helper
 template <std::input_iterator Iterator>
-std::string to_str(Iterator begin,
-                   Iterator end,
-                   const std::string& partition = ", ",
-                   char pb = '\0',
-                   char pe = '\0');
+std::string to_str(Iterator begin, Iterator end, const std::string& partition = ", ", char pb = '\0', char pe = '\0');
 
 // sequence containers
 template <typename T> std::string to_str(const std::vector<T>& sc);
-template <typename T, std::size_t N>
-std::string to_str(const std::array<T, N>& sc);
+template <typename T, std::size_t N> std::string to_str(const std::array<T, N>& sc);
 template <typename T> std::string to_str(const std::deque<T>& sc);
 template <typename T, std::size_t N> std::string to_str(const T (&sc)[N]);
 
@@ -80,14 +72,10 @@ template <typename T> std::string to_str(const std::unordered_multiset<T>& se);
 
 // map containers
 template <typename K, typename V> std::string to_str(const std::map<K, V>& mp);
-template <typename K, typename V>
-std::string to_str(const std::multimap<K, V>& mp);
-template <typename K, typename V>
-std::string to_str(const std::unordered_map<K, V>& mp);
-template <typename K, typename V>
-std::string to_str(const std::unordered_multimap<K, V>& mp);
-template <std::input_iterator Iterator>
-std::string to_str_map_helper(Iterator begin, Iterator end);
+template <typename K, typename V> std::string to_str(const std::multimap<K, V>& mp);
+template <typename K, typename V> std::string to_str(const std::unordered_map<K, V>& mp);
+template <typename K, typename V> std::string to_str(const std::unordered_multimap<K, V>& mp);
+template <std::input_iterator Iterator> std::string to_str_map_helper(Iterator begin, Iterator end);
 
 // user-defined
 template <typename T>
@@ -102,25 +90,18 @@ std::string to_str(const T& t);
 //-------------------------
 
 // pair / tuple
-template <typename T1, typename T2>
-std::string to_str(const std::pair<T1, T2>& p) {
+template <typename T1, typename T2> std::string to_str(const std::pair<T1, T2>& p) {
     return std::string{'('} + to_str(p.first) + ", " + to_str(p.second) + ')';
 }
 template <typename... Ts> std::string to_str(const std::tuple<Ts...>& t) {
     std::string ret{'('};
     bool first = true;
     std::apply(
-        [&](const auto&... args) {
-            ((ret += (first ? "" : ", "), ret += gwen::to_str(args),
-              first = false),
-             ...);
-        },
-        t);
+        [&](const auto&... args) { ((ret += (first ? "" : ", "), ret += gwen::to_str(args), first = false), ...); }, t);
     return ret + ')';
 }
 
-template <typename... Args>
-inline std::string to_str_variadic(const Args&... args) {
+template <typename... Args> inline std::string to_str_variadic(const Args&... args) {
     std::string ret;
     std::size_t index = 0;
 
@@ -144,11 +125,7 @@ inline std::string to_str_variadic(const Args&... args) {
 
 // input iterator helper
 template <std::input_iterator Iterator>
-std::string to_str(Iterator begin,
-                   Iterator end,
-                   const std::string& partition,
-                   char pb,
-                   char pe) {
+std::string to_str(Iterator begin, Iterator end, const std::string& partition, char pb, char pe) {
     std::string ret;
     if (pb) ret += pb;
     for (auto it = begin; it != end; ++it) {
@@ -163,8 +140,7 @@ std::string to_str(Iterator begin,
 template <typename T> std::string to_str(const std::vector<T>& sc) {
     return to_str(sc.begin(), sc.end(), ", ", '[', ']');
 }
-template <typename T, std::size_t N>
-std::string to_str(const std::array<T, N>& sc) {
+template <typename T, std::size_t N> std::string to_str(const std::array<T, N>& sc) {
     return to_str(sc.begin(), sc.end(), ", ", '[', ']');
 }
 template <typename T> std::string to_str(const std::deque<T>& sc) {
@@ -175,9 +151,7 @@ template <typename T, std::size_t N> std::string to_str(const T (&sc)[N]) {
 }
 
 // set containers
-template <typename T> std::string to_str(const std::set<T>& se) {
-    return to_str(se.begin(), se.end(), ", ", '{', '}');
-}
+template <typename T> std::string to_str(const std::set<T>& se) { return to_str(se.begin(), se.end(), ", ", '{', '}'); }
 template <typename T> std::string to_str(const std::multiset<T>& se) {
     return to_str(se.begin(), se.end(), ", ", '{', '}');
 }
@@ -192,20 +166,16 @@ template <typename T> std::string to_str(const std::unordered_multiset<T>& se) {
 template <typename K, typename V> std::string to_str(const std::map<K, V>& mp) {
     return to_str_map_helper(mp.begin(), mp.end());
 }
-template <typename K, typename V>
-std::string to_str(const std::multimap<K, V>& mp) {
+template <typename K, typename V> std::string to_str(const std::multimap<K, V>& mp) {
     return to_str_map_helper(mp.begin(), mp.end());
 }
-template <typename K, typename V>
-std::string to_str(const std::unordered_map<K, V>& mp) {
+template <typename K, typename V> std::string to_str(const std::unordered_map<K, V>& mp) {
     return to_str_map_helper(mp.begin(), mp.end());
 }
-template <typename K, typename V>
-std::string to_str(const std::unordered_multimap<K, V>& mp) {
+template <typename K, typename V> std::string to_str(const std::unordered_multimap<K, V>& mp) {
     return to_str_map_helper(mp.begin(), mp.end());
 }
-template <std::input_iterator Iterator>
-std::string to_str_map_helper(Iterator begin, Iterator end) {
+template <std::input_iterator Iterator> std::string to_str_map_helper(Iterator begin, Iterator end) {
     std::string ret{'{'};
     for (auto it = begin; it != end; ++it) {
         if (it != begin) ret += ", ";
@@ -230,12 +200,8 @@ std::string to_str(const T& t) {
 }  // namespace gwen
 
 #ifdef LOCAL
-#define DEBUG(...)                                                          \
-    std::cerr << #__VA_ARGS__ << ": " << gwen::to_str_variadic(__VA_ARGS__) \
-              << '\n'
-#define DUMP(...)                                                           \
-    std::cerr << #__VA_ARGS__ << ": " << gwen::to_str_variadic(__VA_ARGS__) \
-              << '\n'
+#define DEBUG(...) std::cerr << #__VA_ARGS__ << ": " << gwen::to_str_variadic(__VA_ARGS__) << '\n'
+#define DUMP(...)  std::cerr << #__VA_ARGS__ << ": " << gwen::to_str_variadic(__VA_ARGS__) << '\n'
 #else
 #define DEBUG(...) void(0)
 #define DUMP(...)  void(0)

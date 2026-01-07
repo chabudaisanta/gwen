@@ -30,8 +30,7 @@ template <typename T> struct combination_table {
     }
 };
 
-template<typename T>
-combination_table<T>& get_comb_table() {
+template <typename T> combination_table<T>& get_comb_table() {
     static combination_table<T> table;
     return table;
 }
@@ -50,8 +49,8 @@ template <typename T> T fact_inv(i32 n) {
     return table.I[n];
 }
 
-template<typename T> T comb(i32 n, i32 k) {
-    if(k < 0 || n < k) return T(0);
+template <typename T> T comb(i32 n, i32 k) {
+    if (k < 0 || n < k) return T(0);
     return fact<T>(n) * fact_inv<T>(k) * fact_inv<T>(n - k);
 }
 

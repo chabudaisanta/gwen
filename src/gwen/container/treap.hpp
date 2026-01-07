@@ -7,6 +7,4 @@
 #include "gwen/algebra/monoid.hpp"
 #include "gwen/misc/xorshift.hpp"
 
-namespace gwen {
-
-}  // namespace gwen
+namespace gwen {}  // namespace gwen

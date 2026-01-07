@@ -121,5 +121,4 @@ bool miller(u64 n) {
         return miller64(n);
 }
 
-
 }  // namespace gwen

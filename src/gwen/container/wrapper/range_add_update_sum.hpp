@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <atcoder/lazysegtree>
+#include <vector>
+
 #include "gwen/algebra/range_affine_range_sum_monoid.hpp"
 #include "gwen/types.hpp"
 

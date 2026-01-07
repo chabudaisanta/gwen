@@ -38,8 +38,7 @@ public:
     dynamic_modint64() : tr(0) {}
 
     // need 0 <= abs(x) < RN
-    template <std::unsigned_integral T>
-    dynamic_modint64(T x) : tr(reduce_mul(x, r2)) {}
+    template <std::unsigned_integral T> dynamic_modint64(T x) : tr(reduce_mul(x, r2)) {}
     template <std::signed_integral T> dynamic_modint64(T x) : tr(0) {
         if (x < 0)
             sub(m64{static_cast<u64>(-x)});
@@ -89,19 +88,13 @@ public:
 
     // operator overload (integral)
     template <std::integral T> m64& operator+=(T x) { return add(m64(x)); }
-    template <std::integral T> m64 operator+(T x) const {
-        return *this + m64(x);
-    }
+    template <std::integral T> m64 operator+(T x) const { return *this + m64(x); }
 
     template <std::integral T> m64& operator-=(T x) { return sub(m64(x)); }
-    template <std::integral T> m64 operator-(T x) const {
-        return *this - m64(x);
-    }
+    template <std::integral T> m64 operator-(T x) const { return *this - m64(x); }
 
     template <std::integral T> m64& operator*=(T x) { return mul(m64(x)); }
-    template <std::integral T> m64 operator*(T x) const {
-        return *this * m64(x);
-    }
+    template <std::integral T> m64 operator*(T x) const { return *this * m64(x); }
 
     template <std::integral T> m64 pow(T x) const {
         assert(x >= 0);

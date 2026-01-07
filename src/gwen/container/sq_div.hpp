@@ -1,12 +1,12 @@
 #pragma once
 
 #include <vector>
+
 #include "gwen/types.hpp"
 
 namespace gwen {
 
-template<typename S, S (*op)(S, S), S (*e)()>
-struct sq_div {
+template <typename S, S (*op)(S, S), S (*e)()> struct sq_div {
     static constexpr i32 bsize = 512;
     i32 n;
     i32 m;
@@ -15,7 +15,7 @@ struct sq_div {
 
     sq_div(const vector<S>& x) : n(x.size()), m(n / bsize + (n % bsize > 0)), raw(x) {
         d.resize(m);
-        for(i32 p = 0; p < m; ++p) update(p);
+        for (i32 p = 0; p < m; ++p) update(p);
     }
 
     void set(i32 p, S x) {
@@ -26,15 +26,15 @@ struct sq_div {
 
     S prod(i32 l, i32 r) {
         S ret = e();
-        while(l % bsize != 0 && l < r) {
+        while (l % bsize != 0 && l < r) {
             ret = op(ret, raw[l]);
             l++;
         }
-        while(l + bsize <= r) {
+        while (l + bsize <= r) {
             ret = op(ret, d[l / bsize]);
             l += bsize;
         }
-        while(l < r) {
+        while (l < r) {
             ret = op(ret, raw[l]);
             l++;
         }
@@ -44,10 +44,10 @@ struct sq_div {
     void update(i32 q) {
         d[q] = e();
         i32 offset = q * bsize;
-        for(i32 i = 0; i < bsize && i + offset < n; i++) {
+        for (i32 i = 0; i < bsize && i + offset < n; i++) {
             d[q] = op(d[q], raw[offset + i]);
         }
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

@@ -63,13 +63,10 @@ using gwen::operator""_u64;
 #define S_BAR void(0)
 #endif
 
-constexpr std::pair<int, int> mv[] = {{0, 1},   {1, 0},  {0, -1},
-                                      {-1, 0},  {1, 1},  {1, -1},
-                                      {-1, -1}, {-1, 1}, {0, 0}};
+constexpr std::pair<int, int> mv[] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}, {0, 0}};
 constexpr int dw[] = {0, 0, -1, 1, -1, -1, 1, 1, 0};
 constexpr int dh[] = {-1, 1, 0, 0, -1, 1, -1, 1, 0};
-constexpr int mod998 = 998244353, mod107 = 1000000007, mod109 = 1000000009,
-              mod31 = 2147483647;
+constexpr int mod998 = 998244353, mod107 = 1000000007, mod109 = 1000000009, mod31 = 2147483647;
 constexpr ll mod61 = (1LL << 61) - 1;
 constexpr int iINF = 1001001001;
 constexpr ll liINF = (1LL << 60) + 1;
@@ -80,40 +77,26 @@ std::pair<int, int> mv_to(int hi, int wi, int dir) {
     return std::make_pair(hi + dh[dir], wi + dw[dir]);
 }
 
-template <typename T1, typename T2> inline bool chmax(T1& a, T2 b) {
-    return (a < b ? a = b, true : false);
-}
-template <typename T1, typename T2> inline bool chmin(T1& a, T2 b) {
-    return (a > b ? a = b, true : false);
-}
+template <typename T1, typename T2> inline bool chmax(T1& a, T2 b) { return (a < b ? a = b, true : false); }
+template <typename T1, typename T2> inline bool chmin(T1& a, T2 b) { return (a > b ? a = b, true : false); }
 
-template <std::integral T> inline bool isIn(T x, T l, T r) {
-    return (l <= x) && (x < r);
-}
-template <std::integral T> inline bool isOut(T x, T l, T r) {
-    return (x < l) || (r <= x);
-}
+template <std::integral T> inline bool isIn(T x, T l, T r) { return (l <= x) && (x < r); }
+template <std::integral T> inline bool isOut(T x, T l, T r) { return (x < l) || (r <= x); }
 
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
-    for (auto it = vec.begin(); it != vec.end(); it++)
-        os << *it << (it == prev(vec.end()) ? "" : " ");
+template <typename T> std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
+    for (auto it = vec.begin(); it != vec.end(); it++) os << *it << (it == prev(vec.end()) ? "" : " ");
     return os;
 }
-template <typename T>
-std::istream& operator>>(std::istream& is, std::vector<T>& vec) {
+template <typename T> std::istream& operator>>(std::istream& is, std::vector<T>& vec) {
     for (T& e : vec) is >> e;
     return is;
 }
 void yon(bool b) { std::cout << (b ? "Yes\n" : "No\n"); }
 
-template <typename T>
-std::vector<int> idxsort(const std::vector<T>& vec, bool rev = false) {
+template <typename T> std::vector<int> idxsort(const std::vector<T>& vec, bool rev = false) {
     std::vector<int> ret(vec.size());
     std::iota(ret.begin(), ret.end(), 0);
-    sort(ret.begin(), ret.end(), [&vec, &rev](int a, int b) {
-        return (rev ? vec[a] > vec[b] : vec[a] < vec[b]);
-    });
+    sort(ret.begin(), ret.end(), [&vec, &rev](int a, int b) { return (rev ? vec[a] > vec[b] : vec[a] < vec[b]); });
     return ret;
 }
 template <std::integral T> T ceil_div(T x, T y) {
@@ -144,20 +127,16 @@ template <std::unsigned_integral T> constexpr T isqrt(const T n) noexcept {
 
 template <typename T> constexpr T sq(T x) { return x * x; }
 template <std::integral T> constexpr T choose2(T x) { return x * (x - 1) / 2; }
-template <std::integral T1, std::integral T2>
-constexpr T1 getBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 getBit(T1 bit, T2 i) {
     return bit & (static_cast<T1>(1) << i);
 }
-template <std::integral T1, std::integral T2>
-constexpr T1 setBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 setBit(T1 bit, T2 i) {
     return bit | (static_cast<T1>(1) << i);
 }
-template <std::integral T1, std::integral T2>
-constexpr T1 clearBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 clearBit(T1 bit, T2 i) {
     return bit & ~(static_cast<T1>(1) << i);
 }
-template <std::integral T1, std::integral T2>
-constexpr T1 toggleBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 toggleBit(T1 bit, T2 i) {
     return bit ^ (static_cast<T1>(1) << i);
 }
 
@@ -171,23 +150,24 @@ template <typename Iterator> auto runlength(Iterator begin, Iterator end) {
     }
     return ret;
 }
-template<typename T>
-std::vector<T> prefix_sum(const std::vector<T>& vec) {
+template <typename T> std::vector<T> prefix_sum(const std::vector<T>& vec) {
     i32 N = vec.size();
-    std::vector<T> PS(N+1);
-    for(i32 i = 0; i < N; ++i) PS[i+1] = PS[i] + vec[i];
+    std::vector<T> PS(N + 1);
+    for (i32 i = 0; i < N; ++i) PS[i + 1] = PS[i] + vec[i];
     return PS;
 }
-template<typename T>
-struct prefix_sum_2d {
+template <typename T> struct prefix_sum_2d {
     std::vector<std::vector<T>> dat;
     i32 H, W;
 
     explicit prefix_sum_2d(const std::vector<std::vector<T>>& vec) : H(vec.size()), W(H > 0 ? vec[0].size() : 0) {
-        dat.resize(H+1, std::vector<T>(W+1));
-        for(i32 i = 0; i < H; ++i) for(i32 j = 0; j < W; ++j) dat[i+1][j+1] = vec[i][j];
-        for(i32 i = 0; i < H; ++i) for(i32 j = 0; j < W; ++j) dat[i+1][j+1] += dat[i][j+1];
-        for(i32 i = 0; i < H; ++i) for(i32 j = 0; j < W; ++j) dat[i+1][j+1] += dat[i+1][j];
+        dat.resize(H + 1, std::vector<T>(W + 1));
+        for (i32 i = 0; i < H; ++i)
+            for (i32 j = 0; j < W; ++j) dat[i + 1][j + 1] = vec[i][j];
+        for (i32 i = 0; i < H; ++i)
+            for (i32 j = 0; j < W; ++j) dat[i + 1][j + 1] += dat[i][j + 1];
+        for (i32 i = 0; i < H; ++i)
+            for (i32 j = 0; j < W; ++j) dat[i + 1][j + 1] += dat[i + 1][j];
     }
 
     T get(i32 l, i32 r, i32 u, i32 d) {

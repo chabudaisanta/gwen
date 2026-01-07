@@ -48,8 +48,7 @@ int main() {
     int t = 1;
     // std::cin >> t;
     while (t--) solve();
-    std::cerr << "execution time: " << 1.0 * clock() / CLOCKS_PER_SEC * 1000
-              << "(ms)\n";
+    std::cerr << "execution time: " << 1.0 * clock() / CLOCKS_PER_SEC * 1000 << "(ms)\n";
     return 0;
 }
 
