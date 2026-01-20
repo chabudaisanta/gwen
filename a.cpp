@@ -5,7 +5,7 @@
 // # pragma GCC target("avx2")
 #pragma GCC optimize("O2")
 #pragma GCC optimize("unroll-loops")
-#include "gwen/geo/point.hpp"
+#include "gwen/geo/graham_scan.hpp"
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -22,6 +22,7 @@ constexpr char EL = '\n';
 namespace gwen {
 
 void solve() {
+    
 }
 
 }
