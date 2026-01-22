@@ -17,12 +17,34 @@
 constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
 #include <atcoder/modint>
-
+#include "gwen/container/persistent_stack.hpp"
+#include <map>
 
 namespace gwen {
-
+using Stack = persistent_stack<i32>;
 void solve() {
-    
+    i32 Q; input >> Q;
+    std::map<i32,Stack> MP;
+    Stack A;
+    while(Q--) {
+        std::string s; input >> s;
+        if(s == "ADD") {
+            i32 x; input >> x;
+            A.push(x);
+        }
+        else if(s == "DELETE") {
+            if(A.size()) A.pop();
+        }
+        else if(s == "SAVE") {
+            i32 y; input >> y;
+            MP[y] = A;
+        }
+        else {
+            i32 z; input >> z;
+            A = MP[z];
+        }
+        output << (A.size() ? A.top() : -1) << EL;
+    }
 }
 
 }
