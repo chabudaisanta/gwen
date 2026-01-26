@@ -27,4 +27,13 @@ template <typename T> struct max_monoid {
     static S e() { return std::numeric_limits<S>::min(); }
 };
 
+template <typename T> struct gcd_monoid {
+    using S = T;
+    static S op(S a, S b) {
+        if(b == 0) return a;
+        return op(b, a % b);
+    }
+    static S e() { return 0; }
+}
+
 }  // namespace gwen

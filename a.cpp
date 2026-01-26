@@ -17,34 +17,19 @@
 constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
 #include <atcoder/modint>
-#include "gwen/container/persistent_stack.hpp"
-#include <map>
-
+#include "gwen/algebra/basic_monoid.hpp"
+#include "gwen/query/swag.hpp"
 namespace gwen {
-using Stack = persistent_stack<i32>;
 void solve() {
+    i32 N; input >> N;
+    std::vector<i32> A(N); input >> A;
+    auto S = sliding_window_aggregation<sum_monoid<i32>>(A);
     i32 Q; input >> Q;
-    std::map<i32,Stack> MP;
-    Stack A;
     while(Q--) {
-        std::string s; input >> s;
-        if(s == "ADD") {
-            i32 x; input >> x;
-            A.push(x);
-        }
-        else if(s == "DELETE") {
-            if(A.size()) A.pop();
-        }
-        else if(s == "SAVE") {
-            i32 y; input >> y;
-            MP[y] = A;
-        }
-        else {
-            i32 z; input >> z;
-            A = MP[z];
-        }
-        output << (A.size() ? A.top() : -1) << EL;
+        i32 l, r; input >> l >> r; --l;
+        S.add_query(l, r);
     }
+    auto res = S.solve();
 }
 
 }
