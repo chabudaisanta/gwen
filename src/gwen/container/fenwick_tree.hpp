@@ -13,7 +13,7 @@ template <typename Abel> struct fenwick_tree {
     std::vector<S> data;
 
     fenwick_tree() : N(0) {}
-    explicit fenwick_tree(i32 N_) : N(N), data(N + 1, Abel::e()) {}
+    explicit fenwick_tree(i32 N_) : N(N_), data(N + 1, Abel::e()) {}
     explicit fenwick_tree(const std::vector<S>& vec) : N(vec.size()), data(N + 1) {
         for (i32 i = 1; i <= N; ++i) data[i] = vec[i - 1];
         for (i32 i = 1; i <= N; ++i) {
@@ -26,7 +26,7 @@ template <typename Abel> struct fenwick_tree {
         assert(0 <= p && p < N);
         p++;
         while (p <= N) {
-            data[i] = Abel::op(data[p], x);
+            data[p] = Abel::op(data[p], x);
             p += p & -p;
         }
     }
