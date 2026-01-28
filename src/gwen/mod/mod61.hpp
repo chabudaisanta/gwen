@@ -33,5 +33,5 @@ constexpr u64 sub_mod(u64 a, u64 b) {
     return a - b;
 }
 
-}  // namespace mod61
+}  // namespace rhash
 }  // namespace gwen

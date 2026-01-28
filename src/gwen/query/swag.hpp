@@ -1,15 +1,15 @@
 #pragma once
 
-#include <vector>
 #include <cassert>
 #include <numeric>
-#include "gwen/types.hpp"
-#include "gwen/misc/counting_sort.hpp"
+#include <vector>
+
 #include "gwen/dump.hpp"
+#include "gwen/misc/counting_sort.hpp"
+#include "gwen/types.hpp"
 namespace gwen {
 
-template<typename Monoid>
-struct sliding_window_aggregation {
+template <typename Monoid> struct sliding_window_aggregation {
     using S = typename Monoid::S;
     i32 N;
     std::vector<S> data;
@@ -28,31 +28,31 @@ struct sliding_window_aggregation {
     std::vector<S> solve(bool sorted = false) {
         const i32 Q = L.size();
         std::vector<i32> query(Q);
-        if(sorted) {
+        if (sorted) {
             std::iota(query.begin(), query.end(), 0);
         }
         else {
             std::vector<i32> PR = counting_sort(R, N);
             std::vector<i32> Ls(Q);
-            for(i32 i = 0; i < Q; ++i) Ls[i] = L[PR[i]];
+            for (i32 i = 0; i < Q; ++i) Ls[i] = L[PR[i]];
             std::vector<i32> PL = counting_sort(Ls, N);
-            for(i32 i = 0; i < Q; ++i) query[i] = PR[PL[i]];
+            for (i32 i = 0; i < Q; ++i) query[i] = PR[PL[i]];
         }
 
         std::vector<S> ret(Q), tail;
         S head = Monoid::e();
         i32 l = 0, r = 0;
-        for(i32 idx : query) {
+        for (i32 idx : query) {
             i32 nl = L[idx], nr = R[idx];
             assert(l <= nl && r <= nr);
-            for(; r < nr; ++r) {
+            for (; r < nr; ++r) {
                 head = Monoid::op(head, data[r]);
             }
-            for(; l < nl; ++l) {
-                if(tail.empty()) {
+            for (; l < nl; ++l) {
+                if (tail.empty()) {
                     // [l, r) の中身をすべて tail に移す
                     S acc = Monoid::e();
-                    for(i32 i = r - 1; i >= l; --i) {
+                    for (i32 i = r - 1; i >= l; --i) {
                         acc = Monoid::op(data[i], acc);
                         tail.emplace_back(acc);
                     }
@@ -66,4 +66,4 @@ struct sliding_window_aggregation {
     }
 };
 
-}
+}  // namespace gwen

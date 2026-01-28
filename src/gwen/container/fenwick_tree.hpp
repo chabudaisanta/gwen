@@ -50,7 +50,6 @@ template <typename Abel> struct fenwick_tree {
 
 private:
     i32 max_right_internal(S initial, auto&& f) const {
-        assert(f(e()));
         S s = initial;
         i32 x = 0;
 
