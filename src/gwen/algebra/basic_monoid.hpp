@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <numeric>
 #include <limits>
 namespace gwen {
 
@@ -30,10 +31,19 @@ template <typename T> struct max_monoid {
 template <typename T> struct gcd_monoid {
     using S = T;
     static S op(S a, S b) {
-        if(b == 0) return a;
-        return op(b, a % b);
+        return std::gcd(a, b);
     }
     static S e() { return 0; }
-}
+};
+
+template<typename T> struct affine_monoid {
+    struct S {
+        T a, b;
+    };
+    static S op(S f, S g) {
+        return { f.a * g.a, f.a * g.b + f.b };
+    }
+    static S e() { return {1, 0}; }
+};
 
 }  // namespace gwen

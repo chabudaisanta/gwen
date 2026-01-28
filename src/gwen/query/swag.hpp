@@ -38,7 +38,6 @@ struct sliding_window_aggregation {
             std::vector<i32> PL = counting_sort(Ls, N);
             for(i32 i = 0; i < Q; ++i) query[i] = PR[PL[i]];
         }
-        for(i32 idx : query) DUMP(L[idx], R[idx]);
 
         std::vector<S> ret(Q), tail;
         S head = Monoid::e();

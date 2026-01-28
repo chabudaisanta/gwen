@@ -1,7 +1,7 @@
 #include "gwen/types.hpp"
 
 namespace gwen {
-namespace mod61 {
+namespace rhash {
 
 constexpr u64 mod61 = (1ull << 61) - 1;
 constexpr u64 msk30 = (1ull << 30) - 1;
@@ -32,5 +32,6 @@ constexpr u64 sub_mod(u64 a, u64 b) {
     if (a < b) return a + mod61 - b;
     return a - b;
 }
+
 }  // namespace mod61
 }  // namespace gwen

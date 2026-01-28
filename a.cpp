@@ -5,7 +5,6 @@
 // # pragma GCC target("avx2")
 #pragma GCC optimize("O2")
 #pragma GCC optimize("unroll-loops")
-#include "gwen/geo/graham_scan.hpp"
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -20,16 +19,40 @@ constexpr char EL = '\n';
 #include "gwen/algebra/basic_monoid.hpp"
 #include "gwen/query/swag.hpp"
 namespace gwen {
+using mint998 = atcoder::modint998244353;
+using M = affine_monoid<mint998>;
 void solve() {
-    i32 N; input >> N;
-    std::vector<i32> A(N); input >> A;
-    auto S = sliding_window_aggregation<sum_monoid<i32>>(A);
     i32 Q; input >> Q;
-    while(Q--) {
-        i32 l, r; input >> l >> r; --l;
-        S.add_query(l, r);
+    std::vector<i32> F(Q, 0);
+    std::vector<M::S> A(Q, M::e());
+    std::vector<std::tuple<i32,i32,mint998>> T;
+    i32 r = Q, l = Q - 1;
+    rp(i,Q) {
+        i32 t; input >> t;
+        if(t==0) {
+            i32 a, b; input >> a >> b;
+            A[Q - 1 - i] = { a, b };
+            F[Q - 1 - i] = 1;
+        }
+        else if(t==1) {
+            do {
+                --r;
+            } while(!F[r]);
+        }
+        else {
+            i32 x; input >> x;
+            T.emplace_back(l, r, x);
+        }
+        l--;
     }
-    auto res = S.solve();
+    sliding_window_aggregation<M> SWAG(A);
+    for(auto [l, r, x] : T) SWAG.add_query(l, r);
+    auto res = SWAG.solve();
+    rp(i,T.size()) {
+        auto [l, r, x] = T[i];
+        auto [a, b] = res[i];
+        output << (a * x + b).val() << EL;
+    }
 }
 
 }
