@@ -17,7 +17,7 @@ std::vector<point<T>> graham_scan(std::vector<point<T>> points) {
     if constexpr (contain_on_boundary) {
         i32 i = points.size() - 1;
         while (i >= 0 && P::cross_product(points.back(), points[i]) == 0) i--;
-        std::reverse(points.begin() + i + 1, points.end());
+        std::reverse(points.begin() + (i + 1), points.end());
     }
 
     std::vector<P> ret;
