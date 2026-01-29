@@ -12,11 +12,10 @@ namespace gwen {
 template <typename Monoid> struct sliding_window_aggregation {
     using S = typename Monoid::S;
     i32 N;
-    std::vector<S> data;
     std::vector<i32> L, R;
 
     sliding_window_aggregation() : N(0) {}
-    explicit sliding_window_aggregation(const std::vector<S>& vec) : N(vec.size()), data(vec) {}
+    explicit sliding_window_aggregation(i32 N_) : N(N_) {}
 
     // l の昇順 -> r の昇順にソートしたときに、L[i] <= L[i+1] かつ R[i] <= R[i+1] が成立していなければならない
     void add_query(i32 l, i32 r) {
@@ -25,7 +24,7 @@ template <typename Monoid> struct sliding_window_aggregation {
         R.emplace_back(r);
     }
 
-    std::vector<S> solve(bool sorted = false) {
+    std::vector<S> solve(const std::vector<S>& data, bool sorted = false) {
         const i32 Q = L.size();
         std::vector<i32> query(Q);
         if (sorted) {

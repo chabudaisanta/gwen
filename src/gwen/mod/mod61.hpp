@@ -1,3 +1,5 @@
+#pragma once
+
 #include "gwen/types.hpp"
 
 namespace gwen {
