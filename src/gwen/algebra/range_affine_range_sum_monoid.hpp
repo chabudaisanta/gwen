@@ -8,6 +8,7 @@ template <typename T> struct range_affine_range_sum_monoid {
     };
     static S op(S a, S b) { return {a.val + b.val, a.len + b.len}; }
     static S e() { return {0, 0}; }
+    static S unit(T x) { return {x, 1}; }
 
     struct F {
         T a, b;
