@@ -46,8 +46,8 @@ public:
         q++;
     }
 
-    auto solve(auto&& increment_l, auto&& decrement_l, auto&& increment_r, auto&& decrement_r, auto&& get_res)
-        -> std::vector<decltype(get_res(0))> {
+    template<typename IL, typename DL, typename IR, typename DR, typename GR>
+    auto solve(IL increment_l, DL decrement_l, IR increment_r, DR decrement_r, GR get_res) {
         std::vector<i32> query(q);
         std::iota(query.begin(), query.end(), 0);
         std::sort(query.begin(), query.end(), [&](i32 a, i32 b) { return ord[a] < ord[b]; });
