@@ -1,24 +1,25 @@
 #pragma once
-#include <unordered_map>
 
-#include "gwen/misc/xorshift.hpp"
+#include <functional>
+
+#include "gwen/hash/to_hash.hpp"
+#include "gwen/types.hpp"
+
 namespace gwen {
 namespace hash {
 
-template <typename T, bool isMultiset = false, i32 Reserve_size = 200200> struct zobrist {
+template <typename T, bool isMultiset = false>
+struct zobrist {
 private:
-    static inline std::unordered_map<T, u64> table;
-    static inline bool reserved = false;
+    static u64 elem_hash(const T& x) {
+        return to_hash(static_cast<u64>(std::hash<T>{}(x)));
+    }
+
     i32 sz = 0;
     u64 val = 0;
 
 public:
-    explicit zobrist() {
-        if (!reserved) {
-            table.reserve(Reserve_size);
-            reserved = true;
-        }
-    }
+    zobrist() = default;
 
     inline i32 size() const { return sz; }
     inline bool empty() const { return !sz; }
@@ -27,26 +28,21 @@ public:
     inline bool operator!=(const zobrist& other) const { return !(*this == other); }
 
     inline void insert(const T& x) {
-        if (!table.contains(x)) {
-            table[x] = rand64();
-        }
+        u64 h = elem_hash(x);
         if constexpr (isMultiset) {
-            val += table[x];
-        }
-        else {
-            // この構造体内で重複判定はしない.
-            val ^= table[x];
+            val += h;
+        } else {
+            val ^= h;
         }
         sz++;
     }
 
     inline void erase(const T& x) {
-        assert(table.contains(x));
+        u64 h = elem_hash(x);
         if constexpr (isMultiset) {
-            val -= table[x];
-        }
-        else {
-            val ^= table[x];
+            val -= h;
+        } else {
+            val ^= h;
         }
         sz--;
     }
