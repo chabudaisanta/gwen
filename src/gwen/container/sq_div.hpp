@@ -13,7 +13,7 @@ template <typename S, S (*op)(S, S), S (*e)()> struct sq_div {
     std::vector<S> raw;
     std::vector<S> d;
 
-    sq_div(const vector<S>& x) : n(x.size()), m(n / bsize + (n % bsize > 0)), raw(x) {
+    sq_div(const std::vector<S>& x) : n(x.size()), m(n / bsize + (n % bsize > 0)), raw(x) {
         d.resize(m);
         for (i32 p = 0; p < m; ++p) update(p);
     }

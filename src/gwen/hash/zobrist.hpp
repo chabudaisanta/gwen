@@ -48,6 +48,7 @@ public:
         else {
             val ^= table[x];
         }
+        sz--;
     }
 };
 

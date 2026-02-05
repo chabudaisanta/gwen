@@ -19,6 +19,7 @@ i64 pow_mod(i64 x, i64 n, i64 m = 998244353) {
 }
 
 i64 inv_mod(i64 a, i64 m = 998244353) {
+    assert(a != 0 && "inv_mod(0, m): inverse does not exist");
     i64 b = m, u = 1, v = 0;
     while (b) {
         i64 t = a / b;

@@ -3,48 +3,39 @@
 #include <algorithm>
 #include <bit>
 #include <cassert>
+#include <ranges>
 #include <vector>
 
 #include "gwen/types.hpp"
+#include "gwen/graph/xor_linked_tree.hpp"
 
 namespace gwen {
 
 class doubling_tree {
 private:
-    int n, log, root;
-    std::vector<int> anc;
-    std::vector<int> d;
+    i32 n, log, root;
+    std::vector<i32> anc;
+    std::vector<i32> d;
 
 public:
-    explicit doubling_tree(int n_, int root_, const std::vector<std::vector<int>>& G)
+    template <typename Edge>
+    explicit doubling_tree(i32 n_, i32 root_, const std::vector<Edge>& E)
         : n(n_), log(n_ > 0 ? std::bit_width(static_cast<u32>(n_)) : 0), root(root_) {
-        assert(n == ssize(G));
-        assert(0 <= root && root < n);
-
         anc.assign(log * n, -1);
-        d.assign(n, -1);
+        d.assign(n, 0);
 
-        std::vector<int> q;
-        q.reserve(n);
-        q.emplace_back(root);
-
-        d[root] = 0;
-
-        int head = 0;
-        while (head < ssize(q)) {
-            int v = q[head++];
-            for (int u : G[v]) {
-                if (u != get_anc(v, 0)) {
-                    d[u] = d[v] + 1;
-                    set_anc(u, 0) = v;
-                    q.emplace_back(u);
-                }
+        auto [par, ord] = xor_tree_scan<Edge, true>(E, root);
+        for (i32 v : ord | std::views::reverse) {
+            i32 p = par[v];
+            if(p != -1) {
+                d[v] = d[p] + 1;
+                set_anc(v, 0) = p;
             }
         }
 
-        for (int i = 1; i < log; ++i) {
-            for (int v = 0; v < n; ++v) {
-                int parent_half = get_anc(v, i - 1);
+        for (i32 i = 1; i < log; ++i) {
+            for (i32 v = 0; v < n; ++v) {
+                i32 parent_half = get_anc(v, i - 1);
                 if (parent_half != -1) {
                     set_anc(v, i) = get_anc(parent_half, i - 1);
                 }
@@ -52,25 +43,39 @@ public:
         }
     }
 
-    int kth_anc(int v, int k) const {
+    template <typename T>
+    explicit doubling_tree(i32 n_, i32 root_, const std::vector<std::vector<T>>& G)
+        : doubling_tree(n_, root_, [&] {
+              struct adj_edge { i32 u, v; };
+              std::vector<adj_edge> E;
+              E.reserve(n_ - 1);
+              for (i32 v = 0; v < n_; ++v) {
+                  for (T u : G[v]) {
+                      if (v < static_cast<i32>(u)) E.emplace_back(adj_edge{v, static_cast<i32>(u)});
+                  }
+              }
+              return E;
+          }()) {}
+
+    i32 kth_anc(i32 v, i32 k) const {
         assert(0 <= v && v < n);
         assert(k >= 0);
         if (k > d[v]) return -1;
 
         while (k > 0 && v != -1) {
-            int i = std::countr_zero(static_cast<u32>(k));
+            i32 i = std::countr_zero(static_cast<u32>(k));
             v = get_anc(v, i);
             k &= k - 1;
         }
         return v;
     }
 
-    inline int depth(int v) const {
+    inline i32 depth(i32 v) const {
         assert(0 <= v && v < n);
         return d[v];
     }
 
-    int lca(int u, int v) const {
+    i32 lca(i32 u, i32 v) const {
         assert(0 <= u && u < n);
         assert(0 <= v && v < n);
 
@@ -78,7 +83,7 @@ public:
         u = kth_anc(u, d[u] - d[v]);
 
         if (u == v) return u;
-        for (int i = log - 1; i >= 0; --i) {
+        for (i32 i = log - 1; i >= 0; --i) {
             if (get_anc(u, i) != get_anc(v, i)) {
                 u = get_anc(u, i);
                 v = get_anc(v, i);
@@ -87,7 +92,7 @@ public:
         return get_anc(u, 0);
     }
 
-    int len(int u, int v) const {
+    i32 len(i32 u, i32 v) const {
         assert(0 <= u && u < n);
         assert(0 <= v && v < n);
 
@@ -95,9 +100,9 @@ public:
     }
 
 private:
-    inline int get_anc(int v, int i) const { return anc[static_cast<size_t>(i) * n + v]; }
+    inline i32 get_anc(i32 v, i32 i) const { return anc[static_cast<size_t>(i) * n + v]; }
 
-    inline int& set_anc(int v, int i) { return anc[static_cast<size_t>(i) * n + v]; }
+    inline i32& set_anc(i32 v, i32 i) { return anc[static_cast<size_t>(i) * n + v]; }
 };
 
 }  // namespace gwen
