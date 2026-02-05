@@ -186,8 +186,3 @@ using mint107 = atcoder::modint1000000007;
 #include <gmpxx.h>
 using gmp_int = mpz_class;
 #endif
-/*
-#if __has_include(<Eigen/Dense>)
-#include <Eigen/Dense>
-#endif
-*/
