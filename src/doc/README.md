@@ -10,7 +10,7 @@
 ## ディレクトリ構成
 
 ```
-gwen/
+src/gwen/
 ├── algebra/      # 代数構造（モノイド、アーベル群）
 ├── container/    # データ構造
 ├── geo/          # 幾何
@@ -38,6 +38,12 @@ gwen/
 #include "gwen/types.hpp"
 #include "gwen/io.hpp"
 #include "gwen/dump.hpp"
+```
+
+コンパイル時に include パスを指定：
+
+```bash
+g++ -std=c++20 -I src your_code.cpp
 ```
 
 ### 型・リテラル
@@ -95,14 +101,13 @@ i64 s = ft.sum(l, r);  // [l, r) の和
 | `forest.hpp` | 森の管理 |
 | `xor_linked_tree.hpp` | XOR リンク木（内部用） |
 | `doubling_tree.hpp` | ダブリングによる LCA・k 先祖・距離 |
+| `weighted_dsu.hpp` | 重み付き Union-Find（ポテンシャル付き DSU） |
 
 **doubling_tree 使用例：**
 ```cpp
 #include "gwen/graph/doubling_tree.hpp"
 
 std::vector<std::vector<int>> G(N);  // 隣接リスト
-// G を構築...
-
 gwen::doubling_tree T(N, root, G);
 T.lca(u, v);       // LCA
 T.kth_anc(v, k);   // v の k 個上の祖先
@@ -110,12 +115,34 @@ T.depth(v);        // 深さ
 T.len(u, v);       // u-v パスの長さ（頂点数）
 ```
 
+**weighted_dsu 使用例：**
+```cpp
+#include "gwen/graph/weighted_dsu.hpp"
+#include "gwen/algebra/basic_abel.hpp"
+
+gwen::weighted_dsu<gwen::sum_abel<i64>> dsu(N);
+dsu.merge(a, b, w);   // diff(a,b)=w となるようにマージ
+i64 d = dsu.diff(a, b);
+bool ok = dsu.same(a, b);
+```
+
 ### hash（ハッシュ）
 
 | ファイル | 内容 |
 |----------|------|
-| `rolling_hash.hpp` | ローリングハッシュ |
+| `rolling_hash.hpp` | 静的列の区間ハッシュ（mod61, 逆元不要） |
 | `zobrist.hpp` | Zobrist ハッシュ |
+
+**rolling_hash 使用例：**
+```cpp
+#include "gwen/hash/rolling_hash.hpp"
+
+std::string s = "abcabc";
+gwen::rolling_hash<> rh(s);
+auto h = rh.get(0, 3);       // 区間 [0,3) のハッシュ
+bool eq = rh.equal(0, 3, 3, 6);  // 部分列が一致するか
+i32 len = rh.lcp(0, 3);      // suffix の最長共通接頭辞
+```
 
 ### math（数学）
 
@@ -132,8 +159,6 @@ T.len(u, v);       // u-v パスの長さ（頂点数）
 
 auto fac = gwen::factorize(x);     // 素因数分解
 bool p = gwen::miller(n);          // 素数判定 (u64)
-bool p32 = gwen::miller32(n);      // 32bit 用
-bool p64 = gwen::miller64(n);      // 64bit 用
 ```
 
 ### misc（ユーティリティ）
@@ -153,19 +178,6 @@ bool p64 = gwen::miller64(n);      // 64bit 用
 | `mod61.hpp` | mod 2^61-1 |
 | `modint.hpp` | `dynamic_modint64`（実行時 mod 設定） |
 
-**modint 使用例：**
-```cpp
-#include "gwen/mod/modint.hpp"
-
-using mint = gwen::dynamic_modint64;
-mint::set_mod(998244353);
-
-mint a = 1, b = 2;
-mint c = a + b;
-mint d = a.pow(100);
-u64 v = d.val();
-```
-
 ### query（クエリ処理）
 
 | ファイル | 内容 |
@@ -173,22 +185,6 @@ u64 v = d.val();
 | `mo.hpp` | Mo's algorithm（Hilbert 順） |
 | `swag.hpp` | Sliding Window Aggregation |
 | `functional_query.hpp` | 関数的クエリ |
-
-**Mo's algorithm 使用例：**
-```cpp
-#include "gwen/query/mo.hpp"
-
-gwen::mo_algorithm mo(N);
-mo.add_query(l, r);
-
-auto res = mo.solve(
-    [&](int l, int r) { /* l を増やす */ },
-    [&](int l, int r) { /* l を減らす */ },
-    [&](int l, int r) { /* r を増やす */ },
-    [&](int l, int r) { /* r を減らす */ },
-    [&](int idx) { return /* 現在の答え */; }
-);
-```
 
 ---
 
@@ -203,8 +199,6 @@ gwen::input >> n >> m >> vec;
 gwen::output << ans << '\n';
 ```
 
-`gwen::my_template.hpp` をインクルードしている場合は、`std::cin` / `std::cout` と `std::vector` の `>>` / `<<` も利用可能です。
-
 ---
 
 ## デバッグ
@@ -217,13 +211,24 @@ gwen::output << ans << '\n';
 
 ---
 
-## verify
+## verify・テスト
 
 `verify/` に検証用コードがあります：
+
+- `rolling_hash.cpp` : rolling_hash の検証
+
+`verify/yosupo/` に Library Checker 用のコードがあります：
 
 - `lca.cpp` : LCA（doubling_tree）
 - `jump_on_tree.cpp` : 木上のジャンプ
 - `primality_test.cpp` : 素数判定
+
+テストの実行：
+
+```bash
+./scripts/run_verify.sh           # 全テスト実行
+./scripts/run_verify.sh rolling_hash  # 特定のテストのみ
+```
 
 ---
 
