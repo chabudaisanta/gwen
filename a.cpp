@@ -15,43 +15,20 @@
 #define rp(i, n) for (i32 i = 0; i < (i32)(n); ++i)
 constexpr char EL = '\n';
 #define BAR std::cerr << "-------------------------\n"
-#include <atcoder/modint>
-#include "gwen/algebra/basic_monoid.hpp"
-#include "gwen/query/swag.hpp"
+#include "gwen/graph/doubling_tree.hpp"
+#include "gwen/graph/edge.hpp"
 namespace gwen {
-using mint998 = atcoder::modint998244353;
-using M = affine_monoid<mint998>;
 void solve() {
-    i32 Q; input >> Q;
-    std::vector<i32> F(Q, 0);
-    std::vector<M::S> A(Q, M::e());
-    std::vector<std::tuple<i32,i32,mint998>> T;
-    i32 r = Q, l = Q - 1;
-    rp(i,Q) {
-        i32 t; input >> t;
-        if(t==0) {
-            i32 a, b; input >> a >> b;
-            A[Q - 1 - i] = { a, b };
-            F[Q - 1 - i] = 1;
-        }
-        else if(t==1) {
-            do {
-                --r;
-            } while(!F[r]);
-        }
-        else {
-            i32 x; input >> x;
-            T.emplace_back(l, r, x);
-        }
-        l--;
+    i32 N, Q; input >> N >> Q;
+    std::vector<edge> E(N - 1);
+    for(i32 i = 0; i < N - 1; ++i) {
+        i32 p; input >> p;
+        E[i] = {i + 1, p};
     }
-    sliding_window_aggregation<M> SWAG(A);
-    for(auto [l, r, x] : T) SWAG.add_query(l, r);
-    auto res = SWAG.solve();
-    rp(i,T.size()) {
-        auto [l, r, x] = T[i];
-        auto [a, b] = res[i];
-        output << (a * x + b).val() << EL;
+    doubling_tree T(N, 0, E);
+    while(Q--) {
+        i32 u, v; input >> u >> v;
+        output << T.lca(u, v) << EL;
     }
 }
 
