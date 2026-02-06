@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility>
+#include <span>
 #include <vector>
 
 #include "gwen/types.hpp"
@@ -44,9 +44,8 @@ struct csr {
     i32 size() const { return static_cast<i32>(start.size()) - 1; }
     i32 num_edges() const { return static_cast<i32>(elist.size()); }
 
-    // [l, r) = edges from vertex v
-    std::pair<i32, i32> operator[](i32 v) const {
-        return {start[v], start[v + 1]};
+    std::span<const Edge> operator[](i32 v) const {
+        return std::span<const Edge>(elist).subspan(start[v], start[v + 1] - start[v]);
     }
 };
 
