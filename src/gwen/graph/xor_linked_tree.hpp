@@ -42,7 +42,7 @@ xor_tree_scan_info xor_tree_scan(const std::vector<Edge>& E, i32 root) {
     }
     
     X[root] = -1;
-    return { X, xor_order };
+    return { std::move(X), std::move(xor_order) };
 }
 
 std::vector<i32> get_dfs_order(const xor_tree_scan_info& info) {
