@@ -15,6 +15,8 @@ template <i32 ID = 0> struct rolling_hash_monoid {
     // rhash([a_0, a_1, ... ]) = Σ (a_i * r^i)
     struct S {
         u64 v, p;
+        friend bool operator==(const S& a, const S& b) = default;
+        friend bool operator!=(const S& a, const S& b) = default;
     };
 
     static S op(S a, S b) {
