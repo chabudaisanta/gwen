@@ -112,6 +112,21 @@ template <typename T> struct point {
         if (b.norm_sq() < c.norm_sq()) return -2;  // front
         return 0;                                  // on segment
     }
+
+    // 3点 a, b, c を渡して角 ∠abc の大きさ (rad) を返す
+    // 戻り値は 0 以上 π 以下
+    static auto calc_angle(const point& a, const point& b, const point& c) {
+        auto ba = a - b;
+        auto bc = c - b;
+
+        // ba, bc が零ベクトルだと角度が定義できないのでデバッグ時に検出
+        assert(ba.x != 0 || ba.y != 0);
+        assert(bc.x != 0 || bc.y != 0);
+
+        long double cp = static_cast<long double>(cross_product(ba, bc));
+        long double dp = static_cast<long double>(dot_product(ba, bc));
+        return std::atan2(std::abs(cp), dp);
+    }
 };
 
 }  // namespace gwen
