@@ -1,6 +1,8 @@
 #pragma once
 
+#include <algorithm>
 #include <bitset>
+#include <string>
 
 #include "gwen/types.hpp"
 
@@ -42,12 +44,18 @@ public:
     }
 
     using S = xor_basis;
-    static S op(const S& a, const S& b) {
-        S large = a.size() > b.size() ? a : b;
-        const S& small = a.size() < b.size() ? a : b;
+    static S op(S a, S b) {
+        S &large = a, small = b;
+        if (large.size() < small.size()) std::swap(large, small);
         for (i32 i = BitWidth - 1; i >= 0; --i) large.insert(small.base(i));
         return large;
     }
     static S e() { return S(); }
+
+    std::string dump() const {
+        std::string str;
+        for (i32 i = BitWidth - 1; i >= 0; --i) str += basis[i].to_string() + "\n";
+        return str;
+    }
 };
 }  // namespace gwen
