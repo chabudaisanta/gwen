@@ -19,10 +19,10 @@ struct prime_factorize_table {
         assert(n < (1 << 30));
         n <<= 1;
         p.resize(n, 0);
-        for (int i = 2; i < n; ++i)
+        for (i64 i = 2; i < n; ++i)
             if (!p[i]) {
-                for (i64 j = i64(i) * i; j < n; j += i) {
-                    p[j] = i;
+                for (i64 j = i * i; j < n; j += i) {
+                    if (!p[j]) p[j] = i;
                 }
             }
     }

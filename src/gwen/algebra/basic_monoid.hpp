@@ -28,6 +28,18 @@ template <typename T> struct max_monoid {
     static S e() { return std::numeric_limits<S>::min(); }
 };
 
+template <typename T> struct minmax_monoid {
+    struct S {
+        i32 min, max;
+    };
+    static S op(S a, S b) {
+        return { std::min(a.min, b.min), std::max(a.max, b.max) };
+    }
+    static S e() {
+        return { std::numeric_limits<T>::min(), std::numeric_limits<T>::max() };
+    }
+};
+
 template <typename T> struct gcd_monoid {
     using S = T;
     static S op(S a, S b) {
