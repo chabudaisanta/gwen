@@ -30,7 +30,7 @@ template <typename Monoid> struct disjoint_sparse_table {
             // 負方向累積
             for (i32 l = 0; l < N; l += s2) {
                 i32 r = std::min(l + s, N);
-                for (i32 k = r - 1; k > 0; --k) data[i][k - 1] = Monoid::op(data[i][k - 1], data[i][k]);
+                for (i32 k = r - 1; k > l; --k) data[i][k - 1] = Monoid::op(data[i][k - 1], data[i][k]);
             }
         }
     }
