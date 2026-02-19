@@ -11,20 +11,24 @@ namespace internal {
 
 struct prime_factorize_table {
     i32 n;
-    std::vector<i32> p;  // p[i] = 0: i is prime (or 1/0)
+    // p[i] = 0     if i < 2
+    // p[i] = lpf   if 2 <= i, especially p[i] = i if i is prime
+    std::vector<i32> p;
 
     prime_factorize_table() : n(2), p(2, 0) {}
 
     void extend() {
-        assert(n < (1 << 30));
+        assert(n <= 1e8);
         n <<= 1;
         p.resize(n, 0);
-        for (i64 i = 2; i < n; ++i)
+        for (i64 i = 2; i < n; ++i) {
             if (!p[i]) {
+                p[i] = i;
                 for (i64 j = i * i; j < n; j += i) {
                     if (!p[j]) p[j] = i;
                 }
             }
+        }
     }
 
     // if x <= max() can factorize
@@ -35,16 +39,17 @@ struct prime_factorize_table {
 }  // namespace internal
 
 std::vector<i32> factorize(i32 x) {
-    assert(0 < x && x < (1 << 30));
+    assert(0 <= x && x <= 1e8);
+    if (x <= 1) return {};
     static gwen::internal::prime_factorize_table table;
     while (table.max() < x) table.extend();
     std::vector<i32> ret;
-    while (table.p[x] != 0) {
-        // if p[x] = 0, x is prime
+    while (x > 1) {
+        // table.p[x] = lpf
+        // if table.p[x] = 0, x = 1
         ret.emplace_back(table.p[x]);
         x /= table.p[x];
     }
-    if (x != 1) ret.emplace_back(x);
     return ret;
 }
 
@@ -104,7 +109,7 @@ bool is_prime_small(i32 n) {
     if (n <= 1) return false;
     static gwen::internal::prime_factorize_table table;
     while (table.max() < n) table.extend();
-    return !table.p[n];
+    return table.p[n] == n;
 }
 
 bool miller(u64 n) {
