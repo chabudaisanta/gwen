@@ -31,10 +31,15 @@
 |----------|------|--------|
 | `insert(pos, x)` | 位置 `pos` に要素 `x`（型 `S`）を挿入 | $O(\log n)$ |
 | `erase(pos)` | 位置 `pos` の要素を削除 | $O(\log n)$ |
+| `set(pos, x)` | 位置 `pos` の要素を `x` に書き換え | $O(\log n)$ |
 | `reverse(l, r)` | $[l, r)$ を反転 | $O(\log n)$ |
 | `apply(l, r, f)` | $[l, r)$ に作用 `f`（型 `F`）を適用 | $O(\log n)$ |
+| `all_apply(f)` | 列全体に作用 `f` を適用 | $O(1)$（遅延のみ） |
 | `prod(l, r)` | $[l, r)$ の総積（型 `S`）を返す | $O(\log n)$ |
+| `all_prod()` | 列全体の総積を返す（空なら `e()`） | $O(\log n)$ |
 | `get(pos)` | 位置 `pos` の要素（型 `S`）を返す | $O(\log n)$ |
+| `concat(other)` | 自分の末尾に `other` を連結し、`other` を空にする | $O(\log n)$ |
+| `concat(t0, t1)` (static) | `t0` と `t1` を連結した新 treap を返し、`t0` と `t1` を空にする | $O(\log n)$ |
 
 ---
 

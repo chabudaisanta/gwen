@@ -63,6 +63,28 @@ template <typename Monoid> struct treap {
         return prod(pos, pos + 1);
     }
 
+    void set(i32 pos, const S& x) {
+        assert(0 <= pos && pos < size());
+        auto [l, r] = split(root, pos);
+        auto [m, rr] = split(r, 1);
+        d[m].val = x;
+        update(m);
+        root = merge(merge(l, m), rr);
+    }
+
+    S all_prod() const { return prod_(root); }
+
+    void concat(treap& other) {
+        root = merge(root, other.root);
+        other.root = NIL;
+    }
+    static treap concat(treap& t0, treap& t1) {
+        treap r;
+        r.root = merge(t0.root, t1.root);
+        t0.root = t1.root = NIL;
+        return r;
+    }
+
     void push_back(const S& x) { insert(size(), x); }
     void push_front(const S& x) { insert(0, x); }
 

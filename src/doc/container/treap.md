@@ -135,6 +135,54 @@ S t.get(i32 pos);
 
 ---
 
+## set
+
+```
+void t.set(i32 pos, const S& x);
+```
+
+位置 `pos` の要素を `x` に書き換えます。
+
+**制約**
+
+- $0 \leq \mathrm{pos} < n$
+
+**計算量**
+
+- $O(\log n)$
+
+---
+
+## all_prod
+
+```
+S t.all_prod();
+```
+
+列全体の総積 $op(a[0], \ldots, a[n-1])$ を返します。空のときは `Monoid::e()` を返します。
+
+**計算量**
+
+- $O(1)$
+
+---
+
+## concat
+
+```
+void t.concat(treap& other);
+static treap treap::concat(treap& t0, treap& t1);
+```
+
+- **メンバ**: 自分の列の末尾に `other` の列を連結します。呼び出し後、`other` は空になります。
+- **static**: `t0` の列と `t1` の列を連結した新しい treap を返します。呼び出し後、`t0` と `t1` は空になります。
+
+**計算量**
+
+- $O(\log n)$（$n$ は連結後の長さ）
+
+---
+
 ## push_back
 
 ```

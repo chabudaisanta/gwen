@@ -94,6 +94,43 @@ struct implicit_treap {
         return prod(pos, pos + 1);
     }
 
+    void set(i32 pos, const S& x) {
+        assert(0 <= pos && pos < size());
+        auto [l, r] = split(root, pos);
+        auto [m, rr] = split(r, 1);
+        push(m);
+        d[m].val = x;
+        update(m);
+        root = merge(merge(l, m), rr);
+    }
+
+    void all_apply(const F& f) {
+        if (empty()) return;
+        push(root);
+        if (d[root].has_lazy)
+            d[root].lazy = Monoid::composition(f, d[root].lazy);
+        else
+            d[root].lazy = f;
+        d[root].has_lazy = true;
+    }
+
+    S all_prod() {
+        if (empty()) return Monoid::e();
+        push(root);
+        return d[root].prod;
+    }
+
+    void concat(implicit_treap& other) {
+        root = merge(root, other.root);
+        other.root = NIL;
+    }
+    static implicit_treap concat(implicit_treap& t0, implicit_treap& t1) {
+        implicit_treap r;
+        r.root = merge(t0.root, t1.root);
+        t0.root = t1.root = NIL;
+        return r;
+    }
+
     void push_back(const S& x) { insert(size(), x); }
     void push_front(const S& x) { insert(0, x); }
 
