@@ -30,7 +30,28 @@ template <typename Monoid> struct treap {
 
     treap() = default;
     explicit treap(const std::vector<S>& vec) {
-        for (const S& x : vec) push_back(x);
+        if (vec.empty()) return;
+        std::vector<tree> nodes;
+        nodes.reserve(vec.size());
+        for (const S& x : vec) nodes.push_back(d.new_node(node(x)));
+        tree r = NIL;
+        std::vector<tree> st;
+        st.reserve(vec.size());
+        for (tree t : nodes) {
+            tree last = NIL;
+            while (!st.empty() && d[st.back()].prio < d[t].prio) {
+                last = st.back();
+                st.pop_back();
+            }
+            d[t].left = last;
+            if (!st.empty())
+                d[st.back()].right = t;
+            else
+                r = t;
+            st.push_back(t);
+        }
+        root = r;
+        update_all(root);
     }
 
     i32 size() const { return size_(root); }
@@ -88,7 +109,6 @@ template <typename Monoid> struct treap {
     void push_back(const S& x) { insert(size(), x); }
     void push_front(const S& x) { insert(0, x); }
 
-    /// Debug: in-order DFS, returns vector of val (index order).
     std::vector<S> to_vec() const {
         std::vector<S> res;
         res.reserve(size());
@@ -111,6 +131,12 @@ private:
         node& n = d[t];
         n.size = 1 + size_(n.left) + size_(n.right);
         n.prod = Monoid::op(Monoid::op(prod_(n.left), n.val), prod_(n.right));
+    }
+    static void update_all(tree t) {
+        if (t == NIL) return;
+        update_all(d[t].left);
+        update_all(d[t].right);
+        update(t);
     }
 
     static tree merge(tree l, tree r) {

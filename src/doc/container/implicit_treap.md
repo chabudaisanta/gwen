@@ -23,6 +23,8 @@
 
 **区間**: 0-based の半開区間 $[l, r)$。
 
+**コンストラクタ**: `implicit_treap(const std::vector<S>& vec)` で列から構築。計算量 $O(n)$。
+
 ---
 
 ## 主なメソッド
