@@ -120,6 +120,65 @@ template <typename Key, typename Monoid, typename Compare = std::less<Key>> stru
         d[root].has_lazy = true;
     }
 
+    bool contains(const Key& key) {
+        auto [idx, id] = lower_bound(key);
+        if (id == NIL) return false;
+        return key_eq(get_key(id), key);
+    }
+
+    /// 0 or 1 (unique keys). Same as contains for map semantics.
+    i32 count(const Key& key) {
+        return contains(key) ? 1 : 0;
+    }
+
+    /// 0-based: k-th smallest key and its value. Undefined if k < 0 or k >= size().
+    std::pair<Key, S> kth(i32 k) {
+        assert(0 <= k && k < size());
+        auto [l, mid] = split_idx(root, k);
+        auto [m, r] = split_idx(mid, 1);
+        push(m);
+        Key kk = d[m].key;
+        S vv = d[m].val;
+        root = merge(merge(l, m), r);
+        return {kk, vv};
+    }
+
+    /// Index of the smallest key >= key, and its node id. If none, returns (size(), NIL).
+    std::pair<i32, tree> lower_bound(const Key& key) {
+        auto [l, r] = split_lt(root, key);
+        i32 idx = size_(l);
+        if (r == NIL) {
+            root = l;
+            return {idx, NIL};
+        }
+        auto [m, rr] = split_idx(r, 1);
+        root = merge(merge(l, m), rr);
+        return {idx, m};
+    }
+
+    /// Index of the smallest key > key, and its node id. If none, returns (size(), NIL).
+    std::pair<i32, tree> upper_bound(const Key& key) {
+        auto [l, r] = split_le(root, key);
+        i32 idx = size_(l);
+        if (r == NIL) {
+            root = l;
+            return {idx, NIL};
+        }
+        auto [m, rr] = split_idx(r, 1);
+        root = merge(merge(l, m), rr);
+        return {idx, m};
+    }
+
+    static Key get_key(tree id) {
+        assert(id != NIL);
+        return d[id].key;
+    }
+    static S get_val(tree id) {
+        assert(id != NIL);
+        push(id);
+        return d[id].val;
+    }
+
     /// Debug: in-order DFS, returns (key, val) in key order.
     std::vector<std::pair<Key, S>> to_vec() {
         std::vector<std::pair<Key, S>> res;
@@ -184,6 +243,22 @@ private:
             return {t, b};
         }
         auto [a, b] = split_lt(d[t].left, key);
+        d[t].left = b;
+        update(t);
+        return {a, t};
+    }
+
+    /// (left, right) where every key in left is <= key, every key in right is > key.
+    static std::pair<tree, tree> split_le(tree t, const Key& key) {
+        if (t == NIL) return {NIL, NIL};
+        push(t);
+        if (!cmp(key, d[t].key)) {  // d[t].key <= key
+            auto [a, b] = split_le(d[t].right, key);
+            d[t].right = a;
+            update(t);
+            return {t, b};
+        }
+        auto [a, b] = split_le(d[t].left, key);
         d[t].left = b;
         update(t);
         return {a, t};
