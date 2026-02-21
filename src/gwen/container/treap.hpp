@@ -88,8 +88,22 @@ template <typename Monoid> struct treap {
     void push_back(const S& x) { insert(size(), x); }
     void push_front(const S& x) { insert(0, x); }
 
+    /// Debug: in-order DFS, returns vector of val (index order).
+    std::vector<S> to_vec() const {
+        std::vector<S> res;
+        res.reserve(size());
+        to_vec_(root, res);
+        return res;
+    }
+
 private:
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
+    static void to_vec_(tree t, std::vector<S>& out) {
+        if (t == NIL) return;
+        to_vec_(d[t].left, out);
+        out.push_back(d[t].val);
+        to_vec_(d[t].right, out);
+    }
     static S prod_(tree t) { return t == NIL ? Monoid::e() : d[t].prod; }
 
     static void update(tree t) {
