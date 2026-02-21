@@ -10,16 +10,15 @@
 
 namespace gwen {
 
-template <typename Monoid>
-struct treap {
+template <typename Monoid> struct treap {
     using S = typename Monoid::S;
     using tree = i32;
 
     struct node {
         tree left = 0, right = 0;
-        u32 prio = 0;
-        i32 size = 0;
         S val = Monoid::e(), prod = Monoid::e();
+        i32 size = 0;
+        u32 prio = 0;
         node() = default;
         explicit node(const S& v) : val(v), prod(v), size(1), prio(rand32()) {}
     };
