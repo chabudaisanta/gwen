@@ -1,18 +1,12 @@
-# Treap
+# Treap (treap)
 
-[モノイド](https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%8E%E3%82%A4%E3%83%89) $(S, \cdot: S \times S \to S, e \in S)$ に対し使用できる implicit treap（平衡二分探索木）です。
+[モノイド](https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%8E%E3%82%A4%E3%83%89) $(S, \cdot: S \times S \to S, e \in S)$ に対し使用できる implicit treap（平衡二分探索木）です。長さ $n$ の列に対し、区間の総積の取得・任意位置への挿入・削除を $O(\log n)$ で行います。添字は 0-based、区間は半開区間 $[l, r)$ です。
 
-長さ $n$ の列に対し、
+---
 
-- 区間の要素の総積（モノイド積）の取得
-- 任意位置への要素の挿入
-- 任意位置の要素の削除
+## テンプレート引数
 
-を $O(\log n)$ で行います。添字は 0-based で、区間は半開区間 $[l, r)$ です。
-
-`Monoid` には `S`, `op(S a, S b)`, `e()` を定義した型（例: `gwen::sum_monoid<i64>`, `gwen::min_monoid<i32>`）を指定します。オラクルが定数時間と仮定したときの計算量を記述します。
-
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
+- `Monoid`: `S`, `op(S a, S b)`, `e()` を定義した型（例: `gwen::sum_monoid<i64>`, `gwen::min_monoid<i32>`）。オラクルは定数時間と仮定します。
 
 ---
 
@@ -123,7 +117,7 @@ $op(a[l], a[l+1], \ldots, a[r-1])$ を返します。$l = r$ のときは `Monoi
 S t.get(i32 pos);
 ```
 
-位置 `pos` の要素 $a[\mathrm{pos}]$ を返します。実質的に `prod(pos, pos + 1)` と同じです。
+位置 `pos` の要素 $a[\mathrm{pos}]$ を返します。`prod(pos, pos + 1)` と同じです。
 
 **制約**
 
@@ -208,6 +202,20 @@ void t.push_front(const S& x);
 **計算量**
 
 - $O(\log n)$
+
+---
+
+## to_vec
+
+```
+vector<S> t.to_vec() const;
+```
+
+デバッグ用。in-order DFS で走査し、添字順（列の順序）に `val` を並べた `vector` を返します。
+
+**計算量**
+
+- $O(n)$
 
 ---
 
