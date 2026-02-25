@@ -1,9 +1,4 @@
 #pragma once
 
-#include <algorithm>
-#include <bit>
-#include <vector>
-
-#include "gwen/algebra/monoid.hpp"
-
+// TODO: 書く, sorted_treapを使う
 namespace gwen {}  // namespace gwen
