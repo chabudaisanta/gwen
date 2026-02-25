@@ -10,8 +10,6 @@
 
 前計算 $O(n \log n)$ 時間・空間。クエリ $O(1)$。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## コンストラクタ

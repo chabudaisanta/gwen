@@ -2,8 +2,6 @@
 
 列の区間のハッシュを $O(1)$ で取得するデータ構造です。`rhash::rolling_hash_monoid` と組み合わせて、区間のハッシュ値と「長さに対応するベキ」のペアを返します。文字列の一致判定や LCP に使えます。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## テンプレート引数

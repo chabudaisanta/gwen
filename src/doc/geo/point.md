@@ -2,8 +2,6 @@
 
 2 次元の点（ベクトル）を表すテンプレート `point<T>` です。座標 `(x, y)` と各種演算・比較・幾何用の静的メソッドを提供します。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## コンストラクタ

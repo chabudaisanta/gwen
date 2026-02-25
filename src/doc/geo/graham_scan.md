@@ -2,8 +2,6 @@
 
 与えられた点集合の凸包を求める関数です。戻り値は凸包上の点の列（反時計回り）です。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## 関数

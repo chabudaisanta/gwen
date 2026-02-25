@@ -2,8 +2,6 @@
 
 区間 $[l, r)$ に対するモノイド積を、クエリを「$l$ の昇順 → $r$ の昇順」で処理することで、ならし $O(1)$ で求めるオフラインアルゴリズムです。`sliding_window_aggregation` という名前で提供されています。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## コンストラクタ

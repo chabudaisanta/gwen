@@ -5,8 +5,6 @@
 - 文字の型は `i32(x) - Offset` が $[0, \mathrm{Width})$ に収まる必要があります（例: `'a'` なら `Offset = 'a'`, `Width = 26`）。
 - 同じ文字列を複数回 insert 可能（多重集合として扱う場合、`count` がその回数になります）。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## テンプレート引数

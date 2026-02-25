@@ -2,8 +2,6 @@
 
 複数の根付き木（森）に対して、LCA・$k$ 個先の祖先・距離を $O(\log n)$ で求めるデータ構造です。頂点数 $n$ の隣接リスト `vector<vector<i32>>` から構築します。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## コンストラクタ

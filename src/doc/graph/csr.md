@@ -2,8 +2,6 @@
 
 有向グラフ（または無向グラフ）を隣接リスト形式で保持するデータ構造です。頂点 $v$ から出る辺を連続したメモリで参照できます。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## テンプレート引数

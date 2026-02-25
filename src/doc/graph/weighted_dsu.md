@@ -2,8 +2,6 @@
 
 頂点に「ポテンシャル」を持たせた Union-Find です。同一連結成分内の 2 頂点 $a$, $b$ について、`diff(a, b)` で「$P(a) - P(b)$」を取得できます。アーベル群の演算で重みを管理します。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## テンプレート引数

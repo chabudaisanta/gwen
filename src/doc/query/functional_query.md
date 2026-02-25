@@ -2,8 +2,6 @@
 
 各要素 $i$ が「次の位置」$P[i]$ を持つ列に対して、「$i$ から $k$ 回遷移した先」と「その区間のモノイド積」を $O(\log k)$ で求めるデータ構造です。ダブリングで前計算します。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## コンストラクタ

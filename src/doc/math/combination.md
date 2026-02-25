@@ -2,8 +2,6 @@
 
 階乗 $n!$、階乗の逆元、二項係数 $\binom{n}{k}$ を、静的テーブルで前計算しながら $O(1)$ で返す関数群です。型 `T` は乗法と逆元が定義されている必要があります（例: `gwen::modint`）。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## fact

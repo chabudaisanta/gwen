@@ -2,8 +2,6 @@
 
 集合（または多重集合）のハッシュを、要素の追加・削除ごとに $O(1)$ で更新するデータ構造です。状態の同一性判定やハッシュテーブルのキーに使います。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## テンプレート引数

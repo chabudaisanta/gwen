@@ -2,8 +2,6 @@
 
 素因数分解（LPF テーブル）と、64bit までの素数判定（Miller–Rabin）を提供します。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)
-
 ---
 
 ## factorize

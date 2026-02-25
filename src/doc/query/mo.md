@@ -2,7 +2,6 @@
 
 区間 $[l, r)$ に対するクエリを、Hilbert 曲線の順でソートして処理するオフラインアルゴリズムです。区間の伸縮コストが $O(1)$ のとき、全体で $O(n \sqrt{q})$ 程度になります。
 
-参照: [AC Library document_ja](https://atcoder.github.io/ac-library/master/document_ja/)  
 参考: [take44444 Algorithm-Book](https://take44444.github.io/Algorithm-Book/range/mo/main.html)
 
 ---
