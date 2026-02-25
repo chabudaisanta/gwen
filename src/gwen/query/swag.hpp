@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <deque>
 #include <numeric>
 #include <vector>
 
@@ -62,6 +63,69 @@ template <typename Monoid> struct sliding_window_aggregation {
             ret[idx] = Monoid::op((tail.empty() ? Monoid::e() : tail.back()), head);
         }
         return ret;
+    }
+};
+
+template <typename Monoid> struct swag_deque {
+    using S = typename Monoid::S;
+    std::vector<S> f, b;
+    std::deque<S> data;
+
+    swag_deque() = default;
+
+    S fold() const {
+        if (data.empty()) return Monoid::e();
+        if (f.empty()) return b.back();
+        if (b.empty()) return f.back();
+        return Monoid::op(f.back(), b.back());
+    }
+    void push_front(S x) {
+        data.emplace_front(x);
+        if (f.empty())
+            f.emplace_back(x);
+        else
+            f.emplace_back(Monoid::op(x, f.back()));
+    }
+    void push_back(S x) {
+        data.emplace_back(x);
+        if (b.empty())
+            b.emplace_back(x);
+        else
+            b.emplace_back(Monoid::op(b.back(), x));
+    }
+
+    void pop_back() {
+        assert(data.size());
+        if (b.empty()) balance(true);
+        b.pop_back();
+        data.pop_back();
+    }
+    void pop_front() {
+        assert(data.size());
+        if (f.empty()) balance(false);
+        f.pop_back();
+        data.pop_front();
+    }
+
+private:
+    // dir = false: f >= b
+    // dir = true : f <= b
+    void balance(bool dir) {
+        i32 n = data.size();
+        i32 m = dir ? n / 2 : (n + 1) / 2;
+        f.resize(m);
+        b.resize(n - m);
+
+        S acc = Monoid::e();
+        for (i32 i = m - 1; i >= 0; --i) {
+            acc = Monoid::op(data[i], acc);
+            f[m - 1 - i] = acc;
+        }
+        acc = Monoid::e();
+        for (i32 i = m; i < n; ++i) {
+            acc = Monoid::op(acc, data[i]);
+            b[i - m] = acc;
+        }
     }
 };
 

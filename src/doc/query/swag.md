@@ -73,3 +73,12 @@ swag.add_query(0, 3);  // [0,3) -> 1+2+3 = 6
 swag.add_query(1, 4);  // [1,4) -> 2+3+4 = 9
 auto res = swag.solve(data);  // {6, 9}
 ```
+
+---
+
+## 検証
+
+`sliding_window_aggregation` および `swag_deque` は、Library Checker における以下の提出で検証されています。
+
+- [submission 355484](https://judge.yosupo.jp/submission/355484)
+- [submission 347958](https://judge.yosupo.jp/submission/347958)
