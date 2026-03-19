@@ -108,4 +108,8 @@ template <typename Node, i32 Width, i32 Offset> struct trie_base {
     }
 };
 
+using trie = trie_base<trie_node_minimum<26>, 26, 'a'>;
+using TRIE = trie_base<trie_node_minimum<26>, 26, 'A'>;
+using Trie = trie_base<trie_node_minimum<52>, 52, 'A'>;
+
 }  // namespace gwen

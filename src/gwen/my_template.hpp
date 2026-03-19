@@ -82,6 +82,7 @@ template <typename T1, typename T2> inline bool chmin(T1& a, T2 b) { return (a >
 
 template <std::integral T> inline bool isIn(T x, T l, T r) { return (l <= x) && (x < r); }
 template <std::integral T> inline bool isOut(T x, T l, T r) { return (x < l) || (r <= x); }
+template <std::integral T> inline bool isOverlap(T l0, T r0, T l1, T r1) { return !(r1 <= l0 || r0 <= l1); }
 
 template <typename T> std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
     for (auto it = vec.begin(); it != vec.end(); it++) os << *it << (it == prev(vec.end()) ? "" : " ");
@@ -176,6 +177,10 @@ template <typename T> struct prefix_sum_2d {
         return dat[d][r] - dat[d][l] - dat[u][r] + dat[u][l];
     }
 };
+template <typename Container> auto SUM(const Container& vec) {
+    using T = typename Container::value_type;
+    return std::accumulate(vec.begin(), vec.end(), T{});
+}
 
 #if __has_include(<atcoder/all>)
 #include <atcoder/all>
