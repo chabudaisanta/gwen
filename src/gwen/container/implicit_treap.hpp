@@ -12,6 +12,7 @@ namespace gwen {
 
 /// Implicit treap: split by index (left subtree size).
 /// Monoid must provide: S, F, op(S,S), e(), mapping(F,S), composition(F,F), id().
+/// prod / rev_prod are left-to-right / right-to-left aggregates (non-commutative reverse).
 template <typename Monoid>
 struct implicit_treap {
     using S = typename Monoid::S;
@@ -20,14 +21,14 @@ struct implicit_treap {
 
     struct node {
         tree left = 0, right = 0;
-        S val = Monoid::e(), prod = Monoid::e();
+        S val = Monoid::e(), prod = Monoid::e(), rev_prod = Monoid::e();
         i32 size = 0;
         u32 prio = 0;
         bool rev = false;
         F lazy{};
         bool has_lazy = false;
         node() = default;
-        explicit node(const S& v) : val(v), prod(v), size(1), prio(rand32()) {}
+        explicit node(const S& v) : val(v), prod(v), rev_prod(v), size(1), prio(rand32()) {}
     };
 
     static inline node_pool<node> d;
@@ -82,6 +83,7 @@ struct implicit_treap {
         auto [left, mid_r] = split(root, l);
         auto [mid, right] = split(mid_r, r - l);
         d[mid].rev ^= true;
+        std::swap(d[mid].prod, d[mid].rev_prod);
         root = merge(merge(left, mid), right);
     }
 
@@ -173,6 +175,7 @@ private:
         to_vec_(d[t].right, out);
     }
     static S prod_(tree t) { return t == NIL ? Monoid::e() : d[t].prod; }
+    static S rev_prod_(tree t) { return t == NIL ? Monoid::e() : d[t].rev_prod; }
 
     static void push(tree t) {
         if (t == NIL) return;
@@ -180,12 +183,19 @@ private:
         if (n.rev) {
             n.rev = false;
             std::swap(n.left, n.right);
-            if (n.left != NIL) d[n.left].rev ^= true;
-            if (n.right != NIL) d[n.right].rev ^= true;
+            if (n.left != NIL) {
+                d[n.left].rev ^= true;
+                std::swap(d[n.left].prod, d[n.left].rev_prod);
+            }
+            if (n.right != NIL) {
+                d[n.right].rev ^= true;
+                std::swap(d[n.right].prod, d[n.right].rev_prod);
+            }
         }
         if (n.has_lazy) {
             n.val = Monoid::mapping(n.lazy, n.val);
             n.prod = Monoid::mapping(n.lazy, n.prod);
+            n.rev_prod = Monoid::mapping(n.lazy, n.rev_prod);
             if (n.left != NIL) {
                 if (d[n.left].has_lazy)
                     d[n.left].lazy = Monoid::composition(n.lazy, d[n.left].lazy);
@@ -211,6 +221,7 @@ private:
         push(n.right);
         n.size = 1 + size_(n.left) + size_(n.right);
         n.prod = Monoid::op(Monoid::op(prod_(n.left), n.val), prod_(n.right));
+        n.rev_prod = Monoid::op(Monoid::op(rev_prod_(n.right), n.val), rev_prod_(n.left));
     }
     static void update_all(tree t) {
         if (t == NIL) return;
