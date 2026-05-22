@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include "gwen/container/mdarray.hpp"
 #include "gwen/types.hpp"
 
 #define D_GWEN_IO_BUF_SIZE 1 << 20
@@ -162,6 +163,11 @@ public:
 
     template <typename T> is_type& operator>>(std::vector<T>& vec) {
         for (T& dest : vec) (*this) >> dest;
+        return *this;
+    }
+
+    template <typename T, i32 Rank> is_type& operator>>(mdarray<T, Rank>& a) {
+        for (T& e : a.data) (*this) >> e;
         return *this;
     }
 } input;
