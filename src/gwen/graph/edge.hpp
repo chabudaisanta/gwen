@@ -1,26 +1,25 @@
 #pragma once
 
+#include <concepts>
+
 #include "gwen/types.hpp"
 
 namespace gwen {
 
-struct edge {
+template <typename T>
+concept edge_type = requires(const T& t) {
+    { t.u } -> std::convertible_to<i32>;
+    { t.v } -> std::convertible_to<i32>;
+    typename T::weight_type;
+};
+
+template <typename T = i32> struct edge {
+    using weight_type = T;
     i32 u, v;
-    edge() : u(-1), v(-1) {}
-    edge(i32 u_, i32 v_) : u(u_), v(v_) {}
-
-    template<typename istream>
-    void input(istream& is) {
-        is >> u >> v;
-    }
+    weight_type w;
+    edge() : u(-1), v(-1), w(0) {}
+    edge(i32 u_, i32 v_) : u(u_), v(v_), w(1) {}
+    edge(i32 u_, i32 v_, weight_type w_) : u(u_), v(v_), w(w_) {}
 };
 
-template<typename WeightType>
-struct full_edge : edge {
-    WeightType w;
-    i32 id;
-    full_edge() : edge(), w(0), id(-1) {}
-    full_edge(i32 u_, i32 v_, WeightType w_, i32 id_) : edge(u_, v_), w(w_), id(id_) {}
-};
-
-}
+}  // namespace gwen
