@@ -5,7 +5,6 @@
 #include <numeric>
 #include <vector>
 
-#include "gwen/dump.hpp"
 #include "gwen/misc/counting_sort.hpp"
 #include "gwen/types.hpp"
 namespace gwen {
