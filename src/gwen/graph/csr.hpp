@@ -1,5 +1,5 @@
 #pragma once
-
+// 書き直す
 #include <span>
 #include <vector>
 
@@ -7,18 +7,17 @@
 
 namespace gwen {
 
-template <typename Edge>
-struct csr {
+template <typename Edge> struct csr {
     std::vector<i32> start;
     std::vector<Edge> elist;
 
     csr() = default;
-    csr(i32 n, const std::vector<Edge>& edges, bool directed = true)
-        : start(n + 1, 0) {
+    csr(i32 n, const std::vector<Edge>& edges, bool directed = true) : start(n + 1, 0) {
         std::vector<Edge> tmp;
         if (directed) {
             tmp = edges;
-        } else {
+        }
+        else {
             tmp.reserve(edges.size() * 2);
             for (const auto& e : edges) {
                 tmp.push_back(e);
