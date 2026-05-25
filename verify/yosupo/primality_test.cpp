@@ -13,17 +13,17 @@ using i32 = gwen::i32;
 using u32 = gwen::u32;
 using i64 = gwen::i64;
 using u64 = gwen::u64;
-using gwen::cin;
-using gwen::cout;
+using gwen::input;
+using gwen::output;
 using mint = gwen::dynamic_modint64;
 
 void solve() {
     i32 Q;
-    cin >> Q;
+    input >> Q;
     while (Q--) {
         u64 n;
-        cin >> n;
-        cout << (gwen::miller(n) ? "Yes\n" : "No\n");
+        input >> n;
+        output << (gwen::miller(n) ? "Yes\n" : "No\n");
     }
 }
 

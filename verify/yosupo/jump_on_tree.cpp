@@ -11,37 +11,37 @@
 #include "gwen/types.hpp"
 
 using i32 = gwen::i32;
-using gwen::cin;
-using gwen::cout;
+using gwen::input;
+using gwen::output;
 
 void solve() {
     int N, Q;
-    cin >> N >> Q;
+    input >> N >> Q;
     gwen::NonDirectedGraph<i32> g(N);
     for (int i = 0; i < N - 1; ++i) {
         int u, v;
-        cin >> u >> v;
+        input >> u >> v;
         g.add_edge(u, v);
     }
     g.build();
     gwen::tree_lca T(0, g);
     while (Q--) {
         int s, t, i;
-        cin >> s >> t >> i;
+        input >> s >> t >> i;
 
         int lca = T.lca(s, t);
         int ds = T.depth(s), dt = T.depth(t), dl = T.depth(lca);
 
         int len = ds + dt - 2 * dl;
         if (len < i)
-            cout << "-1\n";
+            output << "-1\n";
         else {
             if (ds - dl == i)
-                cout << lca << '\n';
+                output << lca << '\n';
             else if (i < ds - dl)
-                cout << T.kth_anc(s, i) << '\n';
+                output << T.kth_anc(s, i) << '\n';
             else
-                cout << T.kth_anc(t, len - i) << '\n';
+                output << T.kth_anc(t, len - i) << '\n';
         }
     }
 }

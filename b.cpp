@@ -11,8 +11,8 @@ using i32 = gwen::i32;
 using u32 = gwen::u32;
 using i64 = gwen::i64;
 using u64 = gwen::u64;
-using gwen::cin;
-using gwen::cout;
+using gwen::input;
+using gwen::output;
 
 #include "gwen/algebra/basic_monoid.hpp"
 #include "gwen/container/mergesort_tree.hpp"
