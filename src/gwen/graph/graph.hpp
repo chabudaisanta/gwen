@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cassert>
+#include <concepts>
+#include <ranges>
 #include <span>
 #include <vector>
 
@@ -10,16 +12,31 @@
 
 namespace gwen {
 
-template <edge_type Edge> struct NonDirectedGraph {
+template <typename T>
+concept graph_concept = requires(const T& t, i32 u) {
+    typename T::edge_type;
+    typename T::weight_type;
+    { t.N } -> std::convertible_to<i32>;
+    { t[u] } -> std::ranges::range;
+    requires std::convertible_to<std::ranges::range_reference_t<decltype(t[u])>, const typename T::edge_type&>;
+};
+
+template <edge_concept Edge, bool isDirected = true> struct graph_base {
+public:
+    using edge_type = Edge;
     using weight_type = typename Edge::weight_type;
-    i32 N;
+
+    const i32 N;
+
+private:
     bool built;
     std::vector<Edge> edge_buf;
     csr<Edge> G;
 
-    NonDirectedGraph() : NonDirectedGraph(0) {}
-    explicit NonDirectedGraph(i32 N_) : N(N_), built(false) {}
-    NonDirectedGraph(i32 N_, const std::vector<Edge>& E) : N(N_), built(true), G(N_, E, false) {}
+public:
+    graph_base() : graph_base(0) {}
+    explicit graph_base(i32 N_) : N(N_), built(false) {}
+    graph_base(i32 N_, const std::vector<Edge>& E) : N(N_), built(true), edge_buf(E), G(N_, E, isDirected) {}
 
     void add_edge(const Edge& e) {
         assert(!built);
@@ -30,14 +47,19 @@ template <edge_type Edge> struct NonDirectedGraph {
 
     void build() {
         assert(!built);
-        G = csr<Edge>(N, edge_buf, false);
+        G = csr<Edge>(N, edge_buf, isDirected);
         built = true;
     }
+
+    const std::vector<Edge>& edges() const { return edge_buf; }
 
     std::span<const Edge> operator[](i32 u) const {
         assert(built);
         return G[u];
     }
 };
+
+template <typename T> using DirectedGraph = graph_base<edge<T>, true>;
+template <typename T> using NonDirectedGraph = graph_base<edge<T>, false>;
 
 }  // namespace gwen

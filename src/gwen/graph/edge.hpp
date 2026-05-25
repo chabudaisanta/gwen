@@ -7,7 +7,7 @@
 namespace gwen {
 
 template <typename T>
-concept edge_type = requires(const T& t) {
+concept edge_concept = requires(const T& t) {
     { t.u } -> std::convertible_to<i32>;
     { t.v } -> std::convertible_to<i32>;
     typename T::weight_type;

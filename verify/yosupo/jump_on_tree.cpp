@@ -5,7 +5,8 @@
 
 #include <vector>
 
-#include "gwen/graph/doubling_tree.hpp"
+#include "gwen/graph/tree_lca.hpp"
+#include "gwen/graph/graph.hpp"
 #include "gwen/io.hpp"
 #include "gwen/types.hpp"
 
@@ -16,14 +17,14 @@ using gwen::cout;
 void solve() {
     int N, Q;
     cin >> N >> Q;
-    std::vector<std::vector<i32>> G(N);
+    gwen::NonDirectedGraph<i32> g(N);
     for (int i = 0; i < N - 1; ++i) {
         int u, v;
         cin >> u >> v;
-        G[u].emplace_back(v);
-        G[v].emplace_back(u);
+        g.add_edge(u, v);
     }
-    gwen::doubling_tree T(N, 0, G);
+    g.build();
+    gwen::tree_lca T(0, g);
     while (Q--) {
         int s, t, i;
         cin >> s >> t >> i;

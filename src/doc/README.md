@@ -16,7 +16,7 @@
 | **algebra/** | 代数構造（モノイド、アーベル群など）。`basic_monoid`, `basic_abel`, 遅延セグ木用モノイド、ローリングハッシュ用モノイドなど。 |
 | **container/** | データ構造。Fenwick Tree、Disjoint Sparse Table、Treap、Trie、ラッパー（区間加算・区間和など）。 |
 | **geo/** | 2 次元幾何。点・ベクトル、内積・外積、CCW、凸包（Graham scan）など。 |
-| **graph/** | グラフ・木。CSR、重み付き DSU、森の LCA・距離、XOR リンク木など。 |
+| **graph/** | グラフ・木。辺型・`graph_base`、CSR、根付き木の LCA（`tree_lca`）、森の LCA・距離、XOR リンク木など。 |
 | **hash/** | ハッシュ。ローリングハッシュ、Zobrist ハッシュ。 |
 | **math/** | 数学。組み合わせ・階乗、素因数分解・素数判定など。 |
 | **misc/** | ユーティリティ。座標圧縮、カウンティングソート、乱数、ノードプールなど。 |

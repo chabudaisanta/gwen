@@ -8,7 +8,8 @@
 #include <queue>
 #include <vector>
 
-#include "gwen/graph/doubling_tree.hpp"
+#include "gwen/graph/tree_lca.hpp"
+#include "gwen/graph/graph.hpp"
 
 using namespace std;
 using namespace gwen;
@@ -16,14 +17,14 @@ using namespace gwen;
 void solve() {
     int N, Q;
     cin >> N >> Q;
-    vector<vector<int>> G(N);
+    NonDirectedGraph<i32> g(N);
     for (int i = 1; i < N; ++i) {
         int p;
         cin >> p;
-        G[p].emplace_back(i);
-        G[i].emplace_back(p);
+        g.add_edge(p, i);
     }
-    doubling_tree T(N, 0, G);
+    g.build();
+    tree_lca T(0, g);
     while (Q--) {
         int u, v;
         cin >> u >> v;
