@@ -11,6 +11,8 @@
 - メンバ `u`, `v` が `i32` に変換可能
 - 型エイリアス `weight_type` が存在する
 
+重みの大小比較が必要なアルゴリズム（`dijkstra` など）は、別途 `dijkstra_weight_concept` で制約します。
+
 ---
 
 ## edge

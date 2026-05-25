@@ -129,3 +129,4 @@ tree_lca lca(0, g);
 - 辺型: [edge.md](edge.md)
 - CSR の詳細: [csr.md](csr.md)
 - 根付き木の LCA: [tree_lca.md](tree_lca.md)
+- 最短経路: [dijkstra.md](dijkstra.md)
