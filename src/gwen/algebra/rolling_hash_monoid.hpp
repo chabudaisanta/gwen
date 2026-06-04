@@ -1,7 +1,9 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <random>
+#include <vector>
 
 #include "gwen/misc/xorshift.hpp"
 #include "gwen/mod/mod61.hpp"
@@ -9,6 +11,7 @@
 
 namespace gwen {
 namespace rhash {
+
 template <i32 ID = 0> struct rolling_hash_monoid {
     static inline const u64 r = rand64() % (mod61 - 2) + 2;
 
@@ -37,5 +40,27 @@ template <i32 ID = 0> struct rolling_hash_monoid {
         return {v, p};
     }
 };
+
+// r^i (mod 61). Shared per ID; rolling_hash calls ensure(n) on construction.
+template <i32 ID> struct power_table {
+    static std::vector<u64>& data() {
+        static std::vector<u64> table{1};
+        return table;
+    }
+
+    static void ensure(i32 n) {
+        auto& t = data();
+        const u64 base = rolling_hash_monoid<ID>::r;
+        while (static_cast<i32>(t.size()) <= n) {
+            t.push_back(mul_mod(t.back(), base));
+        }
+    }
+
+    static u64 pow(i32 len) {
+        assert(0 <= len && len < static_cast<i32>(data().size()));
+        return data()[static_cast<size_t>(len)];
+    }
+};
+
 }  // namespace rhash
 }  // namespace gwen

@@ -10,28 +10,19 @@
 
 namespace gwen {
 
-template <i32 ID = 0>
-struct rolling_hash {
+template <i32 ID = 0> struct rolling_hash {
     using Monoid = rhash::rolling_hash_monoid<ID>;
     using S = typename Monoid::S;
 
     i32 n;
     // suf[i] = hash of [i, n) with a_i having weight r^0: a_i + a_{i+1}*r + ...
     std::vector<u64> suf;
-    std::vector<u64> P;  // P[i] = r^i
 
     template <typename Container>
-    explicit rolling_hash(const Container& seq)
-        : n(static_cast<i32>(std::size(seq))),
-          suf(n + 1, 0),
-          P(n + 1, 1) {
+    explicit rolling_hash(const Container& seq) : n(static_cast<i32>(std::size(seq))), suf(n + 1, 0) {
+        rhash::power_table<ID>::ensure(n);
         for (i32 i = n - 1; i >= 0; --i) {
-            suf[i] = rhash::add_mod(
-                static_cast<u64>(seq[i]),
-                rhash::mul_mod(Monoid::r, suf[i + 1]));
-        }
-        for (i32 i = 1; i <= n; ++i) {
-            P[i] = rhash::mul_mod(P[i - 1], Monoid::r);
+            suf[i] = rhash::add_mod(static_cast<u64>(seq[i]), rhash::mul_mod(Monoid::r, suf[i + 1]));
         }
     }
 
@@ -43,9 +34,30 @@ struct rolling_hash {
     S get(i32 l, i32 r) const {
         assert(0 <= l && l <= r && r <= n);
         if (l == r) return Monoid::e();
-        u64 v = rhash::sub_mod(suf[l], rhash::mul_mod(suf[r], P[r - l]));
-        u64 p = P[r - l];
-        return {v, p};
+        const i32 len = r - l;
+        const u64 rp = rhash::power_table<ID>::pow(len);
+        u64 v = rhash::sub_mod(suf[l], rhash::mul_mod(suf[r], rp));
+        return {v, rp};
+    }
+
+    // [l, r) rotated left by k: [l+k, r) || [l, l+k)
+    S rotl(i32 l, i32 r, i32 k) const {
+        assert(0 <= l && l <= r && r <= n);
+        const i32 len = r - l;
+        if (len == 0) return Monoid::e();
+        k %= len;
+        if (k == 0) return get(l, r);
+        return Monoid::op(get(l + k, r), get(l, l + k));
+    }
+
+    // [l, r) rotated right by k: [r-k, r) || [l, r-k)
+    S rotr(i32 l, i32 r, i32 k) const {
+        assert(0 <= l && l <= r && r <= n);
+        const i32 len = r - l;
+        if (len == 0) return Monoid::e();
+        k %= len;
+        if (k == 0) return get(l, r);
+        return Monoid::op(get(r - k, r), get(l, r - k));
     }
 
     bool equal(i32 l1, i32 r1, i32 l2, i32 r2) const {

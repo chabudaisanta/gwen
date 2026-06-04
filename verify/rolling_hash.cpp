@@ -33,6 +33,12 @@ int main() {
     assert(rh.lcp(1, 9) == 2);      // "to..." vs "to..."
     assert(rh.lcp(0, 14) == 1);     // "o" vs "o"
 
+    // rotl / rotr on [8,13) "ototo"
+    assert(rh.rotl(8, 13, 0).v == rh.get(8, 13).v);
+    assert(rh.rotl(8, 13, 2).v == rhash::rolling_hash_monoid<0>::op(rh.get(10, 13), rh.get(8, 10)).v);
+    assert(rh.rotr(8, 13, 2).v == rhash::rolling_hash_monoid<0>::op(rh.get(11, 13), rh.get(8, 11)).v);
+    assert(rh.rotr(8, 13, 3).v == rh.rotl(8, 13, 2).v);  // rotr k = rotl (len-k)
+
     std::cout << "rolling_hash: all tests passed\n";
     return 0;
 }

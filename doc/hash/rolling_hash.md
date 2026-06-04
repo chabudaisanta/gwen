@@ -17,11 +17,22 @@ template <typename Container>
 rolling_hash<ID> rh(const Container& seq);
 ```
 
-列 `seq`（`std::size` と `seq[i]` でアクセス可能なもの）から構築します。接尾辞区間のハッシュと $r^{\mathrm{len}}$ を前計算します。
+列 `seq`（`std::size` と `seq[i]` でアクセス可能なもの）から構築します。接尾辞ハッシュ `suf` を前計算します。$r^i$ はインスタンスごとではなく、同じ `ID` で共有する `rhash::power_table<ID>` に保持します（構築時に `ensure(n)`）。
 
 **計算量**
 
 - $O(n)$
+
+---
+
+## power_table（共有）
+
+```
+rhash::power_table<ID>::ensure(n);
+u64 rhash::power_table<ID>::pow(len);  // r^len
+```
+
+モノイド `rolling_hash_monoid<ID>` は結合則と基底 `r` のみを持ち、べきテーブルは別管理です。
 
 ---
 
@@ -51,6 +62,26 @@ $l = r$ のときは `Monoid::e()` を返します。
 **制約**
 
 - $0 \leq l \leq r \leq n$
+
+**計算量**
+
+- $O(1)$
+
+---
+
+## rotl / rotr
+
+```
+S rh.rotl(i32 l, i32 r, i32 k) const;
+S rh.rotr(i32 l, i32 r, i32 k) const;
+```
+
+区間 $[l, r)$ を長さ $\mathrm{len}$ として、$k$ を $\mathrm{len}$ で剰余したうえで回転したハッシュを返します。
+
+- **rotl**: $[l+k, r)$ の後に $[l, l+k)$ を連結（左回転）
+- **rotr**: $[r-k, r)$ の後に $[l, r-k)$ を連結（右回転）。$\mathrm{rotr}(k) = \mathrm{rotl}(\mathrm{len}-k)$
+
+いずれも `Monoid::op` と `get` のみで計算します（追加の前計算なし）。
 
 **計算量**
 
@@ -106,4 +137,5 @@ rolling_hash<> rh(s);
 rh.get(0, 3);           // "abc" のハッシュ
 rh.equal(0, 3, 3, 6);   // true（"abc" == "abc"）
 rh.lcp(0, 3);           // 3
+rh.rotl(0, 6, 2);       // "cabcab" のハッシュ（"abcabc" を左に 2）
 ```
