@@ -73,7 +73,7 @@ public:
         for (i32 i = 0; i < A.N; ++i)
             for (i32 k = 0; k < A.M; ++k)
                 for (i32 j = 0; j < B.M; ++j) {
-                    ret[i][j] += ret[i][k] * ret[k][j];
+                    ret[i][j] += A[i][k] * B[k][j];
                 }
         return ret;
     }
