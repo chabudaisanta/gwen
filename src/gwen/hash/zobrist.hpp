@@ -8,12 +8,9 @@
 namespace gwen {
 namespace hash {
 
-template <typename T, bool isMultiset = false>
-struct zobrist {
+template <typename T, bool isMultiset = false> struct zobrist {
 private:
-    static u64 elem_hash(const T& x) {
-        return to_hash(static_cast<u64>(std::hash<T>{}(x)));
-    }
+    static u64 elem_hash(const T& x) { return to_hash(static_cast<u64>(std::hash<T>{}(x))); }
 
     i32 sz = 0;
     u64 val = 0;
@@ -31,7 +28,8 @@ public:
         u64 h = elem_hash(x);
         if constexpr (isMultiset) {
             val += h;
-        } else {
+        }
+        else {
             val ^= h;
         }
         sz++;
@@ -41,7 +39,8 @@ public:
         u64 h = elem_hash(x);
         if constexpr (isMultiset) {
             val -= h;
-        } else {
+        }
+        else {
             val ^= h;
         }
         sz--;

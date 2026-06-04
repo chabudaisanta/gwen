@@ -12,9 +12,9 @@ namespace gwen {
 struct bit_vector {
     static constexpr i32 w = 64;
 
-    i32 n = 0;              // ビット長
-    std::vector<u64> block; // ビット列（w ビットごと）
-    std::vector<i32> count; // count[i] = block[0..i-1] の 1 の個数（rank1 用）
+    i32 n = 0;               // ビット長
+    std::vector<u64> block;  // ビット列（w ビットごと）
+    std::vector<i32> count;  // count[i] = block[0..i-1] の 1 の個数（rank1 用）
 
     bit_vector() = default;
 
@@ -47,8 +47,7 @@ struct bit_vector {
 
     /// build 後に呼ぶ（rank 用の累積を計算）
     void build() {
-        for (size_t i = 1; i < block.size(); ++i)
-            count[i] = count[i - 1] + __builtin_popcountll(block[i - 1]);
+        for (size_t i = 1; i < block.size(); ++i) count[i] = count[i - 1] + __builtin_popcountll(block[i - 1]);
     }
 
     /// k 番目 (0-indexed) の 1 の位置。存在しなければ n
@@ -57,8 +56,10 @@ struct bit_vector {
         i32 lo = 0, hi = n;
         while (hi - lo > 1) {
             i32 mid = lo + (hi - lo) / 2;
-            if (rank1(mid) <= k) lo = mid;
-            else hi = mid;
+            if (rank1(mid) <= k)
+                lo = mid;
+            else
+                hi = mid;
         }
         return lo;
     }
@@ -69,8 +70,10 @@ struct bit_vector {
         i32 lo = 0, hi = n;
         while (hi - lo > 1) {
             i32 mid = lo + (hi - lo) / 2;
-            if (rank0(mid) <= k) lo = mid;
-            else hi = mid;
+            if (rank0(mid) <= k)
+                lo = mid;
+            else
+                hi = mid;
         }
         return lo;
     }

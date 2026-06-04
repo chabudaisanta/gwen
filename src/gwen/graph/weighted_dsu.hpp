@@ -8,8 +8,7 @@
 
 namespace gwen {
 
-template <typename Abel>
-struct weighted_dsu {
+template <typename Abel> struct weighted_dsu {
     using S = typename Abel::S;
 
     i32 n;
@@ -81,10 +80,8 @@ struct weighted_dsu {
         std::vector<std::vector<i32>> result(n);
         for (i32 i = 0; i < n; ++i) result[i].reserve(group_size[i]);
         for (i32 i = 0; i < n; ++i) result[leader_buf[i]].push_back(i);
-        result.erase(
-            std::remove_if(result.begin(), result.end(),
-                           [](const std::vector<i32>& v) { return v.empty(); }),
-            result.end());
+        result.erase(std::remove_if(result.begin(), result.end(), [](const std::vector<i32>& v) { return v.empty(); }),
+                     result.end());
         return result;
     }
 };

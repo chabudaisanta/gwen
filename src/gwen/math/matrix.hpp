@@ -77,9 +77,7 @@ public:
     bool is_square() const { return N == M; }
 
     std::span<T> operator[](i32 i) { return std::span<T>(&dat[static_cast<size_t>(i) * M], M); }
-    std::span<const T> operator[](i32 i) const {
-        return std::span<const T>(&dat[static_cast<size_t>(i) * M], M);
-    }
+    std::span<const T> operator[](i32 i) const { return std::span<const T>(&dat[static_cast<size_t>(i) * M], M); }
 
     matrix operator+(const matrix& other) const { return add(*this, other); }
     matrix operator-(const matrix& other) const { return sub(*this, other); }
@@ -144,13 +142,15 @@ public:
         assert(is_square());
         matrix aug(N, 2 * N);
         for (i32 i = 0; i < N; ++i) {
-            for (i32 j = 0; j < N; ++j) aug.dat[static_cast<size_t>(i) * (2 * N) + j] = dat[static_cast<size_t>(i) * N + j];
+            for (i32 j = 0; j < N; ++j)
+                aug.dat[static_cast<size_t>(i) * (2 * N) + j] = dat[static_cast<size_t>(i) * N + j];
             aug.dat[static_cast<size_t>(i) * (2 * N) + N + i] = T(1);
         }
         if (gauss(aug, N, true).first != N) return matrix();
         matrix ret(N);
         for (i32 i = 0; i < N; ++i)
-            for (i32 j = 0; j < N; ++j) ret.dat[static_cast<size_t>(i) * N + j] = aug.dat[static_cast<size_t>(i) * (2 * N) + N + j];
+            for (i32 j = 0; j < N; ++j)
+                ret.dat[static_cast<size_t>(i) * N + j] = aug.dat[static_cast<size_t>(i) * (2 * N) + N + j];
         return ret;
     }
 
@@ -174,7 +174,8 @@ public:
             for (i32 k = 0; k < A.M; ++k) {
                 const T aik = A.dat[static_cast<size_t>(i) * A.M + k];
                 const i32 krow = k * B.M;
-                for (i32 j = 0; j < B.M; ++j) ret.dat[static_cast<size_t>(row) + j] += aik * B.dat[static_cast<size_t>(krow) + j];
+                for (i32 j = 0; j < B.M; ++j)
+                    ret.dat[static_cast<size_t>(row) + j] += aik * B.dat[static_cast<size_t>(krow) + j];
             }
         }
         return ret;

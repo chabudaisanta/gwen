@@ -9,8 +9,7 @@
 namespace gwen {
 
 /// Wavelet Matrix。非負整数列の range rank / range quantile 等を O(bits) で提供。
-template <typename T>
-struct wavelet_matrix {
+template <typename T> struct wavelet_matrix {
     i32 n = 0;
     i32 lg = 0;  // ビット幅（0 から lg-1 がレベル）
     std::vector<T> a;
@@ -18,9 +17,7 @@ struct wavelet_matrix {
 
     wavelet_matrix() = default;
 
-    explicit wavelet_matrix(const std::vector<T>& vec) : n(static_cast<i32>(vec.size())), a(vec) {
-        build();
-    }
+    explicit wavelet_matrix(const std::vector<T>& vec) : n(static_cast<i32>(vec.size())), a(vec) { build(); }
 
     void build() {
         if (n == 0) {
@@ -73,7 +70,8 @@ struct wavelet_matrix {
             if (k < r0 - l0) {
                 l = l0;
                 r = r0;
-            } else {
+            }
+            else {
                 k -= r0 - l0;
                 res |= T(1) << h;
                 l = l + zeros - l0;
@@ -84,9 +82,7 @@ struct wavelet_matrix {
     }
 
     /// [l, r) で k 番目 (0-indexed) に大きい値
-    T kth_largest(i32 l, i32 r, i32 k) const {
-        return kth_smallest(l, r, (r - l) - 1 - k);
-    }
+    T kth_largest(i32 l, i32 r, i32 k) const { return kth_smallest(l, r, (r - l) - 1 - k); }
 
     /// [l, r) のうち値が upper 未満の個数
     i32 range_freq(i32 l, i32 r, T upper) const {
@@ -100,7 +96,8 @@ struct wavelet_matrix {
                 ret += r0 - l0;
                 l = l + zeros - l0;
                 r = r + zeros - r0;
-            } else {
+            }
+            else {
                 l = l0;
                 r = r0;
             }
@@ -109,9 +106,7 @@ struct wavelet_matrix {
     }
 
     /// [l, r) のうち値が [lower, upper) に含まれる個数
-    i32 range_freq(i32 l, i32 r, T lower, T upper) const {
-        return range_freq(l, r, upper) - range_freq(l, r, lower);
-    }
+    i32 range_freq(i32 l, i32 r, T lower, T upper) const { return range_freq(l, r, upper) - range_freq(l, r, lower); }
 
     /// [l, r) で upper 未満の最大値。なければ -1（T が符号付きなら -1、要検討）
     T prev_value(i32 l, i32 r, T upper) const {

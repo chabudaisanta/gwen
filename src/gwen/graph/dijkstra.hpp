@@ -23,8 +23,7 @@ template <typename G>
 concept dijkstra_graph_concept = graph_concept<G> && dijkstra_weight_concept<typename G::weight_type> &&
                                  std::default_initializable<typename G::edge_type>;
 
-template <dijkstra_graph_concept Graph>
-struct dijkstra {
+template <dijkstra_graph_concept Graph> struct dijkstra {
 public:
     using weight_type = typename Graph::weight_type;
     using edge_type = typename Graph::edge_type;

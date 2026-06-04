@@ -13,8 +13,7 @@ namespace gwen {
 /// Implicit treap: split by index (left subtree size).
 /// Monoid must provide: S, F, op(S,S), e(), mapping(F,S), composition(F,F), id().
 /// prod / rev_prod are left-to-right / right-to-left aggregates (non-commutative reverse).
-template <typename Monoid>
-struct implicit_treap {
+template <typename Monoid> struct implicit_treap {
     using S = typename Monoid::S;
     using F = typename Monoid::F;
     using tree = i32;

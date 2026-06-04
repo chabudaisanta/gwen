@@ -13,8 +13,7 @@ namespace gwen {
 
 /// Ordered multiset (BST by key, heap by priority). std::multiset-like API (no iterators).
 /// Supports insert, erase one, kth (k-th smallest), size, count_lower.
-template <typename K, typename Compare = std::less<K>>
-struct sorted_treap {
+template <typename K, typename Compare = std::less<K>> struct sorted_treap {
     using tree = i32;
 
     struct node {
@@ -144,9 +143,7 @@ struct sorted_treap {
     }
 
 private:
-    static bool key_eq(const K& a, const K& b) {
-        return !cmp(a, b) && !cmp(b, a);
-    }
+    static bool key_eq(const K& a, const K& b) { return !cmp(a, b) && !cmp(b, a); }
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
     static void to_vec_(tree t, std::vector<K>& out) {
         if (t == NIL) return;

@@ -44,8 +44,7 @@ private:
     }
 
 public:
-    template <edge_concept Edge, bool isDirected>
-    explicit tree_lca(i32 root_, const graph_base<Edge, isDirected>& g) {
+    template <edge_concept Edge, bool isDirected> explicit tree_lca(i32 root_, const graph_base<Edge, isDirected>& g) {
         build(g.N, root_, g.edges());
     }
 

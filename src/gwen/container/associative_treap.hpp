@@ -127,9 +127,7 @@ template <typename Key, typename Monoid, typename Compare = std::less<Key>> stru
     }
 
     /// 0 or 1 (unique keys). Same as contains for map semantics.
-    i32 count(const Key& key) {
-        return contains(key) ? 1 : 0;
-    }
+    i32 count(const Key& key) { return contains(key) ? 1 : 0; }
 
     /// 0-based: k-th smallest key and its value. Undefined if k < 0 or k >= size().
     std::pair<Key, S> kth(i32 k) {

@@ -14,16 +14,15 @@ namespace gwen {
 struct hld {
     i32 n;
     i32 root;
-    std::vector<i32> parent;   // parent[v]: 親（根は -1）
-    std::vector<i32> depth;    // depth[v]: 根からの深さ
-    std::vector<i32> heavy;    // heavy[v]: 重い子の 1 つ（いなければ -1）
-    std::vector<i32> head;     // head[v]: v が属する heavy path の先頭（根側）
-    std::vector<i32> in;       // in[v]: 行きがけ順（euler tour の index、セグ木用）
-    std::vector<i32> out;      // out[v]: 帰りがけ順（部分木は [in[v], out[v])）
-    std::vector<i32> order;    // order[i]: in-index i の頂点
+    std::vector<i32> parent;  // parent[v]: 親（根は -1）
+    std::vector<i32> depth;   // depth[v]: 根からの深さ
+    std::vector<i32> heavy;   // heavy[v]: 重い子の 1 つ（いなければ -1）
+    std::vector<i32> head;    // head[v]: v が属する heavy path の先頭（根側）
+    std::vector<i32> in;      // in[v]: 行きがけ順（euler tour の index、セグ木用）
+    std::vector<i32> out;     // out[v]: 帰りがけ順（部分木は [in[v], out[v])）
+    std::vector<i32> order;   // order[i]: in-index i の頂点
 
-    explicit hld(i32 n_, i32 root_, const std::vector<std::vector<i32>>& G)
-        : n(n_), root(root_) {
+    explicit hld(i32 n_, i32 root_, const std::vector<std::vector<i32>>& G) : n(n_), root(root_) {
         parent.assign(n, -1);
         depth.assign(n, 0);
         heavy.assign(n, -1);
@@ -88,9 +87,7 @@ struct hld {
         return depth[u] < depth[v] ? u : v;
     }
 
-    i32 get_dist(i32 u, i32 v) const {
-        return depth[u] + depth[v] - 2 * depth[get_lca(u, v)];
-    }
+    i32 get_dist(i32 u, i32 v) const { return depth[u] + depth[v] - 2 * depth[get_lca(u, v)]; }
 
     // パス u -> v を [in の区間] の列に分解する。各要素は [l, r) (半開区間)。
     // セグ木で path クエリするときに使う。

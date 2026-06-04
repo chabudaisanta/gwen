@@ -12,8 +12,7 @@ namespace gwen {
 
 namespace mdarray_detail {
 
-template <i32 Rank>
-constexpr i64 volume(const std::array<i32, Rank>& shape) {
+template <i32 Rank> constexpr i64 volume(const std::array<i32, Rank>& shape) {
     i64 n = 1;
     for (i32 d : shape) n *= d;
     return n;
@@ -61,8 +60,7 @@ struct mdarray {
     void fill(const T& x) { std::fill(data.begin(), data.end(), x); }
 };
 
-template <typename T, i32 Rank>
-std::istream& operator>>(std::istream& is, mdarray<T, Rank>& a) {
+template <typename T, i32 Rank> std::istream& operator>>(std::istream& is, mdarray<T, Rank>& a) {
     for (T& e : a.data) is >> e;
     return is;
 }
