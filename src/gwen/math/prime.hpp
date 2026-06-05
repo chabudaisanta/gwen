@@ -22,7 +22,7 @@ struct prime_factorize_table {
         n <<= 1;
         p.resize(n, 0);
         for (i64 i = 2; i < n; ++i) {
-            if (!p[i]) {
+            if (!p[i] || p[i] == i) {
                 p[i] = i;
                 for (i64 j = i * i; j < n; j += i) {
                     if (!p[j]) p[j] = i;
