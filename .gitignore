@@ -7,3 +7,8 @@ TODO.md
 build/
 debug/
 debug/a.exe
+debug/test_build/
+
+.venv/
+__pycache__/
+.pytest_cache/
