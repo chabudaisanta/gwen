@@ -2,19 +2,13 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT"
+BUILD_DIR="$ROOT/.build"
 
-PYTHON="${ROOT}/.venv/bin/python"
-if [[ ! -x "$PYTHON" ]]; then
-    PYTHON="python3"
-fi
+echo "=== Building tests with CMake ==="
+mkdir -p "$BUILD_DIR"
+cmake -S "$ROOT" -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release
+cmake --build "$BUILD_DIR" --parallel
 
-if ! "$PYTHON" -c "import pytest" 2>/dev/null; then
-    echo "pytest is not installed."
-    echo "Run:"
-    echo "  python3 -m venv .venv"
-    echo "  .venv/bin/pip install -r requirements-dev.txt"
-    exit 1
-fi
-
-exec "$PYTHON" -m pytest test/ -v "$@"
+echo ""
+echo "=== Running Google Test ==="
+exec "$BUILD_DIR/test/gwen_tests" "$@"
