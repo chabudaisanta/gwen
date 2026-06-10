@@ -4,10 +4,8 @@ alias.txt
 command.txt
 TODO.md
 
-build/
-debug/
-debug/a.exe
-debug/test_build/
+.build/
+.vscode/
 
 .venv/
 __pycache__/

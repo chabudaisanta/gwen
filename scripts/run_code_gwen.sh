@@ -1,18 +1,37 @@
 #!/bin/bash
 
+# プロジェクトのルートディレクトリを取得
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 # プログラムへのパス
-EXECUTABLE="/home/chabudaisanta/lib/gwen/debug/a.exe"
+EXECUTABLE="${ROOT}/.build/a.out"
 # 入力ファイルへのパス
-INPUT_FILE="/home/chabudaisanta/lib/gwen/debug/in.txt"
+INPUT_FILE="${ROOT}/.build/in.txt"
 # 標準出力のリダイレクト先ファイル
-OUTPUT_FILE="/home/chabudaisanta/lib/gwen/debug/out.txt"
+OUTPUT_FILE="${ROOT}/.build/out.txt"
 # 標準エラー出力のリダイレクト先ファイル
-ERROR_FILE="/home/chabudaisanta/lib/gwen/debug/err.txt"
+ERROR_FILE="${ROOT}/.build/err.txt"
 # タイムリミット（s）
 TIME_LIMIT="5s"
 
-# 既存の出力・エラーファイルをクリアする（新しい実行結果を確実に記録するため）
-# ファイルが存在しない場合は作成されます。
+# .build ディレクトリが存在することを確認
+mkdir -p "${ROOT}/.build"
+
+# 実行ファイルが存在しない場合はエラーを表示
+if [ ! -f "$EXECUTABLE" ]; then
+    echo "エラー: 実行ファイルが見つかりません。"
+    echo "  ターゲット: $EXECUTABLE"
+    echo "  まずはプログラムをコンパイルして $EXECUTABLE に配置してください。"
+    exit 1
+fi
+
+# 入力ファイルが存在しない場合は空ファイルを作成
+if [ ! -f "$INPUT_FILE" ]; then
+    touch "$INPUT_FILE"
+    echo "警告: 入力ファイル $INPUT_FILE が見つからなかったため、空のファイルを作成しました。"
+fi
+
+# 既存の出力・エラーファイルをクリアする
 > "$OUTPUT_FILE"
 > "$ERROR_FILE"
 
@@ -24,17 +43,11 @@ echo "  標準エラー出力: $ERROR_FILE"
 echo "  タイムリミット: $TIME_LIMIT"
 echo "--------------------------------------------------"
 
-# 'timeout' コマンドを使用して、指定された時間制限でプログラムを実行します。
-# プログラムの標準入力をINPUT_FILEから読み込み、標準出力をOUTPUT_FILEに、標準エラー出力をERROR_FILEにリダイレクトします。
+# timeout コマンドを使用して、指定された時間制限でプログラムを実行します。
 timeout "$TIME_LIMIT" "$EXECUTABLE" < "$INPUT_FILE" > "$OUTPUT_FILE" 2> "$ERROR_FILE"
 
 # timeoutコマンドの終了ステータスを取得します。
-# timeoutが時間切れでコマンドを終了させた場合、終了ステータスは124になります。
-# timeoutが内部エラーで終了した場合も124以外のステータスが返されることがあります。
-# 実行されたコマンドが正常終了した場合、そのコマンドの終了ステータスが返されます。
 EXIT_STATUS=$?
-
-# echo "--------------------------------------------------"
 
 if [ "$EXIT_STATUS" -eq 124 ]; then
     echo "TLE"
@@ -48,5 +61,3 @@ else
     echo "  出力は '$OUTPUT_FILE' に保存されました。"
     echo "  エラーメッセージは '$ERROR_FILE' に保存されました (エラーがなければ空です)。"
 fi
-
-echo "完了。"

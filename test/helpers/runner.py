@@ -8,10 +8,10 @@ from pathlib import Path
 from .discover import Case, Problem
 
 ROOT = Path(__file__).resolve().parents[2]
-SRC_DIR = ROOT / "src"
-BUILD_DIR = ROOT / "debug" / "test_build"
+INCLUDE_DIR = ROOT / "include"
+BUILD_DIR = ROOT / ".build" / "test_build"
 
-DEFAULT_CXXFLAGS = ["-std=c++20", f"-I{SRC_DIR}", "-O2", "-DLOCAL"]
+DEFAULT_CXXFLAGS = ["-std=c++20", f"-I{INCLUDE_DIR}", "-O2", "-DLOCAL"]
 
 
 def normalize_output(text: str) -> str:
