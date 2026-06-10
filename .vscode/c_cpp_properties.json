@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/home/chabudaisanta/lib/ac-library-master",
-                "/home/chabudaisanta/lib/gwen/src",
+                "/home/chabudaisanta/lib/gwen/include/",
+                "/home/chabudaisanta/lib/gwen/references/",
                 "/usr/include/eigen3/"
             ],
             "defines": [
