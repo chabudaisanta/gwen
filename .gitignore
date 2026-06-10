@@ -1,12 +1,10 @@
-a.cpp
-c.cpp
-alias.txt
 command.txt
 TODO.md
 
 .build/
 .vscode/
 
+.env/
 .venv/
 __pycache__/
 .pytest_cache/
