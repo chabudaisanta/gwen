@@ -8,3 +8,4 @@ TODO.md
 .venv/
 __pycache__/
 .pytest_cache/
+.competitive-verifier/
