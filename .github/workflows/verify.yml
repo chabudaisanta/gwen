@@ -34,6 +34,7 @@ jobs:
         with:
           output-path: verify_files.json
           config: config.toml
+          exclude: test/**
       - name: Upload verify_files.json
         uses: competitive-verifier/actions/upload-verify-artifact@v2
         with:
