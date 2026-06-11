@@ -100,12 +100,13 @@ jobs:
         uses: competitive-verifier/actions/docs@v2
         with:
           verify-result: verify-*.json
+          destination: _jekyll
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: .competitive-verifier/docs
+          source: _jekyll
           destination: _site
       - name: Upload pages
         uses: actions/upload-pages-artifact@v3
