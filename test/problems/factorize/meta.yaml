@@ -1,3 +1,21 @@
 title: 素因数分解
-tags: [math, prime]
+tags:
+- math
+- prime
 timeout_sec: 1.0
+description: '正の整数 $N$ が与えられます。$N$ を素因数分解してください。
+
+  '
+constraints: '- $1 \le N \le 10^9$
+
+  - $N$ は整数
+
+  '
+input_format: '$N$
+
+  '
+output_format: '$N$ の素因数を昇順に空白区切りで出力してください。
+
+  '
+samples:
+- '01'

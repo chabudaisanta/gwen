@@ -61,11 +61,11 @@ T comb(i32 n, i32 k);
 
 ```cpp
 #include "gwen/math/combination.hpp"
-#include "gwen/mod/modint.hpp"
+#include <atcoder/modint>
 
 using namespace gwen;
 
-using mint = modint998244353;
+using mint = atcoder::modint998244353;
 mint a = fact<mint>(5);      // 120
 mint b = fact_inv<mint>(3);  // 1/6
 mint c = comb<mint>(5, 2);   // 10

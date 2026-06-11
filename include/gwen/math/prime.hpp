@@ -53,7 +53,7 @@ std::vector<i32> factorize(i32 x) {
     return ret;
 }
 
-bool miller32(u32 n) {
+bool miller32(u64 n) {
     assert(n < 4759123141u);
     static u64 a[3] = {2, 7, 61};
     using mint = dynamic_modint64;

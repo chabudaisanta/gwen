@@ -156,11 +156,11 @@ vector<vector<i32>> dsu.groups();
 
 ```cpp
 #include "gwen/graph/weighted_dsu.hpp"
-#include "gwen/algebra/basic_monoid.hpp"
+#include "gwen/algebra/basic_abel.hpp"
 
 using namespace gwen;
 
-weighted_dsu<sum_monoid<i64>> dsu(4);
+weighted_dsu<sum_abel<i64>> dsu(4);
 dsu.merge(0, 1, 10);   // P(0) - P(1) = 10
 dsu.merge(1, 2, 5);    // P(1) - P(2) = 5
 dsu.diff(0, 2);        // 15

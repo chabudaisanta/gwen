@@ -1,9 +1,12 @@
 # Compile each problem solver as an executable
+# <<< GENERATED SOLUTIONS START >>>
 add_executable(problem_factorize problems/factorize/solution.cpp)
 target_link_libraries(problem_factorize PRIVATE gwen)
 
 add_executable(problem_lca problems/lca/solution.cpp)
 target_link_libraries(problem_lca PRIVATE gwen)
+
+# <<< GENERATED SOLUTIONS END >>>
 
 # Compile Google Test executable
 add_executable(gwen_tests

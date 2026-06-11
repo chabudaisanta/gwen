@@ -61,7 +61,7 @@ bool miller(u64 n);
 ## miller32 / miller64
 
 ```
-bool miller32(u32 n);
+bool miller32(u64 n);
 bool miller64(u64 n);
 ```
 

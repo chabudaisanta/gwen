@@ -50,7 +50,7 @@ vector<i32> get_dfs_order(const xor_tree_scan_info& info);
 `xor_tree_scan` の結果（`NeedOrd == true` で取得した `ord` が入っているもの）から、各頂点の DFS 行きがけ順のインデックスを計算します。
 
 - `info.ord` の長さは `par.size() - 1`（根を除く頂点数）であることを仮定します。
-- 返り値 `dfs_ord` は長さ $N$ の配列で、`dfs_ord[i]` が頂点 `i` の DFS 順の位置（0-based）です。
+- 返り値 `dfs_ord` は長さ $N$ の配列で、`dfs_ord[idx]` が DFS 順（行きがけ順）で `idx` 番目の頂点の ID（0-based）です。
 
 **計算量**
 

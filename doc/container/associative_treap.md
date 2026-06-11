@@ -136,7 +136,7 @@ S t.all_prod();
 
 **計算量**
 
-- $O(\log n)$
+- $O(1)$
 
 ---
 
@@ -260,7 +260,7 @@ static S associative_treap::get_val(tree id);
 
 **計算量**
 
-- $O(\log n)$
+- $O(1)$
 
 ---
 
