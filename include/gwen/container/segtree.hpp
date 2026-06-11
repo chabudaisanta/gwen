@@ -1,8 +1,8 @@
 #pragma once
 
 // TODO : ACL依存をなくすために書く。優先度低
-#include <atcoder/lazysegtree>
-#include <atcoder/segtree>
+#include <atcoder/lazysegtree.hpp>
+#include <atcoder/segtree.hpp>
 namespace gwen {
 template <typename Monoid> using segtree = atcoder::segtree<typename Monoid::S, Monoid::op, Monoid::e>;
 template <typename ActedMonoid>
