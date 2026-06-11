@@ -102,10 +102,15 @@ jobs:
           verify-result: verify-*.json
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: .competitive-verifier/docs
+          destination: _site
       - name: Upload pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _gh_pages
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
