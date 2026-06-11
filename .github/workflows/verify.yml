@@ -1,0 +1,91 @@
+name: verify
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  CXX: g++-15
+  CXXFLAGS: "-std=gnu++23 -O2 -mtune=native -march=native -fconstexpr-depth=1024 -fconstexpr-loop-limit=524288 -fconstexpr-ops-limit=2097152"
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GCC 15
+        run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y gcc-15 g++-15
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          cache-pip: true
+      - name: Resolve dependencies
+        run: competitive-verifier resolve --out verify_files.json
+      - name: Upload verify_files.json
+        uses: competitive-verifier/actions/upload-verify-artifact@v2
+        with:
+          file: verify_files.json
+
+  verify:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GCC 15
+        run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y gcc-15 g++-15
+      - name: Download verify_files.json
+        uses: competitive-verifier/actions/download-verify-artifact@v2
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+      - name: Verify
+        uses: competitive-verifier/actions/verify@v2
+        with:
+          verify-files: verify_files.json
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: result
+          path: verify-*
+
+  docs:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download result
+        uses: actions/download-artifact@v4
+        with:
+          name: result
+          path: .
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+      - name: Docs
+        uses: competitive-verifier/actions/docs@v2
+        with:
+          verify-result: verify-*.json
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _gh_pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
