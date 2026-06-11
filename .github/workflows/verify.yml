@@ -80,6 +80,8 @@ jobs:
         with:
           name: result
           path: .
+      - name: Download verify_files.json
+        uses: competitive-verifier/actions/download-verify-artifact@v2
       - name: Set up competitive-verifier
         uses: competitive-verifier/actions/setup@v2
       - name: Docs
