@@ -66,7 +66,7 @@ vector<i32> get_dfs_order(const xor_tree_scan_info& info);
 using namespace gwen;
 
 struct edge { i32 u, v; };
-vector<edge> E = {{0, 1}, {1, 2}, {1, 3}};  // 0 が根の木
+vector<edge> E = { {0, 1}, {1, 2}, {1, 3} };  // 0 が根の木
 auto info = xor_tree_scan<edge, true>(E, 0);
 // info.par: 0 の親=-1, 1 の親=0, 2 の親=1, 3 の親=1
 // info.ord: 葉から根への順序

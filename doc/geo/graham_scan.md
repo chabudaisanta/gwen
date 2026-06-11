@@ -35,7 +35,7 @@ vector<point<T>> graham_scan(vector<point<T>> points);
 
 using namespace gwen;
 
-vector<point<i64>> ps = {{0, 0}, {1, 0}, {1, 1}, {0, 1}, {1, 2}};
+vector<point<i64>> ps = { {0, 0}, {1, 0}, {1, 1}, {0, 1}, {1, 2} };
 auto hull = graham_scan<i64>(ps);           // 頂点のみ
 auto hull2 = graham_scan<i64, true>(ps);    // 辺上の点も含む
 ```

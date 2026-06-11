@@ -72,7 +72,7 @@ span<const Edge> g[i32 v] const;
 using namespace gwen;
 
 struct edge { i32 u, v; };
-vector<edge> es = {{0, 1}, {1, 2}, {2, 0}};
+vector<edge> es = { {0, 1}, {1, 2}, {2, 0} };
 csr<edge> g(3, es, false);  // 無向
 for (const auto& e : g[0]) {
     // e.v は 0 に隣接する頂点
