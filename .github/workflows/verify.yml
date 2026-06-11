@@ -31,7 +31,9 @@ jobs:
         with:
           cache-pip: true
       - name: Resolve dependencies
-        run: competitive-verifier resolve --out verify_files.json
+        uses: competitive-verifier/actions/oj-resolve@v4
+        with:
+          output-path: verify_files.json
       - name: Upload verify_files.json
         uses: competitive-verifier/actions/upload-verify-artifact@v2
         with:
