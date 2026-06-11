@@ -60,11 +60,12 @@ jobs:
         uses: competitive-verifier/actions/verify@v2
         with:
           verify-files: verify_files.json
+          destination: verify-result.json
       - name: Upload result
         uses: actions/upload-artifact@v4
         with:
           name: result
-          path: verify-*
+          path: verify-result.json
 
   docs:
     needs: verify
