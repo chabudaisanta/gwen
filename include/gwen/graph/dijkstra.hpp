@@ -27,9 +27,9 @@ template <dijkstra_graph_concept Graph> struct dijkstra {
 public:
     using weight_type = typename Graph::weight_type;
     using edge_type = typename Graph::edge_type;
+    static constexpr weight_type Inf = std::numeric_limits<weight_type>::max();
 
 private:
-    static constexpr weight_type Inf = std::numeric_limits<weight_type>::max();
     const i32 N;
     const Graph& G;
     std::vector<edge_type> spt;

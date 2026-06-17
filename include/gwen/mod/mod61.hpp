@@ -17,11 +17,10 @@ constexpr u64 calc_mod(u64 x) {
 }
 
 constexpr u64 mul_mod(u64 a, u64 b) {
-    u64 au = a >> 31, ad = a & msk31;
-    u64 bu = b >> 31, bd = b & msk31;
-    u64 mid = au * bd + ad * bu;
-    u64 mu = mid >> 30, md = mid & msk30;
-    return calc_mod(au * bu * 2 + mu + (md << 31) + ad * bd);
+    u128 t = u128(a) * b;
+    u64 res = (u64)(t >> 61) + (u64)(t & msk61);
+    if (res >= mod61) res -= mod61;
+    return res;
 }
 
 constexpr u64 add_mod(u64 a, u64 b) {
