@@ -86,6 +86,19 @@ public:
         return tmp;
     }
 
+    m64 inv() const {
+        u64 v = val();
+        assert(v != 0 && "dynamic_modint64::inv(): division by zero");
+        return m64(inv_mod_64(v, n));
+    }
+
+    m64& operator/=(const m64& x) { return mul(x.inv()); }
+    m64 operator/(const m64& x) const {
+        m64 tmp = *this;
+        tmp.mul(x.inv());
+        return tmp;
+    }
+
     // operator overload (integral)
     template <std::integral T> m64& operator+=(T x) { return add(m64(x)); }
     template <std::integral T> m64 operator+(T x) const { return *this + m64(x); }
@@ -95,6 +108,9 @@ public:
 
     template <std::integral T> m64& operator*=(T x) { return mul(m64(x)); }
     template <std::integral T> m64 operator*(T x) const { return *this * m64(x); }
+
+    template <std::integral T> m64& operator/=(T x) { return *this /= m64(x); }
+    template <std::integral T> m64 operator/(T x) const { return *this / m64(x); }
 
     template <std::integral T> m64 pow(T x) const {
         assert(x >= 0);
