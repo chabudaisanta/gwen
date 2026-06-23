@@ -1,6 +1,6 @@
 #pragma once
 
-#include <algorithm>
+#include <utility>
 
 #include "gwen/types.hpp"
 

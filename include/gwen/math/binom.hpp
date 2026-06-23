@@ -1,6 +1,8 @@
 #pragma once
 #include <cassert>
 #include <vector>
+#include <utility>
+
 namespace gwen {
 
 template <typename T> struct binom {

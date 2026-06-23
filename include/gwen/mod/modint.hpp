@@ -1,6 +1,7 @@
 #pragma once
 // https://rsk0315.hatenablog.com/entry/2022/11/27/060616
 #include <cassert>
+#include <concepts>
 
 #include "gwen/mod/mod.hpp"
 #include "gwen/types.hpp"
