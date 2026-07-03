@@ -58,13 +58,12 @@ struct PolynomialDifferenceArray {
         // 各座標 i に対して sum(A[d][i] * i^d) を計算する
         std::vector<S> ans(n, Ring::e());
         for (i32 i = 0; i < n; ++i) {
-            S current_i_pow = S(1); // i^0 = 1
-            S s_i = S((i64)i); // オーバーヘッド削減のため外でキャスト
+            S current_i_pow = Ring::e_mul(); // i^0 = 1
+            S s_i = S((i64)i); 
             
             for (i32 d = 0; d <= k; ++d) {
-                // 型Sは演算子 `*` による乗算をサポートしていると仮定
-                ans[i] = Ring::op(ans[i], A[d][i] * current_i_pow);
-                current_i_pow = current_i_pow * s_i;
+                ans[i] = Ring::op(ans[i], Ring::mul(A[d][i], current_i_pow));
+                current_i_pow = Ring::mul(current_i_pow, s_i);
             }
         }
         return ans;
