@@ -8,13 +8,14 @@
 ## コンストラクタ
 
 ```cpp
-PolynomialDifferenceArray<Abel> imos(i32 n, i32 k);
+PolynomialDifferenceArray<Ring> imos(i32 n, i32 k);
 ```
 
 - **入力**: 
   - `n`: 配列のサイズ。クエリの対象となる区間は $[0, n)$ 内であることを想定します。
   - `k`: 追加する多項式の最大次数。
-- `Abel`: 要素の型 `S` や、加算 `op`、逆元 `inv` などを定義した構造体（`basic_abel.hpp` 参照）。
+- `Ring`: 要素の型 `S` や、加法に関する `op`、加法逆元 `inv` などを定義した構造体（`basic_abel.hpp` の `sum_abel` などを用います）。
+  また、型 `S` 自体が乗法（`*` 演算子）をサポートする環であることを想定しています。
 
 **計算量**
 
@@ -87,13 +88,13 @@ std::vector<S> imos.build();
 
 using namespace gwen;
 
-// i64 型を要素とする加法群
-using Abel = sum_abel<i64>;
+// i64 型を要素とする加法群 (S は乗算もサポートするため環として機能)
+using Ring = sum_abel<i64>;
 
 int main() {
     i32 n = 10;
     i32 k = 2;
-    PolynomialDifferenceArray<Abel> imos(n, k);
+    PolynomialDifferenceArray<Ring> imos(n, k);
 
     // [2, 6) に 1 + 2*i を加算
     std::vector<i64> poly = {1, 2};

@@ -7,15 +7,15 @@
 
 namespace gwen {
 
-template <typename Abel>
+template <typename Ring>
 struct PolynomialDifferenceArray {
-    using S = typename Abel::S;
+    using S = typename Ring::S;
 
     i32 n, k;
     std::vector<std::vector<S>> A;
 
     // n: 配列のサイズ, k: 最大の次数
-    PolynomialDifferenceArray(i32 n, i32 k) : n(n), k(k), A(k + 1, std::vector<S>(n, Abel::e())) {}
+    PolynomialDifferenceArray(i32 n, i32 k) : n(n), k(k), A(k + 1, std::vector<S>(n, Ring::e())) {}
 
     // 区間 [l, r) に多項式 f(i) = sum(poly[d] * i^d) を加算する
     // poly は std::vector<S>, std::array<S, N> などのイテレート可能なコンテナを受け取る
@@ -29,8 +29,8 @@ struct PolynomialDifferenceArray {
         i32 d = 0;
         for (const auto& c : poly) {
             if (d > k) break;
-            A[d][l] = Abel::op(A[d][l], c);
-            if (r < n) A[d][r] = Abel::op(A[d][r], Abel::inv(c));
+            A[d][l] = Ring::op(A[d][l], c);
+            if (r < n) A[d][r] = Ring::op(A[d][r], Ring::inv(c));
             d++;
         }
     }
@@ -42,8 +42,8 @@ struct PolynomialDifferenceArray {
         if (l < 0) l = 0;
         if (l >= r || l >= n) return;
 
-        A[d][l] = Abel::op(A[d][l], c);
-        if (r < n) A[d][r] = Abel::op(A[d][r], Abel::inv(c));
+        A[d][l] = Ring::op(A[d][l], c);
+        if (r < n) A[d][r] = Ring::op(A[d][r], Ring::inv(c));
     }
 
     // すべてのクエリを処理し、最終的な配列を構築して返す
@@ -51,19 +51,19 @@ struct PolynomialDifferenceArray {
         // 各次数ごとに累積和をとる
         for (i32 d = 0; d <= k; ++d) {
             for (i32 i = 1; i < n; ++i) {
-                A[d][i] = Abel::op(A[d][i], A[d][i - 1]);
+                A[d][i] = Ring::op(A[d][i], A[d][i - 1]);
             }
         }
 
         // 各座標 i に対して sum(A[d][i] * i^d) を計算する
-        std::vector<S> ans(n, Abel::e());
+        std::vector<S> ans(n, Ring::e());
         for (i32 i = 0; i < n; ++i) {
             S current_i_pow = S(1); // i^0 = 1
             S s_i = S((i64)i); // オーバーヘッド削減のため外でキャスト
             
             for (i32 d = 0; d <= k; ++d) {
                 // 型Sは演算子 `*` による乗算をサポートしていると仮定
-                ans[i] = Abel::op(ans[i], A[d][i] * current_i_pow);
+                ans[i] = Ring::op(ans[i], A[d][i] * current_i_pow);
                 current_i_pow = current_i_pow * s_i;
             }
         }
