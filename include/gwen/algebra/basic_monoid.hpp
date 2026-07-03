@@ -1,7 +1,11 @@
 #pragma once
+
 #include <algorithm>
 #include <limits>
 #include <numeric>
+
+#include "gwen/types.hpp"
+
 namespace gwen {
 
 template <typename T> struct no_op_monoid {
