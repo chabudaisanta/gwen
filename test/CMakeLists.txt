@@ -13,6 +13,7 @@ add_executable(gwen_tests
   unit/test_factorize.cpp
   unit/test_mdarray.cpp
   unit/test_rolling_hash.cpp
+  unit/test_polynomial_difference_array.cpp
   problem_runner/test_problems.cpp
 )
 
