@@ -1,3 +1,8 @@
+---
+layout: default
+title: gwen Library Documentation
+---
+
 # gwen C++ Library
 
 競技プログラミング用の C++23 ライブラリ「gwen」のドキュメントサイトです。

@@ -3,8 +3,6 @@ theme: jekyll-theme-cayman
 title: gwen
 description: Competitive Programming Library (C++23)
 url: ""
-plugins:
-  - jekyll-mathjax
 markdown: kramdown
 kramdown:
   math_engine: mathjax
