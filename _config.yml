@@ -1,0 +1,27 @@
+action_name: verify
+basedir: ''
+branch_name: rebuild-v2
+description: Competitive Programming Library (C++23)
+filename-index: false
+highlightjs-style: default
+icons:
+  LIBRARY_ALL_AC: ':heavy_check_mark:'
+  LIBRARY_ALL_WA: ':x:'
+  LIBRARY_NO_TESTS: ':warning:'
+  LIBRARY_PARTIAL_AC: ':heavy_check_mark:'
+  LIBRARY_SOME_WA: ':question:'
+  TEST_ACCEPTED: ':heavy_check_mark:'
+  TEST_WAITING_JUDGE: ':warning:'
+  TEST_WRONG_ANSWER: ':x:'
+kramdown:
+  math_engine: mathjax
+markdown: kramdown
+mathjax: 3
+plugins:
+- jekyll-mathjax
+sass:
+  style: compressed
+theme: jekyll-theme-cayman
+title: gwen
+url: ''
+workflow_name: verify.yml
