@@ -89,3 +89,17 @@ documentation_of: //include/gwen/algebra/basic_monoid.hpp
 - `id()`: $O(1)$
 - `operator+`: $O(1)$
 ```
+
+## 3. テストコード (`.cpp`) の規約
+単体テストのファイルでは、隠れた依存関係のミス（include忘れ）を検知し、ヘッダーの自己完結性を保証するために、**必ずテスト対象のヘッダーファイルをファイルの先頭でインクルード**します。
+
+```cpp
+// 1. テスト対象のヘッダーを最初にインクルードする
+#include "gwen/misc/timer.hpp"
+
+// 2. その他の標準ライブラリや外部ライブラリをインクルードする
+#include <gtest/gtest.h>
+#include <vector>
+
+// ...
+```

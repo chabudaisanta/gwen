@@ -16,7 +16,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 ### 開発用資料
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)
 - [CI/CDとドキュメントの仕組み (COMPETITIVE_VERIFIER.md)](doc/COMPETITIVE_VERIFIER.md)
-- [コーディング規則およびドキュメント作成規則(RULES.md)](planning/RULES.md)
+- [コーディング規則およびドキュメント作成規則(RULES.md)](doc/RULES.md)
 
 ---
 *GitHubリポジトリ: [chabudaisanta/gwen](https://github.com/chabudaisanta/gwen)*
