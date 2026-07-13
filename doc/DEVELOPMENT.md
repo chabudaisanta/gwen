@@ -41,5 +41,16 @@ cd .build && ctest --output-on-failure
 1. データ構造やアルゴリズムを実装した場合は、`verify/` ディレクトリ以下にオンラインジャッジ検証用のコード（例: `verify/graph/dijkstra_verify.cpp`）を作成します。
 2. `competitive-verifier` のコマンド（またはCI）を用いて、正しく Verify が通るか確認します。
 
-## 6. タスク管理 (TODO.md) の更新
+## 6. コミットメッセージのルール
+本プロジェクトでは、履歴を追いやすくするために「緩やかな Conventional Commits」を採用しています。厳格な縛りはありませんが、以下のプレフィックスを付けることを推奨します。
+
+- `feat:` : 新機能の追加、新しいライブラリモジュール（`.hpp`）の作成
+- `fix:` : バグ修正、コンパイルエラーの修正
+- `docs:` : ドキュメント（`doc/` や `README.md` など）の更新
+- `test:` : ユニットテスト（`test/unit/`）や検証用コード（`verify/`）の追加・修正
+- `chore:` : CI/CD（GitHub Actions）の設定変更、リファクタリング、その他の雑務
+
+例: `feat: 追加の入出力モジュール io.hpp を実装`
+
+## 7. タスク管理 (TODO.md) の更新
 - 作業が一段落したら、`planning/TODO.md` の該当タスクに完了のチェック `[x]` を入れ、現在の進捗を記録します。
