@@ -10,3 +10,5 @@ TODO.md
 __pycache__/
 .pytest_cache/
 .competitive-verifier/
+result.json
+verify_files.json
