@@ -34,14 +34,14 @@ jobs:
         env:
           CPLUSINCLUDEPATH: ${{ github.workspace }}/include
         run: |
-          competitive-verifier verify --verify-json verify_files.json
+          competitive-verifier verify --verify-json verify_files.json --output result.json
 
       - name: Generate Docs
         if: github.event_name == 'push'
         env:
           CPLUSINCLUDEPATH: ${{ github.workspace }}/include
         run: |
-          competitive-verifier docs --verify-json verify_files.json
+          competitive-verifier docs --verify-json verify_files.json result.json
 
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push'
