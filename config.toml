@@ -1,5 +1,5 @@
 [languages.cpp]
 
 [[languages.cpp.environments]]
-CXX = "g++-15"
+CXX = "g++"
 CXXFLAGS = ["-I", "include", "-I", "references/nyaan", "-std=gnu++23", "-O2", "-mtune=native", "-march=native", "-fconstexpr-depth=1024", "-fconstexpr-loop-limit=524288", "-fconstexpr-ops-limit=2097152"]
