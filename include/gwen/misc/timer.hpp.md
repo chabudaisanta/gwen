@@ -68,7 +68,7 @@ data:
   path: include/gwen/misc/timer.hpp
   pathExtension: hpp
   requiredBy: []
-  timestamp: '2026-07-13 23:38:46+09:00'
+  timestamp: '2026-07-13 23:47:04+09:00'
   title: Timer
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
@@ -100,7 +100,7 @@ Timer()
 
 - タイマーを構築し、全体の計測を開始します。デフォルトの制限時間（`limit`）は未設定（最大値）となります。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -112,7 +112,7 @@ template <typename Unit> Unit timer.elapsed() const
 
 タイマーが構築されてからの**全体の経過時間**を指定した時間単位で返します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -124,7 +124,7 @@ template <typename Unit> Unit timer.delta() const
 
 直近で `reset()` または `lap()` を呼び出した時刻（構築直後は構築時刻）からの**経過時間（ラップタイム）**を指定した時間単位で返します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -136,7 +136,7 @@ template <typename Unit> Unit timer.lap()
 
 現在の `delta()` を返しつつ、ラップタイム測定用の基準時刻をリセット（`reset()`）します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -148,7 +148,7 @@ void timer.reset()
 
 ラップタイム測定用の基準時刻を「現在時刻」にリセットします。全体の経過時間（`elapsed`）の基準時刻には影響しません。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -160,7 +160,7 @@ void timer.set_limit(duration target)
 
 タイマーの制限時間を設定します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -172,7 +172,7 @@ void timer.restart(duration target)
 
 ラップタイムをリセット（`reset()`）し、同時に新たな制限時間を設定します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -184,7 +184,7 @@ bool timer.expired() const
 
 前回の `reset()` や `lap()` などのラップタイム基準時刻からの経過時間が、設定された制限時間を超過している場合に `true` を返します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -196,7 +196,7 @@ bool timer.expired_elapsed() const
 
 タイマーが構築されてからの全体経過時間が、設定された制限時間を超過している場合に `true` を返します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
@@ -208,11 +208,11 @@ std::string timer.dump() const
 
 現在の全体の経過時間、ラップタイム、および制限時間を改行区切りの文字列として出力します。
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(1)$
 
-## @{keyword.examples}
+## 使用例
 
 ```cpp
 #include <iostream>

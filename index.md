@@ -28,7 +28,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 ## ドキュメント一覧
 
 ### 基本機能
-- [型エイリアス (types.hpp)](doc/types.md)
+- [型エイリアス (types.hpp)](include/gwen/types.hpp)
 - [時間計測・制限時間管理 (timer.hpp)](include/gwen/misc/timer.hpp)
 
 ### 開発用資料
