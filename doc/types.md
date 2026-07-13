@@ -1,3 +1,7 @@
+---
+title: types
+documentation_of: //include//gwen/types.hpp
+---
 # types.hpp
 
 C++の標準型を競技プログラミング向けに短く書けるようにしたエイリアスと、型推論を容易にするユーザー定義リテラルを提供するヘッダーです。
