@@ -27,9 +27,9 @@ private:
 public:
     Timer() = default;
 
-    template <typename Unit> Unit elapsed() const { return std::chrono::duration_cast<Unit>(elapsed_raw()); }
-    template <typename Unit> Unit delta() const { return std::chrono::duration_cast<Unit>(delta_raw()); }
-    template <typename Unit> Unit lap() {
+    template <typename Unit = ms> Unit elapsed() const { return std::chrono::duration_cast<Unit>(elapsed_raw()); }
+    template <typename Unit = ms> Unit delta() const { return std::chrono::duration_cast<Unit>(delta_raw()); }
+    template <typename Unit = ms> Unit lap() {
         auto res = delta<Unit>();
         reset();
         return res;

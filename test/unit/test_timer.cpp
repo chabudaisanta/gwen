@@ -16,13 +16,13 @@ TEST(TimerTest, MethodCallTest) {
     EXPECT_FALSE(timer.expired());
 
     timer.set_limit(Timer::ms(1));
-    std::this_thread::sleep_for(Timer::ms(10));
+    std::this_thread::sleep_for(Timer::ms(20));
     EXPECT_TRUE(timer.expired());
     timer.restart(Timer::ms(5));
     EXPECT_FALSE(timer.expired());
     EXPECT_TRUE(timer.expired_elapsed());
 
-    std::this_thread::sleep_for(Timer::ms(10));
+    std::this_thread::sleep_for(Timer::ms(20));
     EXPECT_TRUE(timer.expired());
     timer.reset();
     EXPECT_FALSE(timer.expired());
