@@ -28,7 +28,7 @@ jobs:
         env:
           CPLUSINCLUDEPATH: ${{ github.workspace }}/include
         run: |
-          competitive-verifier verify
+          competitive-verifier verify --verify-json
 
       - name: Generate Docs
         if: github.event_name == 'push'
