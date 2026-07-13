@@ -5,8 +5,6 @@
 ## 特徴
 - **ヘッダーオンリー**: `include/` にパスを通すだけで利用可能です。
 - **AIによる開発支援**: このライブラリは、Google AntiGravitiyを使用して開発されています。
-- **C++23 Concept**: 汎用的なデータ構造やアルゴリズムにおいて C++23 concept を活用し、より安全で意図の明確なインターフェースを提供します。
-- **堅牢な検証**: Google Test による単体テストと `competitive-verifier` によるオンラインジャッジテストの両面から品質を担保しています。
 
 ## 要件
 - C++23 以上
@@ -37,3 +35,6 @@ cd .build && ctest
 ```bash
 ./scripts/verify.sh
 ```
+
+## gwen とは?
+[リーグオブレジェンド](https://www.leagueoflegends.com/ja-jp/champions/gwen/)
