@@ -22,9 +22,9 @@ data:
       \    using us = std::chrono::microseconds;\n\nprivate:\n    const timepoint\
       \ start = clock::now();\n    timepoint latest = start;\n    duration limit =\
       \ duration::max();\n\npublic:\n    Timer() = default;\n\n    template <typename\
-      \ Unit> Unit elapsed() const { return std::chrono::duration_cast<Unit>(elapsed_raw());\
-      \ }\n    template <typename Unit> Unit delta() const { return std::chrono::duration_cast<Unit>(delta_raw());\
-      \ }\n    template <typename Unit> Unit lap() {\n        auto res = delta<Unit>();\n\
+      \ Unit = ms> Unit elapsed() const { return std::chrono::duration_cast<Unit>(elapsed_raw());\
+      \ }\n    template <typename Unit = ms> Unit delta() const { return std::chrono::duration_cast<Unit>(delta_raw());\
+      \ }\n    template <typename Unit = ms> Unit lap() {\n        auto res = delta<Unit>();\n\
       \        reset();\n        return res;\n    }\n\n    void reset() { latest =\
       \ clock::now(); }\n    void set_limit(duration target) { limit = target; }\n\
       \    void restart(duration target) {\n        reset();\n        set_limit(target);\n\
@@ -47,9 +47,10 @@ data:
       \ ms = std::chrono::milliseconds;\n    using us = std::chrono::microseconds;\n\
       \nprivate:\n    const timepoint start = clock::now();\n    timepoint latest\
       \ = start;\n    duration limit = duration::max();\n\npublic:\n    Timer() =\
-      \ default;\n\n    template <typename Unit> Unit elapsed() const { return std::chrono::duration_cast<Unit>(elapsed_raw());\
-      \ }\n    template <typename Unit> Unit delta() const { return std::chrono::duration_cast<Unit>(delta_raw());\
-      \ }\n    template <typename Unit> Unit lap() {\n        auto res = delta<Unit>();\n\
+      \ default;\n\n    template <typename Unit = ms> Unit elapsed() const { return\
+      \ std::chrono::duration_cast<Unit>(elapsed_raw()); }\n    template <typename\
+      \ Unit = ms> Unit delta() const { return std::chrono::duration_cast<Unit>(delta_raw());\
+      \ }\n    template <typename Unit = ms> Unit lap() {\n        auto res = delta<Unit>();\n\
       \        reset();\n        return res;\n    }\n\n    void reset() { latest =\
       \ clock::now(); }\n    void set_limit(duration target) { limit = target; }\n\
       \    void restart(duration target) {\n        reset();\n        set_limit(target);\n\
@@ -68,7 +69,7 @@ data:
   path: include/gwen/misc/timer.hpp
   pathExtension: hpp
   requiredBy: []
-  timestamp: '2026-07-14 00:06:14+09:00'
+  timestamp: '2026-07-14 00:27:41+09:00'
   title: Timer
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
@@ -92,6 +93,10 @@ title: Timer
 - `Timer::ms` : ミリ秒 (`std::chrono::milliseconds`)
 - `Timer::us` : マイクロ秒 (`std::chrono::microseconds`)
 
+> [!NOTE]
+> 各種時間取得メソッド (`elapsed`, `delta`, `lap` など) の戻り値は `std::chrono::duration` 型（デフォルトは `Timer::ms`）となります。
+> そのままでは標準出力などで数値として扱えないため、実際の値（ミリ秒など）として出力したり計算に利用したりする場合は、サンプルのように `.count()` を呼び出して整数値を取り出してください。
+
 ## コンストラクタ
 
 ```cpp
@@ -107,7 +112,7 @@ Timer()
 ## elapsed
 
 ```cpp
-template <typename Unit> Unit timer.elapsed() const
+template <typename Unit = Timer::ms> Unit timer.elapsed() const
 ```
 
 タイマーが構築されてからの**全体の経過時間**を指定した時間単位で返します。
@@ -119,7 +124,7 @@ template <typename Unit> Unit timer.elapsed() const
 ## delta
 
 ```cpp
-template <typename Unit> Unit timer.delta() const
+template <typename Unit = Timer::ms> Unit timer.delta() const
 ```
 
 直近で `reset()` または `lap()` を呼び出した時刻（構築直後は構築時刻）からの**経過時間（ラップタイム）**を指定した時間単位で返します。
@@ -131,7 +136,7 @@ template <typename Unit> Unit timer.delta() const
 ## lap
 
 ```cpp
-template <typename Unit> Unit timer.lap()
+template <typename Unit = Timer::ms> Unit timer.lap()
 ```
 
 現在の `delta()` を返しつつ、ラップタイム測定用の基準時刻をリセット（`reset()`）します。
