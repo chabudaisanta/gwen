@@ -52,8 +52,8 @@ struct MonoidWrapper {
   1. `# モジュール名` と概要
   2. `## コンストラクタ` や `## メソッド名` ごとの見出し
   3. 各メソッドの直下に宣言のコードブロックを記述し、その下に説明を書く。
-  4. 制約は `**@{keyword.constraints}**`、計算量は `**@{keyword.complexity}**` という記法を用いる。
-  5. サンプルコードや使い方は `## @{keyword.examples}` の下に記述する。
+  4. 制約は `**制約**`、計算量は `**計算量**` という記法を用いる。
+  5. サンプルコードや使い方は `## 使用例` の下に記述する。
 
 ```markdown
 ---
@@ -73,12 +73,12 @@ fenwick_tree<T> fw(int n)
 
 - 長さ $n$ の配列を作ります。初期値はすべて $0$ です。
 
-**@{keyword.constraints}**
+**制約**
 
 - $T$ は `gwen::Monoid` concept を満たすこと。
 - $0 \leq n \leq 10^8$
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(n)$
 
@@ -90,15 +90,15 @@ void fw.add(int p, T x)
 
 `a[p] += x` を行います。
 
-**@{keyword.constraints}**
+**制約**
 
 - $0 \leq p < n$
 
-**@{keyword.complexity}**
+**計算量**
 
 - $O(\log n)$
 
-## @{keyword.examples}
+## 使用例
 
 \`\`\`cpp
 #include "gwen/algebra/fenwick_tree.hpp"
