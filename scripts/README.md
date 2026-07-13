@@ -50,3 +50,17 @@
 ### 処理内容
 1. `CPLUSINCLUDEPATH` 環境変数に `include` ディレクトリへの絶対パスを設定し、ヘッダーファイルが見つかるようにします。
 2. `competitive-verifier verify` を実行し、`verify/` ディレクトリ配下に存在する検証用コードをコンパイル・実行・判定します。
+
+---
+
+## 4. `format.sh`
+`clang-format` を用いて、プロジェクト内のC++ソースコード（`.cpp`, `.hpp`）をフォーマットするスクリプトです。
+
+### 使い方
+```bash
+./scripts/format.sh
+```
+
+### 処理内容
+1. `include`, `test`, `verify` ディレクトリ配下にあるすべての `.cpp` および `.hpp` ファイルを再帰的に検索します。
+2. `clang-format -i` を実行し、ソースコードをプロジェクトのコーディングスタイル (`.clang-format`) に従って上書きフォーマットします。
