@@ -1,22 +1,24 @@
 cmake_minimum_required(VERSION 3.14)
-project(gwen LANGUAGES CXX)
+project(gwen CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Define Interface library for gwen
+# ライブラリ本体 (ヘッダーオンリー)
 add_library(gwen INTERFACE)
 target_include_directories(gwen INTERFACE include)
 
-# Fetch Content for Google Test
+# テスト
+enable_testing()
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
-  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
-# For Windows: Prevent overriding compiler/linker settings
+# For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-enable_testing()
-add_subdirectory(test)
+add_subdirectory(test/unit)
