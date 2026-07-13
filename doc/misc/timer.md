@@ -18,6 +18,10 @@ documentation_of: //include/gwen/misc/timer.hpp
 - `Timer::ms` : ミリ秒 (`std::chrono::milliseconds`)
 - `Timer::us` : マイクロ秒 (`std::chrono::microseconds`)
 
+> [!NOTE]
+> 各種時間取得メソッド (`elapsed`, `delta`, `lap` など) の戻り値は `std::chrono::duration` 型（デフォルトは `Timer::ms`）となります。
+> そのままでは標準出力などで数値として扱えないため、実際の値（ミリ秒など）として出力したり計算に利用したりする場合は、サンプルのように `.count()` を呼び出して整数値を取り出してください。
+
 ## コンストラクタ
 
 ```cpp
@@ -33,7 +37,7 @@ Timer()
 ## elapsed
 
 ```cpp
-template <typename Unit> Unit timer.elapsed() const
+template <typename Unit = Timer::ms> Unit timer.elapsed() const
 ```
 
 タイマーが構築されてからの**全体の経過時間**を指定した時間単位で返します。
@@ -45,7 +49,7 @@ template <typename Unit> Unit timer.elapsed() const
 ## delta
 
 ```cpp
-template <typename Unit> Unit timer.delta() const
+template <typename Unit = Timer::ms> Unit timer.delta() const
 ```
 
 直近で `reset()` または `lap()` を呼び出した時刻（構築直後は構築時刻）からの**経過時間（ラップタイム）**を指定した時間単位で返します。
@@ -57,7 +61,7 @@ template <typename Unit> Unit timer.delta() const
 ## lap
 
 ```cpp
-template <typename Unit> Unit timer.lap()
+template <typename Unit = Timer::ms> Unit timer.lap()
 ```
 
 現在の `delta()` を返しつつ、ラップタイム測定用の基準時刻をリセット（`reset()`）します。
