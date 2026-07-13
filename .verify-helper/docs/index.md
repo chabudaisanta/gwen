@@ -5,12 +5,12 @@ title: gwen Library Documentation
 
 # gwen C++ Library
 
-競技プログラミング用の C++23 ライブラリ「gwen」のドキュメントサイトです。
+Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラリのドキュメントサイトです。
 
 ## ドキュメント一覧
 
 ### 基本機能
-- [型エイリアスとユーザー定義リテラル (types.hpp)](doc/types.md)
+- [型エイリアス (types.hpp)](doc/types.md)
 
 ### 開発用資料
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)
