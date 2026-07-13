@@ -1,0 +1,45 @@
+# CI/CD とドキュメント生成の仕組み
+
+本プロジェクト（gwen）では、`competitive-verifier` を用いて、テストの自動検証と GitHub Pages へのドキュメント自動デプロイを行っています。ここでは各設定ファイルとその紐付きについて解説します。
+
+## 1. 全体フロー
+
+GitHub にソースコードを Push すると、GitHub Actions によって以下のフローが自動実行されます。
+
+1. **`oj-resolve`**: `#include` などの依存関係を解析し、どのファイルが検証対象かを `verify_files.json` にリストアップします。（※この際、Google Test等の環境に依存する `test/` フォルダは意図的に除外しています）
+2. **`verify`**: 実際にテストコード（`verify/` 配下の提出用コードなど）をコンパイル・実行し、成功/失敗の結果を `result.json` に出力します。
+3. **`docs`**: ソースファイル、`verify_files.json`、`result.json`、および `doc/` 等の Markdown ドキュメントを結合し、Jekyll（静的サイトジェネレータ）用のサイトデータを `.competitive-verifier/_jekyll` フォルダに自動生成します。
+4. **`actions-gh-pages`**: 生成された `_jekyll` フォルダの中身を `gh-pages` という専用ブランチにプッシュし、GitHub Pages として公開します。
+
+---
+
+## 2. 重要な設定ファイルと役割
+
+### `config.toml` (リポジトリ直下)
+- `competitive-verifier` 本体の実行環境設定ファイルです。
+- どのコンパイラ（`g++`）を使うか、コンパイルオプション（`CXXFLAGS` = `-std=gnu++23` など）はどうするかを定義しています。
+- これを読み込ませないと、最新の C++23 構文をパーサーが理解できずに依存関係解析（`oj-resolve`）でエラーになることがあります。
+
+### `.verify-helper/docs/_config.yml`
+- GitHub Pages（Jekyll）の見た目や挙動を決める設定ファイルです。
+- MathJax（数式表示）の有効化や、サイトのタイトル、デザインテーマ（`jekyll-theme-cayman`）などを指定しています。
+
+### `.verify-helper/docs/index.md`
+- ドキュメントサイト（GitHub Pages）の **トップページ** になるファイルです。
+- これが存在しない場合、リポジトリ直下の `README.md` がそのままトップページになってしまいます。
+- 新しいモジュールやドキュメント（例: `doc/io.md`）を作った際は、この `index.md` にリンクを追加することで、サイト上から誰でもアクセスできるようになります。
+
+---
+
+## 3. GitHub Actions の設定 (`.github/workflows/verify.yml`) の工夫点
+
+- **テストフォルダの除外**: 
+  `competitive-verifier` は Google Test などの外部ライブラリをそのままでは解釈できないため、`oj-resolve` 実行時に `--exclude test/` を指定して単体テスト用のディレクトリを解析対象から外しています。
+- **デプロイ先ディレクトリ**:
+  デプロイステップで `publish_dir: ./.competitive-verifier/_jekyll` と指定し、ドキュメントの生成結果だけを `gh-pages` ブランチに送信するように調整しています。
+
+---
+
+## 4. 作業時の注意点（まとめ）
+- 新しい機能を `include/gwen/` に追加し、仕様を `doc/` に書いたら、必ず **`.verify-helper/docs/index.md`** に目次としてリンクを追記してください。
+- 競技プログラミング用の検証コードは `verify/` 配下に置くことで、自動的に依存関係が解決され、検証の合否がドキュメントサイトにバッジとして表示されるようになります。

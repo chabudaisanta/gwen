@@ -9,6 +9,7 @@
 ## 2. ドキュメントの作成
 - `doc/` ディレクトリ以下に、モジュールの仕様や使い方をまとめた Markdown ファイルを作成します（例: `doc/io.md`）。
 - 簡単なサンプルコード（`#include "gwen/...` から始まるもの）を含めると後で使いやすくなります。
+- 作成後は、必ず **`.verify-helper/docs/index.md`** の目次リンクを追加し、GitHub Pages 上からアクセスできるようにしてください。
 
 ## 3. 単体テスト (Google Test) の作成と登録
 1. `test/unit/` ディレクトリ以下にテストファイルを作成します（例: `test/unit/test_io.cpp`）。
