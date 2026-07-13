@@ -11,8 +11,8 @@ TARGET_DIRS=("include" "test" "verify")
 
 for dir in "${TARGET_DIRS[@]}"; do
     if [ -d "$dir" ]; then
-        # .hpp と .cpp ファイルを再帰的に検索し、clang-format を上書きで実行
-        find "$dir" -type f \( -name "*.hpp" -o -name "*.cpp" \) -print | xargs -r clang-format -i
+        # .hpp と .cpp ファイルを再帰的に検索し、clang-format を上書きで実行 (空白ファイル名対応)
+        find "$dir" -type f \( -name "*.hpp" -o -name "*.cpp" \) -print0 | xargs -0 -r clang-format -i
     fi
 done
 

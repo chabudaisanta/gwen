@@ -4,6 +4,11 @@ set -e
 # カレントディレクトリをプロジェクトルートに移動
 cd "$(dirname "$0")/.."
 
+# 仮想環境が存在する場合はアクティベート
+if [ -d ".venv" ]; then
+    source .venv/bin/activate
+fi
+
 echo "==> Running competitive-verifier <=="
 export CPLUSINCLUDEPATH="$(pwd)/include"
 export PATH="$HOME/.local/bin:$PATH"

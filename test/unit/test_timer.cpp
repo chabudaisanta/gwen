@@ -5,7 +5,7 @@
 
 #include "gwen/misc/timer.hpp"
 
-using namespace gwen;
+namespace gwen {
 
 TEST(TimerTest, MethodCallTest) {
     EXPECT_LE(timer.elapsed<Timer::ms>(), Timer::ms::max());
@@ -34,10 +34,12 @@ TEST(TimerTest, DumpTest) {
     Timer timer;
     timer.restart(Timer::s(2));
     std::string d = timer.dump();
-    
+
     // 標準エラー出力に出してログに残す
     std::cerr << "[DEBUG OUTPUT]\n" << d << std::endl;
-    
+
     // limit が正しくフォーマットされているかテスト
     EXPECT_TRUE(d.find("limit: 2000ms") != std::string::npos);
 }
+
+} // namespace gwen

@@ -7,6 +7,8 @@
 using namespace gwen;
 using namespace gwen::literals;
 
+namespace gwen {
+
 TEST(TypesTest, Aliases) {
     EXPECT_TRUE((std::is_same_v<i32, std::int32_t>));
     EXPECT_TRUE((std::is_same_v<i64, std::int64_t>));
@@ -15,6 +17,8 @@ TEST(TypesTest, Aliases) {
     EXPECT_TRUE((std::is_same_v<usize, std::size_t>));
     EXPECT_TRUE((std::is_same_v<isize, std::ptrdiff_t>));
 }
+
+namespace literals {
 
 TEST(TypesTest, Literals) {
     auto val_i64 = 42_i64;
@@ -29,3 +33,6 @@ TEST(TypesTest, Literals) {
     EXPECT_TRUE((std::is_same_v<decltype(val_zu), usize>));
     EXPECT_EQ(val_zu, 12345);
 }
+
+} // namespace literals
+} // namespace gwen

@@ -3,25 +3,22 @@
 # GoogleTest用のマクロ(gtest_discover_tests)を使えるようにする
 include(GoogleTest)
 
-# --- テスト1: test_types ---
+# test/unit/ ディレクトリ内の .cpp ファイルをすべて取得
+file(GLOB TEST_SOURCES "*.cpp")
 
-# "テストスイート" と呼ばれる、テストケースの集まりを作成します。
-# ここでは、 test_types.cpp に書かれたテストを "TypesTest" という名前のスイートにまとめ、
-# test_types という実行ファイル（ターゲット）にリンクしています。
-add_executable(test_types test_types.cpp)
+# template.cpp.sample などを誤って .cpp 拡張子で保存した場合などに備え、template という名前のファイルは除外する
+list(FILTER TEST_SOURCES EXCLUDE REGEX "template.*\\.cpp")
 
-# 【target_link_libraries】
-# 実行ファイルに必要な「ライブラリ（他のプログラムの塊）」を結合（リンク）するコマンドです。
-target_link_libraries(test_types PRIVATE gwen gtest_main)
+foreach(TEST_SOURCE ${TEST_SOURCES})
+    # ファイル名から拡張子を除いた部分（例: test_types.cpp -> test_types）を取得
+    get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
-# 【gtest_discover_tests】
-# 生成された実行ファイルの中身をCMakeが自動で解析（スキャン）し、
-# コード内に書かれた `TEST()` や `TEST_F()` などの各テストケースを ctest に登録するコマンドです。
-# これにより、テストを実行した際に「どのテストケースが成功/失敗したか」を個別に見分けられるようになります。
-gtest_discover_tests(test_types)
+    # 実行ファイルの追加
+    add_executable(${TEST_NAME} ${TEST_SOURCE})
 
+    # ライブラリのリンク
+    target_link_libraries(${TEST_NAME} PRIVATE gwen gtest_main)
 
-# --- テスト2: test_timer ---
-add_executable(test_timer test_timer.cpp)
-target_link_libraries(test_timer PRIVATE gwen gtest_main)
-gtest_discover_tests(test_timer)
+    # CTest への登録
+    gtest_discover_tests(${TEST_NAME})
+endforeach()

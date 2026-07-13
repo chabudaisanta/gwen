@@ -35,5 +35,5 @@ cd .build && ctest
 `competitive-verifier` を用いて、実際の競技プログラミングプラットフォーム（Yosupo Judge 等）の問題で検証を行います。
 
 ```bash
-# TODO: verify コマンドの準備が整い次第更新
+./scripts/verify.sh
 ```

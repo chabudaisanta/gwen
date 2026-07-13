@@ -1,0 +1,16 @@
+// 1. テスト対象のヘッダーを最初にインクルードする
+// #include "gwen/path/to/header.hpp"
+
+// 2. その他の標準ライブラリや外部ライブラリをインクルードする
+#include <gtest/gtest.h>
+
+namespace gwen {
+namespace {
+
+TEST(MyModuleTest, BasicBehavior) {
+    // 期待する振る舞いを記述する
+    // 例: EXPECT_EQ(1 + 1, 2);
+}
+
+} // namespace
+} // namespace gwen

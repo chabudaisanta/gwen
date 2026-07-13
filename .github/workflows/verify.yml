@@ -22,7 +22,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install competitive-verifier
-        run: pip install competitive-verifier
+        run: pip install -r requirements.txt
 
       - name: Resolve Verify Files
         env:
