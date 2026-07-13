@@ -46,7 +46,7 @@ data:
   path: include/gwen/types.hpp
   pathExtension: hpp
   requiredBy: []
-  timestamp: '2026-07-13 21:17:54+09:00'
+  timestamp: '2026-07-13 21:10:13+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: include/gwen/types.hpp
