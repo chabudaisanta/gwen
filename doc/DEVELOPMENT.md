@@ -13,6 +13,7 @@
 
 ## 3. 単体テスト (Google Test) の作成と登録
 1. `test/unit/` ディレクトリ以下にテストファイルを作成します（例: `test/unit/test_io.cpp`）。
+   - **注意**: ヘッダーの自己完結性を保証するため、テストコードでは必ず **テスト対象の `.hpp` ファイルを先頭でインクルード** してください。
 2. `test/unit/CMakeLists.txt` を開き、作成したテストをビルド対象として追記します。
    ```cmake
    # 追記例
@@ -24,6 +25,8 @@
 
 ## 4. 単体テストのビルドと実行
 ターミナルでプロジェクトのルートディレクトリ（`gwen/`）を開き、以下のコマンドでテストを実行します。
+（※一連の処理を自動で行う `scripts/test.sh` の利用も推奨されます。）
+
 ```bash
 # 1. CMakeの構成（初回または CMakeLists.txt 更新時）
 cmake -S . -B .build
@@ -35,6 +38,7 @@ cmake --build .build
 cd .build && ctest --output-on-failure
 ```
 ※ `.build/` ディレクトリは `.gitignore` の対象となるため、リポジトリは汚れません。
+※ テスト実行後、`std::cerr` への出力などの詳細なログを確認したい場合は、`.build/Testing/Temporary/LastTest.log` を参照するか、`scripts/test.sh` 実行時に生成される `test/test.log` を確認してください。
 
 ## 5. 競技プログラミング用 Verify の作成
 ※ 型定義（`types.hpp`）など、ロジックを持たないものは省略可能です。
