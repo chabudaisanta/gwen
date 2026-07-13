@@ -48,46 +48,63 @@ struct MonoidWrapper {
 `competitive-verifier` 向けに、GitHub Pages でレンダリングされる markdown ドキュメントは以下のフォーマットで統一します。AC Library スタイルをできる限り踏襲します。
 
 - **Frontmatter**: `title` と `documentation_of` を必ず設定します。
-- **セクション構成**:
-  1. `## 概要` (Overview)
-  2. `## 制約` (Requirements / Concepts)
-  3. `## 各メソッド` (Methods / API)
-  4. `## 使い方` (Usage)
-  5. `## 注意点` (Notes / Warning - あれば)
-  6. `## 計算量` (Complexity)
+- **セクション構成**: AC Library のフォーマットに合わせ、以下の構成を標準とします。
+  1. `# モジュール名` と概要
+  2. `## コンストラクタ` や `## メソッド名` ごとの見出し
+  3. 各メソッドの直下に宣言のコードブロックを記述し、その下に説明を書く。
+  4. 制約は `**@{keyword.constraints}**`、計算量は `**@{keyword.complexity}**` という記法を用いる。
+  5. サンプルコードや使い方は `## @{keyword.examples}` の下に記述する。
 
 ```markdown
 ---
-title: モジュール名 (例: Basic Monoid)
-documentation_of: //include/gwen/algebra/basic_monoid.hpp
+title: モジュール名 (例: Fenwick Tree)
+documentation_of: //include/gwen/algebra/fenwick_tree.hpp
 ---
 
-## 概要
-ここにアルゴリズムやデータ構造の概要を書きます。
+# Fenwick Tree
 
-## 制約
-- `T` は `gwen::Monoid` concept を満たすこと。
+ここにモジュール全体の概要や、できることを簡潔に書きます。
 
-## 各メソッド
-### `T::id()`
-- 単位元を返します。
+## コンストラクタ
 
-### `T operator+(T a, T b)`
-- 2つの元の演算結果を返します。
+\`\`\`cpp
+fenwick_tree<T> fw(int n)
+\`\`\`
 
-## 使い方
-```cpp
-#include "gwen/algebra/basic_monoid.hpp"
+- 長さ $n$ の配列を作ります。初期値はすべて $0$ です。
+
+**@{keyword.constraints}**
+
+- $T$ は `gwen::Monoid` concept を満たすこと。
+- $0 \leq n \leq 10^8$
+
+**@{keyword.complexity}**
+
+- $O(n)$
+
+## add
+
+\`\`\`cpp
+void fw.add(int p, T x)
+\`\`\`
+
+`a[p] += x` を行います。
+
+**@{keyword.constraints}**
+
+- $0 \leq p < n$
+
+**@{keyword.complexity}**
+
+- $O(\log n)$
+
+## @{keyword.examples}
+
+\`\`\`cpp
+#include "gwen/algebra/fenwick_tree.hpp"
 
 // サンプルコード
-```
-
-## 注意点
-- 特殊なコーナーケースや未定義動作の条件があればここに記述します。
-
-## 計算量
-- `id()`: $O(1)$
-- `operator+`: $O(1)$
+\`\`\`
 ```
 
 ## 3. テストコード (`.cpp`) の規約
