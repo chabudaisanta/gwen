@@ -18,7 +18,9 @@ kramdown:
 markdown: kramdown
 mathjax: 3
 plugins:
-- jekyll-mathjax
+- jemoji
+- jekyll-redirect-from
+- jekyll-remote-theme
 sass:
   style: compressed
 theme: jekyll-theme-cayman

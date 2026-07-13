@@ -1,12 +1,18 @@
 ---
 data:
   top:
-  - categories: []
+  - categories:
+    - name: include/gwen/
+      pages:
+      - filename: types.hpp
+        icon: LIBRARY_NO_TESTS
+        path: include/gwen/types.hpp
     type: Library Files
   - categories: []
     type: Verification Files
 layout: toppage
 ---
+
 # gwen C++ Library
 
 競技プログラミング用の C++23 ライブラリ「gwen」のドキュメントサイトです。
@@ -18,6 +24,7 @@ layout: toppage
 
 ### 開発用資料
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)
+- [CI/CDとドキュメントの仕組み (COMPETITIVE_VERIFIER.md)](doc/COMPETITIVE_VERIFIER.md)
 
 ---
 *GitHubリポジトリ: [chabudaisanta/gwen](https://github.com/chabudaisanta/gwen)*
