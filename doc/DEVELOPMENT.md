@@ -38,7 +38,7 @@ cmake --build .build
 cd .build && ctest --output-on-failure
 ```
 ※ `.build/` ディレクトリは `.gitignore` の対象となるため、リポジトリは汚れません。
-※ テスト実行後、`std::cerr` への出力などの詳細なログを確認したい場合は、`.build/Testing/Temporary/LastTest.log` を参照するか、`scripts/test.sh` 実行時に生成されるルート直下の `test.log` を確認してください。
+※ テスト実行後、`std::cerr` への出力などの詳細なログを確認したい場合は、`.build/Testing/Temporary/LastTest.log` を参照するか、`scripts/test.sh` 実行時に生成される `test/test.log` を確認してください。
 
 ## 5. 競技プログラミング用 Verify の作成
 ※ 型定義（`types.hpp`）など、ロジックを持たないものは省略可能です。
