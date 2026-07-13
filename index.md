@@ -7,6 +7,7 @@ data:
       - filename: types.hpp
         icon: LIBRARY_NO_TESTS
         path: include/gwen/types.hpp
+        title: types
     - name: include/gwen/misc/
       pages:
       - filename: timer.hpp
@@ -28,7 +29,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 
 ### 基本機能
 - [型エイリアス (types.hpp)](doc/types.md)
-- [時間計測・制限時間管理 (timer.hpp)](doc/misc/timer.md)
+- [時間計測・制限時間管理 (timer.hpp)](include/gwen/misc/timer.hpp)
 
 ### 開発用資料
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)
