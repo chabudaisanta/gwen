@@ -37,4 +37,4 @@ cd .build && ctest
 ```
 
 ## gwen とは?
-[リーグオブレジェンド](https://www.leagueoflegends.com/ja-jp/champions/gwen/)
+[リーグオブレジェンド](https://www.leagueoflegends.com/ja-jp/champions/gwen/)より。かわいいですね。
