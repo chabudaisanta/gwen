@@ -1,7 +1,7 @@
 # https://competitive-verifier.github.io/competitive-verifier/
 theme: jekyll-theme-cayman
 title: gwen
-description: Competitive Programming Library (C++20)
+description: Competitive Programming Library (C++23)
 url: ""
 plugins:
   - jekyll-mathjax
