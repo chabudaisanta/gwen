@@ -12,3 +12,4 @@ __pycache__/
 .competitive-verifier/
 result.json
 verify_files.json
+test.log
