@@ -24,18 +24,24 @@ jobs:
       - name: Install competitive-verifier
         run: pip install competitive-verifier
 
+      - name: Resolve Verify Files
+        env:
+          CPLUSINCLUDEPATH: ${{ github.workspace }}/include
+        run: |
+          competitive-verifier oj-resolve
+
       - name: Verify
         env:
           CPLUSINCLUDEPATH: ${{ github.workspace }}/include
         run: |
-          competitive-verifier verify --verify-json
+          competitive-verifier verify --verify-json verify_files.json
 
       - name: Generate Docs
         if: github.event_name == 'push'
         env:
           CPLUSINCLUDEPATH: ${{ github.workspace }}/include
         run: |
-          competitive-verifier docs
+          competitive-verifier docs --verify-json verify_files.json
 
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push'
