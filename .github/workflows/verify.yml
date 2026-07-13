@@ -28,7 +28,7 @@ jobs:
         env:
           CPLUSINCLUDEPATH: ${{ github.workspace }}/include
         run: |
-          competitive-verifier oj-resolve --config config.toml --exclude test/
+          competitive-verifier oj-resolve --config config.toml --exclude test/ > verify_files.json
 
       - name: Verify
         env:
