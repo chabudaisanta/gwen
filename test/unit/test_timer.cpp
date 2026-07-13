@@ -1,7 +1,43 @@
 #include <gtest/gtest.h>
 
+#include <chrono>
+#include <thread>
+
 #include "gwen/misc/timer.hpp"
 
 using namespace gwen;
 
-TEST(TimerTest, CompileTest) { timer; }
+TEST(TimerTest, MethodCallTest) {
+    EXPECT_LE(timer.elapsed<Timer::ms>(), Timer::ms::max());
+    EXPECT_LE(timer.delta<Timer::ms>(), Timer::ms::max());
+    EXPECT_LE(timer.lap<Timer::ms>(), Timer::ms::max());
+
+    timer.set_limit(Timer::s(1));
+    EXPECT_FALSE(timer.expired());
+
+    timer.set_limit(Timer::ms(1));
+    std::this_thread::sleep_for(Timer::ms(10));
+    EXPECT_TRUE(timer.expired());
+    timer.restart(Timer::ms(5));
+    EXPECT_FALSE(timer.expired());
+    EXPECT_TRUE(timer.expired_elapsed());
+
+    std::this_thread::sleep_for(Timer::ms(10));
+    EXPECT_TRUE(timer.expired());
+    timer.reset();
+    EXPECT_FALSE(timer.expired());
+
+    EXPECT_TRUE(timer.dump().size());
+}
+
+TEST(TimerTest, DumpTest) {
+    Timer timer;
+    timer.restart(Timer::s(2));
+    std::string d = timer.dump();
+    
+    // 標準エラー出力に出してログに残す
+    std::cerr << "[DEBUG OUTPUT]\n" << d << std::endl;
+    
+    // limit が正しくフォーマットされているかテスト
+    EXPECT_TRUE(d.find("limit: 2000ms") != std::string::npos);
+}
