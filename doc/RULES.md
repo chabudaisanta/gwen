@@ -25,7 +25,7 @@ namespace gwen {
  * @tparam T テンプレート引数の説明
  */
 template <typename T>
-concept Monoid = requires(T a, T b) {
+concept monoid = requires(T a, T b) {
     { a + b } -> std::same_as<T>;
     { T::id() } -> std::same_as<T>;
 };
@@ -35,7 +35,7 @@ concept Monoid = requires(T a, T b) {
 /**
  * @brief モノイドを扱うクラスの例
  */
-template <Monoid T>
+template <monoid T>
 struct MonoidWrapper {
     T val;
     // ...
@@ -68,14 +68,14 @@ documentation_of: //include/gwen/algebra/fenwick_tree.hpp
 ## コンストラクタ
 
 \`\`\`cpp
-fenwick_tree<T> fw(int n)
+FenwickTree<T> fw(int n)
 \`\`\`
 
 - 長さ $n$ の配列を作ります。初期値はすべて $0$ です。
 
 **制約**
 
-- $T$ は `gwen::Monoid` concept を満たすこと。
+- $T$ は `gwen::monoid` concept を満たすこと。
 - $0 \leq n \leq 10^8$
 
 **計算量**
@@ -124,14 +124,19 @@ void fw.add(int p, T x)
 ```
 
 ## 4. 命名規則 (Naming Conventions)
-一般的なC++の慣習および競技プログラミングライブラリ（AC Libraryなど）のスタイルに従い、以下の命名規則を標準とします。
+一般的なC++の慣習およびC++標準委員会の提案文書（P1851R0 / P1754R1）のガイドラインに従い、以下の命名規則を標準とします。
 
-- **ファイル名・ディレクトリ名**: 小文字のスネークケースを使用します。（例: `fenwick_tree.hpp`, `math`）
-- **型名 (クラス、構造体、エイリアス)**:
-  - 基本的には標準ライブラリに倣い、**小文字のスネークケース**を使用します。（例: `fenwick_tree`, `lazy_segtree`, `modint`）
-  - ただし、テンプレートパラメータや一部のコンセプトなどは **PascalCase** を許容・推奨します。（例: `Monoid`, `Graph`）
+- **ファイル名・ディレクトリ名**: 小文字のスネークケース（`snake_case`）を使用します。（例: `fenwick_tree.hpp`, `math`）
+- **型名 (クラス、構造体、エイリアス)**: パスカルケース（`PascalCase`）を使用します。（例: `FenwickTree`, `LazySegtree`, `ModInt`）
+- **コンセプト名**:
+  - `snake_case` 形式を使用し、コンセプトを示す接頭辞/接尾辞（例: `is_` や `_concept`）は使いません。
+  - **特性 (Capabilities)**: 単一要件（特定の関数呼び出しが可能など）の場合は、要件を説明する**形容詞**とします。要求する特性が関数のときは、`-ible` や `-able` を付けます。（例: `swappable`, `copy_constructible`）
+  - **抽象 (Abstractions)**: 複数要件から構成されるハイレベル・コンセプトの場合は、専門用語を表す**名詞**とします。コンセプトを満たす型の名前よりも総称的にします。（例: `forward_iterator`）
+  - **その他の述語**:
+    - 主に複数の型引数をとり型制約に利用されるときは、適切な**前置詞**で終わる名前とします。（例: `same_as<int>`, `constructible_with<args>`, `sentinel_for<iterator>`）
+    - 主に別コンセプトの定義や `requires` 節で利用されるときは、前置詞は付けません。（例: `mergeable`）
 - **関数名・メソッド名**: 小文字のスネークケースを使用します。（例: `add`, `get_val`, `lower_bound`）
 - **変数名・メンバ変数名**: 小文字のスネークケースを使用します。（例: `edge_count`, `node_id`）
 - **定数名 (const, constexpr)**: 大文字のスネークケースを使用します。（例: `MOD`, `INF`）
-- **テンプレートパラメータ**: 意味が自明な場合は1文字の大文字（`T`, `U`, `N` など）、意味を明記する場合は PascalCase（例: `ValueType`, `Operator`）を使用します。
+- **テンプレートパラメータ**: 意味が自明な場合は1文字の大文字（`T`, `U`, `N` など）、意味を明記する場合は `PascalCase`（例: `ValueType`, `Operator`）を使用します。
 - **マクロ名**: 可能な限り使用を避けますが、必要な場合は `GWEN_` などのプレフィックスを付けた大文字のスネークケースを使用します。（例: `GWEN_ENABLE_DEBUG`）
