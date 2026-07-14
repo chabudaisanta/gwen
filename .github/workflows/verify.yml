@@ -39,6 +39,7 @@ jobs:
         with:
           output-path: verify_files.json
           include: include
+          config: config.toml
       - name: parse-doxygen
         uses: competitive-verifier/actions/parse-doxygen@v2
         with:
@@ -103,6 +104,7 @@ jobs:
           split-index: ${{ matrix.index }}
           timeout: 1800
           prev-result: ${{ steps.restore-cached-results.outputs.cache-hit && 'merged-result.json' || ''}}
+          config: config.toml
 
       - name: Upload result artifact
         uses: actions/upload-artifact@v4
