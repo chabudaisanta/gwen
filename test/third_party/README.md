@@ -10,6 +10,10 @@
 ```cpp
 #include <gtest/gtest.h>
 #include "testlib.h"
+
+// gtest_discover_tests がテスト一覧を取得する際に testlib がエラーを吐くのを防ぐため、
+// 以下のグローバル変数を定義して testlib の終了時チェックを無効化します。
+int dummy_disable_testlib = []() { disableFinalizeGuard(); return 0; }();
 ```
 
 ## 初期化（Google Test内で使う場合）
