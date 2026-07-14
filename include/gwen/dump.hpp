@@ -33,6 +33,15 @@ usize length_of_string_view(std::string_view sv) {
 
 } // namespace internal
 
+/**
+ * @brief 変数の内容を標準エラー出力 (std::cerr) に出力するユーティリティ
+ * 
+ * dumpable な型や value_formattable な型、および std::format で出力可能な型に対応しています。
+ * 主にローカル環境でのデバッグ出力に利用されます。
+ * 
+ * @tparam Args 出力する変数の型
+ * @param args 出力する変数のリスト
+ */
 template<typename... Args>
 void dump(Args&&... args) {
     auto f = [](auto&& arg) {
@@ -55,6 +64,13 @@ void dump(Args&&... args) {
     ((std::cerr << f(args) << (++cnt < sz ? ", " : "\n")), ...);
 }
 
+/**
+ * @brief ローカル環境 (LOCAL マクロ定義時) でのみ動作するデバッグ出力マクロ
+ * 
+ * 変数名と合わせて dump 関数を呼び出します。提出時は何も出力しません。
+ * 
+ * @param ... 出力対象の変数（カンマ区切り）
+ */
 #ifdef LOCAL
 #define DUMP(...) \
     do { \
