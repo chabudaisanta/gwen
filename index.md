@@ -4,6 +4,10 @@ data:
   - categories:
     - name: include/gwen/
       pages:
+      - filename: dump.hpp
+        icon: LIBRARY_NO_TESTS
+        path: include/gwen/dump.hpp
+        title: Dump
       - filename: types.hpp
         icon: LIBRARY_NO_TESTS
         path: include/gwen/types.hpp
