@@ -1,0 +1,8 @@
+# https://competitive-verifier.github.io/competitive-verifier/
+# theme: jekyll-theme-cayman
+title: gwen
+description: Competitive Programming Library (C++23)
+url: ""
+markdown: kramdown
+kramdown:
+  math_engine: mathjax
