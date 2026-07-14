@@ -4,18 +4,13 @@ data:
     '*NOT_SPECIAL_COMMENTS*': ''
     links: []
   dependencies:
-  - files:
-    - filename: types.hpp
-      icon: LIBRARY_NO_TESTS
-      path: include/gwen/types.hpp
-      title: types
+  - files: []
     type: Depends on
   - files: []
     type: Required by
   - files: []
     type: Verified with
-  dependsOn:
-  - include/gwen/types.hpp
+  dependsOn: []
   documentPath: doc/dump.md
   embedded:
   - code: "#pragma once\n\n#include <iostream>\n#include <concepts>\n#include <format>\n\
@@ -57,7 +52,7 @@ data:
   path: include/gwen/dump.hpp
   pathExtension: hpp
   requiredBy: []
-  timestamp: '2026-07-14 19:46:59+09:00'
+  timestamp: '2026-07-14 20:03:13+09:00'
   title: DUMP
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

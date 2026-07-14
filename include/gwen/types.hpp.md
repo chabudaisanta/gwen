@@ -6,11 +6,7 @@ data:
   dependencies:
   - files: []
     type: Depends on
-  - files:
-    - filename: dump.hpp
-      icon: LIBRARY_NO_TESTS
-      path: include/gwen/dump.hpp
-      title: DUMP
+  - files: []
     type: Required by
   - files: []
     type: Verified with
@@ -50,9 +46,8 @@ data:
   isVerificationFile: false
   path: include/gwen/types.hpp
   pathExtension: hpp
-  requiredBy:
-  - include/gwen/dump.hpp
-  timestamp: '2026-07-14 19:46:59+09:00'
+  requiredBy: []
+  timestamp: '2026-07-14 20:03:13+09:00'
   title: types
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
