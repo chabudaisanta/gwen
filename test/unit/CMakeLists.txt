@@ -18,6 +18,7 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
 
     # ライブラリのリンク
     target_link_libraries(${TEST_NAME} PRIVATE gwen gtest_main)
+    target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
 
     # CTest への登録
     gtest_discover_tests(${TEST_NAME})
