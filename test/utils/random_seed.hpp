@@ -7,6 +7,11 @@
 
 namespace gwen::test {
 
+// gtest_discover_tests 実行時に testlib が「registerGen が呼ばれていない」とエラーを吐くのを防ぐため、
+// ヘッダインクルード時にグローバル変数として初期化し、終了時チェックを無効化します。
+inline int _testlib_disable_guard = []() { disableFinalizeGuard(); return 0; }();
+
+
 /**
  * @brief testlib.h の rnd にシードを設定し、使用されたシード値を標準エラー出力に記録します。
  * テスト失敗時にログからシード値を拾い、固定シードで再実行することでバグを再現可能にします。

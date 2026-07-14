@@ -7,7 +7,6 @@
 #include "gwen/ds/fenwick_tree.hpp"
 
 #include "testlib.h"
-int dummy_disable = []() { disableFinalizeGuard(); return 0; }();
 #include "utils/naive_array.hpp"
 #include "utils/random_seed.hpp"
 

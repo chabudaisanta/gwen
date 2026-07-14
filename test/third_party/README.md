@@ -10,20 +10,18 @@
 ```cpp
 #include <gtest/gtest.h>
 #include "testlib.h"
-
-// gtest_discover_tests がテスト一覧を取得する際に testlib がエラーを吐くのを防ぐため、
-// 以下のグローバル変数を定義して testlib の終了時チェックを無効化します。
-int dummy_disable_testlib = []() { disableFinalizeGuard(); return 0; }();
+#include "utils/random_seed.hpp"
 ```
 
 ## 初期化（Google Test内で使う場合）
 
-本来 `testlib.h` の乱数生成器 `rnd` は、`registerGen(argc, argv, 1);` で初期化されます。しかし、Google Test のテストケース内ではコマンドライン引数を受け取れないため、直接シード値を指定して初期化するのが簡単です。
-
 ```cpp
 TEST(MyAlgoTest, RandomTest) {
-    // 任意のシード値で乱数生成器を初期化
-    rnd.setSeed(12345);
+    // std::random_device 経由のランダムシードで初期化しつつ、コンソールにシードを出力する
+    test::setup_random_seed();
+    
+    // バグ等で特定のシードを再現したい場合は固定値を渡す
+    // test::setup_random_seed(12345);
     
     // ランダムテストの実行...
 }
