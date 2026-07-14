@@ -23,9 +23,13 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [Fenwick Tree (fenwick_tree.hpp)](include/gwen/ds/fenwick_tree.hpp)
 
 ### 開発用資料
+- [リポジトリ全体README](README.md)
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)
 - [CI/CDとドキュメントの仕組み (COMPETITIVE_VERIFIER.md)](doc/COMPETITIVE_VERIFIER.md)
 - [コーディング規則およびドキュメント作成規則(RULES.md)](doc/RULES.md)
+- [testlib.hの使用方法(test/third_party/README.md)](test/third_party/README.md)
+- [テスト用ユーティリティの使用方法(test/utils/README.md)](test/utils/README.md)
+- [スクリプト使用方法(scripts/README.md)](scripts/README.md)
 
 ---
 *GitHubリポジトリ: [chabudaisanta/gwen](https://github.com/chabudaisanta/gwen)*
