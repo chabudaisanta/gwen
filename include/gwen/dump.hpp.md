@@ -14,8 +14,32 @@ data:
   documentPath: doc/dump.md
   embedded:
   - code: "#pragma once\n\n#include <iostream>\n#include <concepts>\n#include <format>\n\
-      #include <string>\n#include <string_view>\n\n#include \"gwen/types.hpp\"\n\n\
-      namespace gwen {\n\nnamespace internal {\n\ntemplate<typename... Args>\nconstexpr\
+      #include <string>\n#include <string_view>\n\n#include <gwen/types.hpp>\n\nnamespace\
+      \ gwen {\n\nnamespace internal {\n\ntemplate<typename... Args>\nconstexpr bool\
+      \ is_empty_args(Args&&... args) {\n    return sizeof...(args) == 0;\n} \n\n\
+      template<typename T>\nconcept dumpable = requires(const T& t) {\n    { t.dump()\
+      \ } -> std::convertible_to<std::string>;\n};\n\ntemplate<typename T>\nconcept\
+      \ value_formattable = requires(const T& t) {\n    { t.val() } -> std::formattable<char>;\n\
+      };\n\nusize length_of_string_view(std::string_view sv) {\n    return sv.size();\n\
+      }\n\n} // namespace internal\n\ntemplate<typename... Args>\nvoid dump(Args&&...\
+      \ args) {\n    auto f = [](auto&& arg) {\n        using T = std::remove_cvref_t<decltype(arg)>;\n\
+      \        if constexpr (internal::dumpable<T>) {\n            return arg.dump();\n\
+      \        }\n        else if constexpr (internal::value_formattable<T>) {\n \
+      \           return std::format(\"{}\", arg.val());\n        }\n        else\
+      \ if constexpr (std::formattable<T,char>) {\n            return std::format(\"\
+      {}\", arg);\n        }\n        else {\n            return \"[unformattable\
+      \ token]\";\n        }\n    };\n    usize cnt = 0;\n    auto sz = sizeof...(args);\n\
+      \    ((std::cerr << f(args) << (++cnt < sz ? \", \" : \"\\n\")), ...);\n}\n\n\
+      #ifdef LOCAL\n#define DUMP(...) \\\n    do { \\\n        if constexpr (::gwen::internal::is_empty_args(__VA_ARGS__))\
+      \ {\\\n            std::cerr << \"empty dump called\\n\";\\\n        } else\
+      \ {\\\n            std::cerr << #__VA_ARGS__ << \": \";\\\n            if (15\
+      \ <= ::gwen::internal::length_of_string_view(#__VA_ARGS__)) std::cerr << \"\\\
+      n    \";\\\n            ::gwen::dump(__VA_ARGS__);\\\n        }\\\n    } while(0)\n\
+      #else\n#define DUMP(...) do{}while(0)\n#endif\n} // namespace gwen"
+    name: default
+  - code: "#line 2 \"include/gwen/dump.hpp\"\n\n#include <iostream>\n#include <concepts>\n\
+      #include <format>\n#include <string>\n#include <string_view>\n\n#include <gwen/types.hpp>\n\
+      \nnamespace gwen {\n\nnamespace internal {\n\ntemplate<typename... Args>\nconstexpr\
       \ bool is_empty_args(Args&&... args) {\n    return sizeof...(args) == 0;\n}\
       \ \n\ntemplate<typename T>\nconcept dumpable = requires(const T& t) {\n    {\
       \ t.dump() } -> std::convertible_to<std::string>;\n};\n\ntemplate<typename T>\n\
@@ -35,24 +59,14 @@ data:
       \ {\\\n            std::cerr << #__VA_ARGS__ << \": \";\\\n            if (15\
       \ <= ::gwen::internal::length_of_string_view(#__VA_ARGS__)) std::cerr << \"\\\
       n    \";\\\n            ::gwen::dump(__VA_ARGS__);\\\n        }\\\n    } while(0)\n\
-      #else\n#define DUMP(...) do{}while(0)\n#endif\n} // namespace gwen"
-    name: default
-  - code: "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/competitive_verifier/oj/resolver.py\"\
-      , line 290, in resolve\n    bundled_code = language.bundle(path, basedir=basedir)\n\
-      \                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/competitive_verifier/oj/languages/cplusplus.py\"\
-      , line 243, in bundle\n    bundler.update(path)\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/competitive_verifier/oj/languages/cplusplus_bundle.py\"\
-      , line 479, in update\n    self._resolve(pathlib.Path(included), included_from=path)\n\
-      \  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/competitive_verifier/oj/languages/cplusplus_bundle.py\"\
-      , line 286, in _resolve\n    raise BundleErrorAt(path, -1, \"no such header\"\
-      )\ncompetitive_verifier.oj.languages.cplusplus_bundle.BundleErrorAt: gwen/types.hpp:\
-      \ line -1: no such header\n"
-    name: bundle error
+      #else\n#define DUMP(...) do{}while(0)\n#endif\n} // namespace gwen\n"
+    name: bundled
   isFailed: false
   isVerificationFile: false
   path: include/gwen/dump.hpp
   pathExtension: hpp
   requiredBy: []
-  timestamp: '2026-07-14 20:58:01+09:00'
+  timestamp: '2026-07-14 21:05:49+09:00'
   title: DUMP
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
@@ -130,7 +144,7 @@ struct ModInt {
 ```cpp
 // clang-format off
 #define LOCAL // ローカル環境の想定
-#include "gwen/dump.hpp"
+#include <gwen/dump.hpp>
 // clang-format on
 
 #include <vector>
