@@ -1,5 +1,5 @@
 ---
-title: Dump
+title: DUMP
 documentation_of: //include/gwen/dump.hpp
 ---
 
