@@ -6,7 +6,7 @@
 #include <string>
 #include <string_view>
 
-#include <gwen/types.hpp>
+#include "gwen/types.hpp"
 
 namespace gwen {
 
