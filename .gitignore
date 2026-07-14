@@ -1,10 +1,5 @@
-command.txt
-TODO.md
-
 .build/
 .vscode/
-.doc/private/
-.temp/
 
 .env/
 .venv/
@@ -14,3 +9,5 @@ __pycache__/
 result.json
 verify_files.json
 test/test.log
+_jekyll/
+temp/
