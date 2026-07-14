@@ -4,6 +4,7 @@ TODO.md
 .build/
 .vscode/
 .doc/private/
+.temp/
 
 .env/
 .venv/
