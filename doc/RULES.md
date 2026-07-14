@@ -112,7 +112,9 @@ void fw.add(int p, T x)
 
 ```cpp
 // 1. テスト対象のヘッダーを最初にインクルードする
+// clang-format off
 #include "gwen/misc/timer.hpp"
+// clang-format on
 
 // 2. その他の標準ライブラリや外部ライブラリをインクルードする
 #include <gtest/gtest.h>

@@ -1,9 +1,11 @@
+// clang-format off
+#include "gwen/misc/timer.hpp"
+// clang-format on
+
 #include <gtest/gtest.h>
 
 #include <chrono>
 #include <thread>
-
-#include "gwen/misc/timer.hpp"
 
 namespace gwen {
 
@@ -42,4 +44,4 @@ TEST(TimerTest, DumpTest) {
     EXPECT_TRUE(d.find("limit: 2000ms") != std::string::npos);
 }
 
-} // namespace gwen
+}  // namespace gwen

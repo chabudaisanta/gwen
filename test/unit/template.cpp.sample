@@ -1,5 +1,7 @@
 // 1. テスト対象のヘッダーを最初にインクルードする
+// clang-format off
 // #include "gwen/path/to/header.hpp"
+// clang-format on
 
 // 2. その他の標準ライブラリや外部ライブラリをインクルードする
 #include <gtest/gtest.h>

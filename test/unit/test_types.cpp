@@ -1,8 +1,9 @@
+// clang-format off
+#include "gwen/types.hpp"
+// clang-format on
 #include <gtest/gtest.h>
 
 #include <type_traits>
-
-#include "gwen/types.hpp"
 
 using namespace gwen;
 using namespace gwen::literals;
@@ -34,5 +35,5 @@ TEST(TypesTest, Literals) {
     EXPECT_EQ(val_zu, 12345);
 }
 
-} // namespace literals
-} // namespace gwen
+}  // namespace literals
+}  // namespace gwen
