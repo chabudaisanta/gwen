@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <utility>
+#include <tuple>
 
 namespace gwen {
 
@@ -20,6 +22,9 @@ struct MyDumpable {
 struct MyFormattable {
     int val() const { return 42; }
 };
+
+// フォーマット条件を一切満たさない型
+struct MyUnformattable {};
 
 TEST(DumpTest, BasicTypes) {
     testing::internal::CaptureStderr();
@@ -61,13 +66,18 @@ TEST(DumpTest, ContainerOutput) {
     testing::internal::CaptureStderr();
     std::vector<int> v = {1, 2, 3};
     std::set<std::string> s = {"a", "b"};
-    DUMP(v, s);
+    std::pair<int, double> p = {1, 2.5};
+    std::tuple<int, std::string, double> t = {1, "test", 3.14};
+    
+    DUMP(v, s, p, t);
     std::string output = testing::internal::GetCapturedStderr();
     
     // C++23 の std::format の仕様に基づく出力形式
     EXPECT_TRUE(output.find("[1, 2, 3]") != std::string::npos);
     EXPECT_TRUE(output.find("\"a\"") != std::string::npos);
     EXPECT_TRUE(output.find("\"b\"") != std::string::npos);
+    EXPECT_TRUE(output.find("(1, 2.5)") != std::string::npos);
+    EXPECT_TRUE(output.find("(1, \"test\", 3.14)") != std::string::npos);
 }
 
 TEST(DumpTest, EmptyMacro) {
@@ -75,6 +85,14 @@ TEST(DumpTest, EmptyMacro) {
     DUMP();
     std::string output = testing::internal::GetCapturedStderr();
     EXPECT_EQ(output, "empty dump called\n");
+}
+
+TEST(DumpTest, UnformattableOutput) {
+    MyUnformattable u;
+    testing::internal::CaptureStderr();
+    DUMP(u);
+    std::string output = testing::internal::GetCapturedStderr();
+    EXPECT_TRUE(output.find("[unformattable token]") != std::string::npos);
 }
 
 } // namespace gwen
