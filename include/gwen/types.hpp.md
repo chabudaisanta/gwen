@@ -10,7 +10,7 @@ data:
     - filename: dump.hpp
       icon: LIBRARY_NO_TESTS
       path: include/gwen/dump.hpp
-      title: Dump
+      title: DUMP
     type: Required by
   - files: []
     type: Verified with
@@ -52,7 +52,7 @@ data:
   pathExtension: hpp
   requiredBy:
   - include/gwen/dump.hpp
-  timestamp: '2026-07-14 19:36:27+09:00'
+  timestamp: '2026-07-14 19:46:59+09:00'
   title: types
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

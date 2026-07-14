@@ -23,7 +23,7 @@ plugins:
 - jekyll-remote-theme
 sass:
   style: compressed
-theme: jekyll-theme-cayman
+theme: jekyll-theme-minimal
 title: gwen
 url: ''
 workflow_name: verify.yml
