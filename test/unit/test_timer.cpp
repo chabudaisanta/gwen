@@ -10,9 +10,9 @@
 namespace gwen {
 
 TEST(TimerTest, MethodCallTest) {
-    EXPECT_LE(timer.elapsed<Timer::ms>(), Timer::ms::max());
-    EXPECT_LE(timer.delta<Timer::ms>(), Timer::ms::max());
-    EXPECT_LE(timer.lap<Timer::ms>(), Timer::ms::max());
+    EXPECT_LE(timer.elapsed<Timer::ms>(), Timer::ms(20));
+    EXPECT_LE(timer.delta<Timer::ms>(), Timer::ms(20));
+    EXPECT_LE(timer.lap<Timer::ms>(), Timer::ms(20));
 
     timer.set_limit(Timer::s(1));
     EXPECT_FALSE(timer.expired());
