@@ -12,6 +12,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 
 ### 基本機能
 - [型エイリアス (types.hpp)](include/gwen/types.hpp)
+- [エラー出力マクロ(dump.hpp)](include/gwen/dump.hpp)
 - [時間計測・制限時間管理 (timer.hpp)](include/gwen/misc/timer.hpp)
 
 ### 開発用資料
