@@ -72,7 +72,7 @@ struct ModInt {
 ```cpp
 // clang-format off
 #define LOCAL // ローカル環境の想定
-#include <gwen/dump.hpp>
+#include "gwen/dump.hpp"
 // clang-format on
 
 #include <vector>
