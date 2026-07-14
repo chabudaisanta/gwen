@@ -26,20 +26,20 @@ jobs:
 
       - name: Resolve Verify Files
         env:
-          CPLUSINCLUDEPATH: ${{ github.workspace }}/include
+          CPLUS_INCLUDE_PATH: ${{ github.workspace }}/include
         run: |
           competitive-verifier oj-resolve --config config.toml --exclude test/ > verify_files.json
 
       - name: Verify
         env:
-          CPLUSINCLUDEPATH: ${{ github.workspace }}/include
+          CPLUS_INCLUDE_PATH: ${{ github.workspace }}/include
         run: |
           competitive-verifier verify --verify-json verify_files.json --output result.json
 
       - name: Generate Docs
         if: github.event_name == 'push'
         env:
-          CPLUSINCLUDEPATH: ${{ github.workspace }}/include
+          CPLUS_INCLUDE_PATH: ${{ github.workspace }}/include
         run: |
           competitive-verifier docs --verify-json verify_files.json result.json
 
