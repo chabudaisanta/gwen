@@ -6,6 +6,8 @@
 #include <gtest/gtest.h>
 
 #include <string>
+#include <vector>
+#include <set>
 
 namespace gwen {
 
@@ -53,6 +55,26 @@ TEST(DumpTest, MacroLongOutput) {
     std::string output = testing::internal::GetCapturedStderr();
     // 15文字以上の場合は改行が入るか確認
     EXPECT_EQ(output, "a, b, c, d, e, a, b, c, d, e: \n    1, 2, 3, 4, 5, 1, 2, 3, 4, 5\n");
+}
+
+TEST(DumpTest, ContainerOutput) {
+    testing::internal::CaptureStderr();
+    std::vector<int> v = {1, 2, 3};
+    std::set<std::string> s = {"a", "b"};
+    DUMP(v, s);
+    std::string output = testing::internal::GetCapturedStderr();
+    
+    // C++23 の std::format の仕様に基づく出力形式
+    EXPECT_TRUE(output.find("[1, 2, 3]") != std::string::npos);
+    EXPECT_TRUE(output.find("\"a\"") != std::string::npos);
+    EXPECT_TRUE(output.find("\"b\"") != std::string::npos);
+}
+
+TEST(DumpTest, EmptyMacro) {
+    testing::internal::CaptureStderr();
+    DUMP();
+    std::string output = testing::internal::GetCapturedStderr();
+    EXPECT_EQ(output, "empty dump called\n");
 }
 
 } // namespace gwen
