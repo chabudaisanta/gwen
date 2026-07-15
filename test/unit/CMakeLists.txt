@@ -6,8 +6,8 @@ include(GoogleTest)
 # test/unit/ ディレクトリ内の .cpp ファイルをすべて取得
 file(GLOB TEST_SOURCES "*.cpp")
 
-# template.cpp.sample などを誤って .cpp 拡張子で保存した場合などに備え、template という名前のファイルは除外する
-list(FILTER TEST_SOURCES EXCLUDE REGEX "template.*\\.cpp")
+# template.cpp.sample などを誤って .cpp 拡張子で保存した場合などに備え、template.cpp などは除外するが、template_test.cppは除外しない
+list(FILTER TEST_SOURCES EXCLUDE REGEX "template\\.cpp")
 
 foreach(TEST_SOURCE ${TEST_SOURCES})
     # ファイル名から拡張子を除いた部分（例: test_types.cpp -> test_types）を取得

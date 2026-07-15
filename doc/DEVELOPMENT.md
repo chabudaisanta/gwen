@@ -12,16 +12,9 @@
 - 作成後は、必ず **`.verify-helper/docs/index.md`** の目次リンクを追加し、GitHub Pages 上からアクセスできるようにしてください。
 
 ## 3. 単体テスト (Google Test) の作成と登録
-1. `test/unit/` ディレクトリ以下にテストファイルを作成します（例: `test/unit/test_io.cpp`）。
-   - **注意**: ヘッダーの自己完結性を保証するため、テストコードでは必ず **テスト対象の `.hpp` ファイルを先頭でインクルード** してください。
-2. `test/unit/CMakeLists.txt` を開き、作成したテストをビルド対象として追記します。
-   ```cmake
-   # 追記例
-   add_executable(test_io test_io.cpp)
-   target_link_libraries(test_io gwen gtest_main)
-   include(GoogleTest)
-   gtest_discover_tests(test_io)
-   ```
+1. `test/unit/` ディレクトリ以下にテストファイルを作成します（例: `test/unit/io_test.cpp`）。
+   - **注意**: ヘッダーの自己完結性を保証するため、テストコードでは必ず **テスト対象の `.hpp` ファイルを先頭でインクルード** し、自動フォーマッタによる並べ替えを防ぐために `// clang-format off` / `on` で囲んでください（詳細は `RULES.md` 参照）。
+2. 新しいテストファイルを追加した場合は、CMakeのファイル一覧を再取得するため、必ず **CMake の構成 (`cmake -S . -B .build`) を再実行** してください（`test/unit/CMakeLists.txt` の手動更新は不要です）。
 
 ## 4. 単体テストのビルドと実行
 ターミナルでプロジェクトのルートディレクトリ（`gwen/`）を開き、以下のコマンドでテストを実行します。

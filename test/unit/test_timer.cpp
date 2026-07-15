@@ -1,5 +1,5 @@
 // clang-format off
-#include "gwen/misc/timer.hpp"
+#include "gwen/utils/timer.hpp"
 // clang-format on
 
 #include <gtest/gtest.h>
