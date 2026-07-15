@@ -30,6 +30,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 ### 剰余演算 (Mod)
 - [モジュラ演算基盤 (mod.hpp)](doc/mod/mod.md)
 - [Dynamic ModInt (modint.hpp)](doc/mod/modint.md)
+- [ModInt61 (mod61.hpp)](doc/mod/mod61.md)
 
 ### 入出力 (IO)
 - [std::vector入出力 (vector.hpp)](doc/io/vector.md)

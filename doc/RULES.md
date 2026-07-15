@@ -130,6 +130,9 @@ void fw.add(int p, T x)
 
 - **ファイル名・ディレクトリ名**: 小文字のスネークケース（`snake_case`）を使用します。（例: `fenwick_tree.hpp`, `math`）
 - **型名 (クラス、構造体、エイリアス)**: パスカルケース（`PascalCase`）を使用します。（例: `FenwickTree`, `LazySegtree`, `ModInt`）
+- **`class` と `struct` の使い分け**:
+  - **`struct`**: 数学的な概念（例: `ModInt`, `Point`）や単純なデータの集まりなど、基本型のように値ベースの演算を主目的とする型に使用します。一部のメンバが `private` でカプセル化されている場合であっても、この基準に合致するものは `struct` とします。
+  - **`class`**: 複雑なデータ構造（例: `FenwickTree`, `SegmentTree`, `Graph`）や、内部状態の更新において厳密な不変条件の維持が必要なオブジェクト指向的なカプセル化を伴う型に使用します。
 - **コンセプト名**:
   - `snake_case` 形式を使用し、コンセプトを示す接頭辞/接尾辞（例: `is_` や `_concept`）は使いません。
   - **特性 (Capabilities)**: 単一要件（特定の関数呼び出しが可能など）の場合は、要件を説明する**形容詞**とします。要求する特性が関数のときは、`-ible` や `-able` を付けます。（例: `swappable`, `copy_constructible`）

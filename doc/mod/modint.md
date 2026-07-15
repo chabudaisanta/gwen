@@ -5,7 +5,7 @@ documentation_of: //include/gwen/mod/modint.hpp
 
 # Dynamic ModInt (実行時モジュラ演算)
 
-実行時に法 $M$ を設定できる ModInt クラス `DynamicModInt64` を提供します。内部で Montgomery 乗算を用いることで、演算が高速化されています。
+実行時に法 $M$ を設定できる ModInt 構造体 `DynamicModInt64` を提供します。内部で Montgomery 乗算を用いることで、演算が高速化されています。
 
 また、本ヘッダ内で `modint` および `ring` コンセプトも定義しています。
 
