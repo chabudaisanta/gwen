@@ -25,6 +25,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 
 ### 数学 (Math)
 - [素数・素因数分解 (prime.hpp)](doc/math/prime.md)
+- [順列・組合せ (combination.hpp)](doc/math/combination.md)
 - [整数演算 (integer.hpp)](doc/math/integer.md)
 - [基本数学 (basic.hpp)](doc/math/basic.md)
 
