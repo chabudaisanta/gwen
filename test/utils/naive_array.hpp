@@ -1,19 +1,18 @@
 #pragma once
 
-#include <vector>
 #include <algorithm>
 #include <numeric>
+#include <vector>
 
 namespace gwen::test {
 
 /**
  * @brief セグメント木やBITなどのデータ構造のテスト用の愚直解クラス
- * 
+ *
  * 計算量は意図的に O(N) となっており、ランダムテスト時に
  * 正確な答え（Expected）を計算する目的で使用します。
  */
-template <typename T>
-struct NaiveArray {
+template <typename T> struct NaiveArray {
     std::vector<T> data;
 
     NaiveArray() = default;
@@ -32,7 +31,7 @@ struct NaiveArray {
     void range_add(int l, int r, T x) {
         for (int i = l; i < r; ++i) data[i] += x;
     }
-    
+
     void range_update(int l, int r, T x) {
         for (int i = l; i < r; ++i) data[i] = x;
     }
@@ -57,12 +56,11 @@ struct NaiveArray {
     }
 
     // 任意の二項演算による区間取得
-    template <typename Op>
-    T fold(int l, int r, Op op, T e) const {
+    template <typename Op> T fold(int l, int r, Op op, T e) const {
         T res = e;
         for (int i = l; i < r; ++i) res = op(res, data[i]);
         return res;
     }
 };
 
-} // namespace gwen::test
+}  // namespace gwen::test

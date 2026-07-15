@@ -1,14 +1,17 @@
+// clang-format off
+#define LOCAL
+#include "gwen/ds/fenwick_tree.hpp"
+// clang-format on
 #include <gtest/gtest.h>
 
 #include <vector>
 
-#include "gwen/types.hpp"
 #include "gwen/alge/abel.hpp"
-#include "gwen/ds/fenwick_tree.hpp"
-
+#include "gwen/types.hpp"
 #include "testlib.h"
 #include "utils/naive_array.hpp"
 #include "utils/random_seed.hpp"
+#include "gwen/dump.hpp"
 
 using namespace gwen;
 
@@ -30,8 +33,8 @@ TEST(FenwickTreeTest, SumAbel) {
     EXPECT_EQ(bit.sum(5), 15);
 
     EXPECT_EQ(bit.sum(0, 5), 15);
-    EXPECT_EQ(bit.sum(1, 3), 5);  // 2 + 3
-    EXPECT_EQ(bit.sum(2, 5), 12); // 3 + 4 + 5
+    EXPECT_EQ(bit.sum(1, 3), 5);   // 2 + 3
+    EXPECT_EQ(bit.sum(2, 5), 12);  // 3 + 4 + 5
 }
 
 TEST(FenwickTreeTest, XorAbel) {
@@ -44,12 +47,12 @@ TEST(FenwickTreeTest, XorAbel) {
     EXPECT_EQ(bit.sum(4), 1 ^ 2 ^ 3 ^ 4);
     EXPECT_EQ(bit.sum(5), 1 ^ 2 ^ 3 ^ 4 ^ 5);
 
-    EXPECT_EQ(bit.sum(1, 4), 2 ^ 3 ^ 4); // 5
+    EXPECT_EQ(bit.sum(1, 4), 2 ^ 3 ^ 4);  // 5
 
-    bit.add(2, 7); // a[2] (which was 3) ^= 7 -> 4
+    bit.add(2, 7);  // a[2] (which was 3) ^= 7 -> 4
     // array is now {1, 2, 4, 4, 5}
     EXPECT_EQ(bit.sum(2, 3), 4);
-    EXPECT_EQ(bit.sum(1, 4), 2 ^ 4 ^ 4); // 2
+    EXPECT_EQ(bit.sum(1, 4), 2 ^ 4 ^ 4);  // 2
 }
 
 TEST(FenwickTreeTest, MaxRight) {
@@ -82,27 +85,49 @@ TEST(FenwickTreeTest, MaxRight) {
     EXPECT_EQ(bit.max_right(2, [](i32 x) { return x <= 2; }), 2);
 }
 
+TEST(FenwickTreeTest, ToVectorTest) {
+    std::vector<i64> A = {3, 1, 4, 1, 5};
+    FenwickTree<sum_abel<i64>> ft(A);
+    EXPECT_EQ(ft.to_vec(), A);
+
+    A[2] += 39; // [3, 1, 43, 1, 5]
+    ft.add(2, 39);
+    EXPECT_EQ(ft.to_vec(), A);
+}
+
 TEST(FenwickTreeTest, RandomTest) {
     test::setup_random_seed();
     i32 T = 100;
     const i32 MAX_N = 40, MIN_N = 5;
     const i32 MAX_Q = 40, MIN_Q = 0;
     const i64 MAX_A = 1001001001, MIN_A = -1001001001;
-    while(T--) {
+    while (T--) {
         i32 N = rnd.next(MIN_N, MAX_N);
         FenwickTree<sum_abel<i64>> ft(N);
         test::NaiveArray<i64> naive(N, 0);
 
         i32 Q = rnd.next(MIN_Q, MAX_Q);
-        while(Q--) {
+        while (Q--) {
             i32 p = rnd.next(N);
             i64 a = rnd.next(MIN_A, MAX_A);
             ft.add(p, a);
             naive.add(p, a);
         }
 
-        for(i32 l = 0; l < N; ++l) for(i32 r = l + 1; r <= N; ++r) {
-            ASSERT_EQ(ft.sum(l, r), naive.sum(l, r));
-        }
+        for (i32 l = 0; l < N; ++l)
+            for (i32 r = l + 1; r <= N; ++r) {
+                ASSERT_EQ(ft.sum(l, r), naive.sum(l, r));
+            }
+        ASSERT_EQ(ft.to_vec(), naive.data);
     }
+}
+
+TEST(FenwickTreeTest, DumpTest) {
+    FenwickTree<sum_abel<i64>> ft(std::vector<i64>{3, 1, 4, 1, 5});
+    testing::internal::CaptureStderr();
+    DUMP(ft);
+    std::string output = testing::internal::GetCapturedStderr();
+    EXPECT_TRUE(output.find("FenwickTree{") != std::string::npos);
+    EXPECT_TRUE(output.find("N = 5") != std::string::npos);
+    EXPECT_TRUE(output.find("data(restored) = [3, 1, 4, 1, 5]") != std::string::npos);
 }

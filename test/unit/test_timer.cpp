@@ -41,6 +41,7 @@ TEST(TimerTest, DumpTest) {
     std::cerr << "[DEBUG OUTPUT]\n" << d << std::endl;
 
     // limit が正しくフォーマットされているかテスト
+    EXPECT_TRUE(d.find("Timer{") != std::string::npos);
     EXPECT_TRUE(d.find("limit: 2000ms") != std::string::npos);
 }
 

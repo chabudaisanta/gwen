@@ -1,7 +1,8 @@
-#include <gtest/gtest.h>
-
+// clang-format off
 #include "gwen/alge/abel.hpp"
 #include "gwen/alge/monoid.hpp"
+// clang-format on
+#include <gtest/gtest.h>
 
 using namespace gwen;
 
@@ -34,7 +35,7 @@ TEST(AlgeTest, MonoidOpAndE) {
     auto minmax_e = minmax_monoid<int>::e();
     EXPECT_EQ(minmax_e.min, std::numeric_limits<int>::max());
     EXPECT_EQ(minmax_e.max, std::numeric_limits<int>::min());
-    
+
     auto minmax_res = minmax_monoid<int>::op({3, 10}, {5, 8});
     EXPECT_EQ(minmax_res.min, 3);
     EXPECT_EQ(minmax_res.max, 10);
@@ -44,12 +45,12 @@ TEST(AlgeTest, MonoidOpAndE) {
     EXPECT_EQ(gcd_monoid<int>::op(12, 18), 6);
 
     // affine (ax + b)
-    auto f = affine_monoid<int>::S{2, 3}; // 2x + 3
-    auto g = affine_monoid<int>::S{4, 5}; // 4x + 5
-    auto fg = affine_monoid<int>::op(f, g); // f(g(x)) = 2*(4x+5)+3 = 8x+13
+    auto f = affine_monoid<int>::S{2, 3};    // 2x + 3
+    auto g = affine_monoid<int>::S{4, 5};    // 4x + 5
+    auto fg = affine_monoid<int>::op(f, g);  // f(g(x)) = 2*(4x+5)+3 = 8x+13
     EXPECT_EQ(fg.a, 8);
     EXPECT_EQ(fg.b, 13);
-    
+
     auto affine_e = affine_monoid<int>::e();
     EXPECT_EQ(affine_e.a, 1);
     EXPECT_EQ(affine_e.b, 0);

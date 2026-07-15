@@ -65,7 +65,7 @@ template <class F>
 i32 max_right(F&& f) const
 ```
 $f(sum(0, r)) = \text{true}$ となる最大の $r$ を返します。
-- 制約: $f(e) = \text{true}$ であり、$r$ に対して単調性を持つこと
+- 制約: $f(sum(0, r))$ が $r$ に対して単調性を持つこと
 - 計算量: $O(\log N)$
 
 ```cpp
@@ -73,5 +73,5 @@ template <class F>
 i32 max_right(i32 l, F&& f) const
 ```
 $f(sum(l, r)) = \text{true}$ となる最大の $r$ を返します。
-- 制約: $f(e) = \text{true}$ であり、$r$ に対して単調性を持つこと
+- 制約: $f(sum(0, r))$ が $r$ に対して単調性を持つこと
 - 計算量: $O(\log N)$

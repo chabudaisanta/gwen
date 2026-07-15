@@ -1,21 +1,24 @@
 #pragma once
 
 #include <iostream>
-#include <random>
 #include <optional>
+#include <random>
+
 #include "testlib.h"
 
 namespace gwen::test {
 
 // gtest_discover_tests 実行時に testlib が「registerGen が呼ばれていない」とエラーを吐くのを防ぐため、
 // ヘッダインクルード時にグローバル変数として初期化し、終了時チェックを無効化します。
-inline int _testlib_disable_guard = []() { disableFinalizeGuard(); return 0; }();
-
+inline int _testlib_disable_guard = []() {
+    disableFinalizeGuard();
+    return 0;
+}();
 
 /**
  * @brief testlib.h の rnd にシードを設定し、使用されたシード値を標準エラー出力に記録します。
  * テスト失敗時にログからシード値を拾い、固定シードで再実行することでバグを再現可能にします。
- * 
+ *
  * @param fixed_seed デバッグ用にシードを固定したい場合は数値を渡します。
  *                   指定がない場合は std::random_device によりランダムなシードが生成されます。
  * @return 実際に設定されたシード値
@@ -24,7 +27,8 @@ inline uint32_t setup_random_seed(std::optional<uint32_t> fixed_seed = std::null
     uint32_t seed;
     if (fixed_seed.has_value()) {
         seed = fixed_seed.value();
-    } else {
+    }
+    else {
         seed = std::random_device{}();
     }
     // テスト失敗時にもコンソールログに確実に残るよう std::cerr に出力
@@ -33,4 +37,4 @@ inline uint32_t setup_random_seed(std::optional<uint32_t> fixed_seed = std::null
     return seed;
 }
 
-} // namespace gwen::test
+}  // namespace gwen::test

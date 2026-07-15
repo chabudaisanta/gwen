@@ -29,7 +29,8 @@ int main() {
             long long x;
             std::cin >> p >> x;
             bit.add(p, x);
-        } else {
+        }
+        else {
             int l, r;
             std::cin >> l >> r;
             std::cout << bit.sum(l, r) << "\n";
