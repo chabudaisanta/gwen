@@ -27,6 +27,10 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [整数演算 (integer.hpp)](doc/math/integer.md)
 - [基本数学 (basic.hpp)](doc/math/basic.md)
 
+### 剰余演算 (Mod)
+- [モジュラ演算基盤 (mod.hpp)](doc/mod/mod.md)
+- [Dynamic ModInt (modint.hpp)](doc/mod/modint.md)
+
 ### 入出力 (IO)
 - [std::vector入出力 (vector.hpp)](doc/io/vector.md)
 - [Yes/No 出力 (yesno.hpp)](doc/io/yesno.md)
@@ -38,6 +42,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 ### 代数構造 (Algebra)
 - [モノイド (monoid.hpp)](include/gwen/alge/monoid.hpp)
 - [アーベル群 (abel.hpp)](include/gwen/alge/abel.hpp)
+- [環 (ring.hpp)](doc/alge/ring.md)
 
 ### データ構造 (Data Structures)
 - [累積和 (prefix_sum.hpp)](doc/ds/prefix_sum.md)
