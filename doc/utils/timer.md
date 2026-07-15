@@ -1,6 +1,6 @@
 ---
 title: Timer
-documentation_of: //include/gwen/misc/timer.hpp
+documentation_of: //include/gwen/utils/timer.hpp
 ---
 
 # Timer
@@ -146,7 +146,7 @@ std::string timer.dump() const
 
 ```cpp
 #include <iostream>
-#include "gwen/misc/timer.hpp"
+#include "gwen/utils/timer.hpp"
 
 using namespace gwen;
 

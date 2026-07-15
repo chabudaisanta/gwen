@@ -10,16 +10,37 @@ AtCoder(https://atcoder.jp/users/chaby)
 
 ## ドキュメント一覧
 
-### 基本機能
+### 統合テンプレート
+- [統合テンプレート (template.hpp)](doc/template.md)
+
+### 基本機能 (Core)
+- [マクロ (macro.hpp)](doc/core/macro.md)
+- [定数 (constants.hpp)](doc/core/constants.md)
+- [グリッド探索 (grid.hpp)](doc/core/grid.md)
+- [ユーティリティ (utils.hpp)](doc/core/utils.md)
+- [ビット操作 (bit.hpp)](doc/core/bit.md)
 - [型エイリアス (types.hpp)](include/gwen/types.hpp)
 - [エラー出力マクロ(dump.hpp)](include/gwen/dump.hpp)
-- [時間計測・制限時間管理 (timer.hpp)](include/gwen/misc/timer.hpp)
+- [時間計測・制限時間管理 (timer.hpp)](doc/utils/timer.md)
+
+### 数学 (Math)
+- [整数演算 (integer.hpp)](doc/math/integer.md)
+- [基本数学 (basic.hpp)](doc/math/basic.md)
+
+### 入出力 (IO)
+- [std::vector入出力 (vector.hpp)](doc/io/vector.md)
+- [Yes/No 出力 (yesno.hpp)](doc/io/yesno.md)
+
+### アルゴリズム (Algo)
+- [インデックスソート (idxsort.hpp)](doc/algo/idxsort.md)
+- [ランレングス圧縮 (runlength.hpp)](doc/algo/runlength.md)
 
 ### 代数構造 (Algebra)
 - [モノイド (monoid.hpp)](include/gwen/alge/monoid.hpp)
 - [アーベル群 (abel.hpp)](include/gwen/alge/abel.hpp)
 
 ### データ構造 (Data Structures)
+- [累積和 (prefix_sum.hpp)](doc/ds/prefix_sum.md)
 - [Fenwick Tree (fenwick_tree.hpp)](include/gwen/ds/fenwick_tree.hpp)
 
 ### 開発用資料
