@@ -24,6 +24,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [時間計測・制限時間管理 (timer.hpp)](doc/utils/timer.md)
 
 ### 数学 (Math)
+- [素数・素因数分解 (prime.hpp)](doc/math/prime.md)
 - [整数演算 (integer.hpp)](doc/math/integer.md)
 - [基本数学 (basic.hpp)](doc/math/basic.md)
 
