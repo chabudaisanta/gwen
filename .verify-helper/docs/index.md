@@ -23,7 +23,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [Fenwick Tree (fenwick_tree.hpp)](include/gwen/ds/fenwick_tree.hpp)
 
 ### 開発用資料
-- [リポジトリ全体README](README.md)
+- [リポジトリ全体README(README.md)](README.md)
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)
 - [CI/CDとドキュメントの仕組み (COMPETITIVE_VERIFIER.md)](doc/COMPETITIVE_VERIFIER.md)
 - [コーディング規則およびドキュメント作成規則(RULES.md)](doc/RULES.md)

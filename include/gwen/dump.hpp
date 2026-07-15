@@ -5,12 +5,18 @@
 #include <format>
 #include <string>
 #include <string_view>
+#include <source_location>
 
 #include "gwen/types.hpp"
 
 namespace gwen {
 
 namespace internal {
+
+constexpr std::string_view basename(std::string_view path) {
+    auto pos = path.find_last_of("/\\");
+    return pos == std::string_view::npos ? path : path.substr(pos + 1);
+}
 
 template<typename... Args>
 constexpr bool is_empty_args(Args&&... args) {
@@ -26,10 +32,6 @@ template<typename T>
 concept value_formattable = requires(const T& t) {
     { t.val() } -> std::formattable<char>;
 };
-
-usize length_of_string_view(std::string_view sv) {
-    return sv.size();
-}
 
 } // namespace internal
 
@@ -61,7 +63,7 @@ void dump(Args&&... args) {
     };
     usize cnt = 0;
     auto sz = sizeof...(args);
-    ((std::cerr << f(args) << (++cnt < sz ? ", " : "\n")), ...);
+    ((std::cerr << f(args) << (++cnt < sz ? ",\n" : "\n")), ...);
 }
 
 /**
@@ -74,11 +76,13 @@ void dump(Args&&... args) {
 #ifdef LOCAL
 #define DUMP(...) \
     do { \
-        if constexpr (::gwen::internal::is_empty_args(__VA_ARGS__)) {\
-            std::cerr << "empty dump called\n";\
+        auto loc = std::source_location::current(); \
+        std::cerr << "\033[1;36m[gwen::DUMP @ " << ::gwen::internal::basename(loc.file_name()) << ':' << loc.line() << "]\033[0m\n"; \
+        constexpr std::string_view __vars_sv = #__VA_ARGS__; \
+        if constexpr (__vars_sv.empty() || __vars_sv.find_first_not_of(" \t\r\n") == std::string_view::npos) {\
+            std::cerr << "\033[1;31m[empty]\033[0m\n";\
         } else {\
-            std::cerr << #__VA_ARGS__ << ": ";\
-            if (15 <= ::gwen::internal::length_of_string_view(#__VA_ARGS__)) std::cerr << "\n    ";\
+            std::cerr << "\033[1;33m[vars]\033[0m\n" << #__VA_ARGS__ << "\n\033[1;32m[dump]\033[0m\n";\
             ::gwen::dump(__VA_ARGS__);\
         }\
     } while(0)

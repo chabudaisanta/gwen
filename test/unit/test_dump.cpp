@@ -30,7 +30,7 @@ TEST(DumpTest, BasicTypes) {
     testing::internal::CaptureStderr();
     dump(1, 2.5, "hello");
     std::string output = testing::internal::GetCapturedStderr();
-    EXPECT_EQ(output, "1, 2.5, hello\n");
+    EXPECT_EQ(output, "1,\n2.5,\nhello\n");
 }
 
 TEST(DumpTest, CustomTypes) {
@@ -40,7 +40,7 @@ TEST(DumpTest, CustomTypes) {
     testing::internal::CaptureStderr();
     dump(d, f);
     std::string output = testing::internal::GetCapturedStderr();
-    EXPECT_EQ(output, "dumpable_value, 42\n");
+    EXPECT_EQ(output, "dumpable_value,\n42\n");
 }
 
 TEST(DumpTest, MacroOutput) {
@@ -49,17 +49,10 @@ TEST(DumpTest, MacroOutput) {
     std::string str = "test";
     DUMP(x, str);
     std::string output = testing::internal::GetCapturedStderr();
-    EXPECT_EQ(output, "x, str: 10, test\n");
-}
-
-TEST(DumpTest, MacroLongOutput) {
-    testing::internal::CaptureStderr();
-    int a = 1, b = 2, c = 3, d = 4, e = 5;
-    // 変数名リストが15文字以上になるようにする
-    DUMP(a, b, c, d, e, a, b, c, d, e);
-    std::string output = testing::internal::GetCapturedStderr();
-    // 15文字以上の場合は改行が入るか確認
-    EXPECT_EQ(output, "a, b, c, d, e, a, b, c, d, e: \n    1, 2, 3, 4, 5, 1, 2, 3, 4, 5\n");
+    EXPECT_TRUE(output.find("[vars]") != std::string::npos);
+    EXPECT_TRUE(output.find("x, str") != std::string::npos);
+    EXPECT_TRUE(output.find("[dump]") != std::string::npos);
+    EXPECT_TRUE(output.find("10,\ntest") != std::string::npos);
 }
 
 TEST(DumpTest, ContainerOutput) {
@@ -84,7 +77,7 @@ TEST(DumpTest, EmptyMacro) {
     testing::internal::CaptureStderr();
     DUMP();
     std::string output = testing::internal::GetCapturedStderr();
-    EXPECT_EQ(output, "empty dump called\n");
+    EXPECT_TRUE(output.find("[empty]") != std::string::npos);
 }
 
 TEST(DumpTest, UnformattableOutput) {
