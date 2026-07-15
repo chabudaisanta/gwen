@@ -5,11 +5,11 @@
 
 #include <gtest/gtest.h>
 
-#include <string>
-#include <vector>
 #include <set>
-#include <utility>
+#include <string>
 #include <tuple>
+#include <utility>
+#include <vector>
 
 namespace gwen {
 
@@ -61,10 +61,10 @@ TEST(DumpTest, ContainerOutput) {
     std::set<std::string> s = {"a", "b"};
     std::pair<int, double> p = {1, 2.5};
     std::tuple<int, std::string, double> t = {1, "test", 3.14};
-    
+
     DUMP(v, s, p, t);
     std::string output = testing::internal::GetCapturedStderr();
-    
+
     // C++23 の std::format の仕様に基づく出力形式
     EXPECT_TRUE(output.find("[1, 2, 3]") != std::string::npos);
     EXPECT_TRUE(output.find("\"a\"") != std::string::npos);
@@ -88,4 +88,4 @@ TEST(DumpTest, UnformattableOutput) {
     EXPECT_TRUE(output.find("[unformattable token]") != std::string::npos);
 }
 
-} // namespace gwen
+}  // namespace gwen
