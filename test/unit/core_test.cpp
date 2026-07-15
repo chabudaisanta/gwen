@@ -6,7 +6,14 @@
 #include "gwen/core/bit.hpp"
 // clang-format on
 
+#include <set>
+#include <vector>
+#include <utility>
+#include <cmath>
+
 #include <gtest/gtest.h>
+
+#include "gwen/types.hpp"
 
 using namespace gwen;
 
@@ -34,9 +41,16 @@ TEST(CoreTest, Utils) {
 }
 
 TEST(CoreTest, Grid) {
-    auto [nh, nw] = mv_to(5, 5, 0);
-    EXPECT_EQ(nh, 4);
-    EXPECT_EQ(nw, 5);
+    std::vector<std::pair<i32,i32>> HW = {{3, 1}, {4, 1}, {5, 9}, {2, 6}, {5, 3}};
+    for(auto [h, w] : HW) {
+        std::set<std::pair<i32,i32>> se;
+        for(i32 i = 0; i < 9; ++i) {
+            auto [nh, nw] = mv_to(h, w, i);
+            ASSERT_LE(std::abs(nh - h) + std::abs(nw - w), 2);
+            se.emplace(nh, nw);
+        }
+        ASSERT_EQ(se.size(), 9);
+    }
 }
 
 TEST(CoreTest, Bit) {

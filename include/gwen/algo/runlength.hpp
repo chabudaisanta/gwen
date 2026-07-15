@@ -6,6 +6,13 @@
 
 namespace gwen {
 
+/**
+ * @brief ランレングス圧縮（連長圧縮）を行う
+ * @tparam Iterator イテレータの型
+ * @param begin 圧縮対象の開始イテレータ
+ * @param end 圧縮対象の終了イテレータ
+ * @return std::vector<std::pair<ValueType, i32>> 要素とその連続回数のペアの配列
+ */
 template <typename Iterator>
 auto runlength(Iterator begin, Iterator end) {
     using ValueType = typename std::iterator_traits<Iterator>::value_type;
