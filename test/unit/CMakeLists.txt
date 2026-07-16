@@ -4,7 +4,7 @@
 include(GoogleTest)
 
 # test/unit/ ディレクトリ内の .cpp ファイルをすべて取得
-file(GLOB TEST_SOURCES "*.cpp")
+file(GLOB_RECURSE TEST_SOURCES "*.cpp")
 
 # template.cpp.sample などを誤って .cpp 拡張子で保存した場合などに備え、template.cpp などは除外するが、template_test.cppは除外しない
 list(FILTER TEST_SOURCES EXCLUDE REGEX "template\\.cpp")
