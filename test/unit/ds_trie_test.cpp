@@ -1,4 +1,4 @@
-#include "gwen/container/trie.hpp"
+#include "gwen/ds/trie.hpp"
 #include <gtest/gtest.h>
 #include <string>
 

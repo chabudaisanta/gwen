@@ -4,7 +4,7 @@
 
 ## 1. ヘッダーファイルの実装
 - `include/gwen/` 以下の適切なディレクトリに `.hpp` ファイルを作成します（例: `include/gwen/io.hpp`）。
-- C++23 の仕様に準拠し、汎用的な制約が必要な場合は `include/gwen/concept/` に `concept` の定義を追加・利用します。
+- C++23 の仕様に準拠し、汎用的な制約が必要な場合は `include/gwen/alge/` や `include/gwen/graph/` 等の適切なディレクトリに `concept` の定義を追加・利用します。
 
 ## 2. ドキュメントの作成
 - `doc/` ディレクトリ以下に、モジュールの仕様や使い方をまとめた Markdown ファイルを作成します（例: `doc/io.md`）。

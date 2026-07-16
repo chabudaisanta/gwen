@@ -66,7 +66,7 @@ struct MonoidWrapper {
 ```markdown
 ---
 title: モジュール名 (例: Fenwick Tree)
-documentation_of: //include/gwen/algebra/fenwick_tree.hpp
+documentation_of: //include/gwen/ds/fenwick_tree.hpp
 ---
 
 # Fenwick Tree
@@ -148,7 +148,7 @@ void fw.add(int p, T x)
     - 主に別コンセプトの定義や `requires` 節で利用されるときは、前置詞は付けません。（例: `mergeable`）
 - **関数名・メソッド名**: 小文字のスネークケースを使用します。（例: `add`, `get_val`, `lower_bound`）
 - **変数名・メンバ変数名**: 小文字のスネークケースを使用します。（例: `edge_count`, `node_id`）
-- **定数名 (const, constexpr)**: 大文字のスネークケースを使用します。（例: `MOD`, `INF`）
+- **定数名 (const, constexpr)**: 大文字のスネークケースを使用します。（例: `MOD`, `INF`）。ただし、`mod998` や `iINF` などの競プロの慣習に基づく小文字混在の定数は例外として許容します。
 - 略語を避け、意図が明確に伝わる名前を使用します。（例: `calc` より `calculate`）
 - ただし、競技プログラミングの慣習として広く認知されている略称（例: `dfs`, `bfs`, `lca`, `gcd`）は許容されます。
 

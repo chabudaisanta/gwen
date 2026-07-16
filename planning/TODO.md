@@ -1,6 +1,7 @@
 # TODO (rebuild-v2)
 
-gwen ライブラリの再構築・移行タスクの管理ファイル。
+gwen ライブラリの再構築・移行タスクの全体管理ファイル。
+※ **AIエージェントへの指示**: 新規モジュールの実装や移植タスク（`port_module`）が完了した際は、必ずこのファイルの該当タスクに完了チェック (`[x]`) を入れてください。
 
 ## フェーズ 1: 骨組み（Skeleton）の構築
 - [x] 新ブランチ `rebuild-v2` の作成
@@ -43,8 +44,8 @@ gwen ライブラリの再構築・移行タスクの管理ファイル。
 ## フェーズ 4: 新規モジュールの移植と未完了タスクの消化 (現在進行中)
 - [x] Phase 4.1: 高頻度ラッパー & モノイド (`rolling_hash_monoid.hpp`, `range_add_update_sum.hpp`)
 - [x] Phase 4.2: データ構造 & グラフアルゴリズム (済: `bit_vector.hpp`, `wavelet_matrix.hpp`, `weighted_dsu.hpp`, `forest.hpp`, `tree_lca.hpp`)
-- [ ] Phase 4.3: 数学 & アルゴリズム (`matrix.hpp`, `lis.hpp`)
-- [ ] Phase 4.4: クオリティ改善リライト (`xor_basis.hpp`, `zobrist.hpp` など)
+- [x] Phase 4.3: 数学 & アルゴリズム (`matrix.hpp`, `lis.hpp`)
+- [x] Phase 4.4: クオリティ改善リライト (`xor_basis.hpp`, `zobrist.hpp` など)
 - [ ] Graph, BBST, Math, Hash 等の `competitive-verifier` 向け Verify 追加実装
 
 ※ 詳細な移植対象は `planning/transplant_from_master.md` を参照。

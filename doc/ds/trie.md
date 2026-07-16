@@ -1,6 +1,6 @@
 ---
 title: Trie木 (Prefix Tree)
-documentation_of: //include/gwen/container/trie.hpp
+documentation_of: //include/gwen/ds/trie.hpp
 ---
 
 ## 概要
