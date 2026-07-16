@@ -61,6 +61,8 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [グラフ基盤 (graph.hpp)](doc/graph/graph.md)
 - [CSR形式 (csr.hpp)](doc/graph/csr.md)
 - [エッジ (edge.hpp)](doc/graph/edge.md)
+- [単一始点最短経路 (dijkstra.hpp)](doc/graph/dijkstra.md)
+- [HL分解 (hld.hpp)](doc/graph/hld.md)
 
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)
