@@ -12,7 +12,7 @@ namespace atcoder {
 // Zvi Galil and Giuseppe F. Italiano,
 // Data structures and algorithms for disjoint set union problems
 struct dsu {
-  public:
+public:
     dsu() : _n(0) {}
     explicit dsu(int n) : _n(n), parent_or_size(n, -1) {}
 
@@ -56,14 +56,12 @@ struct dsu {
         for (int i = 0; i < _n; i++) {
             result[leader_buf[i]].push_back(i);
         }
-        result.erase(
-            std::remove_if(result.begin(), result.end(),
-                           [&](const std::vector<int>& v) { return v.empty(); }),
-            result.end());
+        result.erase(std::remove_if(result.begin(), result.end(), [&](const std::vector<int>& v) { return v.empty(); }),
+                     result.end());
         return result;
     }
 
-  private:
+private:
     int _n;
     // root node: -1 * component size
     // otherwise: parent

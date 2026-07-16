@@ -3,8 +3,8 @@
 #include <cassert>
 
 #include "gwen/alge/monoid.hpp"
-#include "gwen/utils/node_pool.hpp"
 #include "gwen/types.hpp"
+#include "gwen/utils/node_pool.hpp"
 
 namespace gwen {
 
@@ -12,8 +12,7 @@ namespace gwen {
  * @brief 動的セグメント木
  * @details 座標圧縮なしで広大な区間を扱えるセグメント木です。ポインタ（インデックス）ベースでノードを管理します。
  */
-template <monoid M>
-class DynamicSegmentTree {
+template <monoid M> class DynamicSegmentTree {
 public:
     using S = typename M::S;
     using tree = i32;
@@ -48,7 +47,8 @@ private:
         if (p < m) {
             tree cl = set_(d[t].left, l, m, p, x);
             d[t].left = cl;
-        } else {
+        }
+        else {
             tree cr = set_(d[t].right, m, r, p, x);
             d[t].right = cr;
         }
@@ -85,9 +85,7 @@ public:
         return prod_(root, 0, n, l, r);
     }
 
-    S all_prod() const {
-        return root == NIL ? M::e() : d[root].val;
-    }
+    S all_prod() const { return root == NIL ? M::e() : d[root].val; }
 };
 
-} // namespace gwen
+}  // namespace gwen

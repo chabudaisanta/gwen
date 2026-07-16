@@ -3,6 +3,7 @@
 // clang-format on
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace gwen;

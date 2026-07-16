@@ -16,10 +16,10 @@ namespace gwen {
  * @tparam T 要素の型（整数型）
  */
 template <std::integral T> struct WaveletMatrix {
-    i32 n = 0;                    ///< 配列の長さ
-    i32 lg = 0;                   ///< ビット幅（0 から lg-1 がレベル）
-    std::vector<T> a;             ///< 元の配列
-    std::vector<BitVector> bv;    ///< 各レベルのビットベクトル
+    i32 n = 0;                  ///< 配列の長さ
+    i32 lg = 0;                 ///< ビット幅（0 から lg-1 がレベル）
+    std::vector<T> a;           ///< 元の配列
+    std::vector<BitVector> bv;  ///< 各レベルのビットベクトル
 
     /**
      * @brief デフォルトコンストラクタ
@@ -96,7 +96,8 @@ template <std::integral T> struct WaveletMatrix {
             if (k < r0 - l0) {
                 l = l0;
                 r = r0;
-            } else {
+            }
+            else {
                 k -= r0 - l0;
                 res |= T(1) << h;
                 l = l + zeros - l0;
@@ -133,7 +134,8 @@ template <std::integral T> struct WaveletMatrix {
                 ret += r0 - l0;
                 l = l + zeros - l0;
                 r = r + zeros - r0;
-            } else {
+            }
+            else {
                 l = l0;
                 r = r0;
             }

@@ -33,7 +33,8 @@ int main() {
             int l, r, b, c;
             std::cin >> l >> r >> b >> c;
             seg.affine(l, r, b, c);
-        } else {
+        }
+        else {
             int l, r;
             std::cin >> l >> r;
             std::cout << seg.prod(l, r).val() << "\n";

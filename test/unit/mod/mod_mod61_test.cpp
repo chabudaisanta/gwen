@@ -47,7 +47,7 @@ TEST_F(ModInt61Test, AdditionAndSubtraction) {
     ModInt61 c = a;
     c += 10;
     EXPECT_EQ(c.val(), 5);
-    
+
     EXPECT_EQ((ModInt61(5) + 10).val(), 15);
     EXPECT_EQ((5 + ModInt61(10)).val(), 15);
 }
@@ -68,7 +68,7 @@ TEST_F(ModInt61Test, MultiplicationAndDivision) {
 
 TEST_F(ModInt61Test, Pow) {
     ModInt61 a(2);
-    EXPECT_EQ(a.pow(61).val(), 1); // 2^61 = 1 mod (2^61 - 1)
+    EXPECT_EQ(a.pow(61).val(), 1);  // 2^61 = 1 mod (2^61 - 1)
     EXPECT_EQ(a.pow(0).val(), 1);
     EXPECT_EQ(a.pow(10).val(), 1024);
 }

@@ -40,7 +40,7 @@ TEST(GraphForestTest, BasicOperations) {
     // Kth ancestor check
     EXPECT_EQ(forest.get_kth_ancestor(3, 1), 2);
     EXPECT_EQ(forest.get_kth_ancestor(3, 2), 0);
-    EXPECT_EQ(forest.get_kth_ancestor(3, 3), -1); // out of bounds
+    EXPECT_EQ(forest.get_kth_ancestor(3, 3), -1);  // out of bounds
 
     // LCA check
     EXPECT_EQ(forest.get_lca(1, 2), 0);
@@ -50,8 +50,8 @@ TEST(GraphForestTest, BasicOperations) {
     EXPECT_EQ(forest.get_lca(1, 5), -1);
 
     // Dist check
-    EXPECT_EQ(forest.get_dist(1, 3), 3); // 1 -> 0 -> 2 -> 3 (1+2=3 edges)
+    EXPECT_EQ(forest.get_dist(1, 3), 3);  // 1 -> 0 -> 2 -> 3 (1+2=3 edges)
     EXPECT_EQ(forest.get_dist(0, 3), 2);
 }
 
-} // namespace gwen
+}  // namespace gwen

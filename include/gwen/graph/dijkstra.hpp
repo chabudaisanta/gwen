@@ -26,15 +26,14 @@ concept dijkstra_weight = std::totally_ordered<W> && std::default_initializable<
  * @brief Dijkstra法を適用可能なグラフのコンセプト
  */
 template <typename G>
-concept dijkstra_graph = graph<G> && dijkstra_weight<typename G::weight_type> &&
-                         std::default_initializable<typename G::edge_type>;
+concept dijkstra_graph =
+    graph<G> && dijkstra_weight<typename G::weight_type> && std::default_initializable<typename G::edge_type>;
 
 /**
  * @brief 単一始点最短経路を求める Dijkstra 法の実装
  * @tparam G 対象とするグラフの型
  */
-template <dijkstra_graph G>
-class Dijkstra {
+template <dijkstra_graph G> class Dijkstra {
 public:
     using weight_type = typename G::weight_type;
     using edge_type = typename G::edge_type;
@@ -98,4 +97,4 @@ public:
     const std::vector<edge_type>& get_spt() const { return spt_; }
 };
 
-} // namespace gwen
+}  // namespace gwen

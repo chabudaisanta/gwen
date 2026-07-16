@@ -75,8 +75,7 @@ public:
     /**
      * @brief 符号なし整数からのコンストラクタ
      */
-    template <std::unsigned_integral T>
-    DynamicModInt64(T x) {
+    template <std::unsigned_integral T> DynamicModInt64(T x) {
         static_assert(sizeof(T) <= sizeof(u64), "T must be 64-bit or smaller");
         tr = reduce_mul(static_cast<u64>(x), r2);
     }
@@ -84,12 +83,12 @@ public:
     /**
      * @brief 符号付き整数からのコンストラクタ
      */
-    template <std::signed_integral T>
-    DynamicModInt64(T x) : tr(0) {
+    template <std::signed_integral T> DynamicModInt64(T x) : tr(0) {
         static_assert(sizeof(T) <= sizeof(u64), "T must be 64-bit or smaller");
         if (x < 0) {
             sub(m64{static_cast<u64>(-static_cast<i64>(x))});
-        } else {
+        }
+        else {
             tr = reduce_mul(static_cast<u64>(x), r2);
         }
     }
@@ -145,8 +144,7 @@ public:
     /**
      * @brief 累乗を計算する
      */
-    template <std::integral T>
-    m64 pow(T x) const {
+    template <std::integral T> m64 pow(T x) const {
         if constexpr (std::is_signed_v<T>) {
             assert(x >= 0);
         }
@@ -161,4 +159,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

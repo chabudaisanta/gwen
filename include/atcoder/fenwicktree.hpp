@@ -12,7 +12,7 @@ namespace atcoder {
 template <class T> struct fenwick_tree {
     using U = internal::to_unsigned_t<T>;
 
-  public:
+public:
     fenwick_tree() : _n(0) {}
     explicit fenwick_tree(int n) : _n(n), data(n) {}
 
@@ -30,7 +30,7 @@ template <class T> struct fenwick_tree {
         return sum(r) - sum(l);
     }
 
-  private:
+private:
     int _n;
     std::vector<U> data;
 

@@ -13,8 +13,7 @@ namespace gwen {
  * @brief Heavy-Light Decomposition (重軽分解) を行うクラス
  * @tparam G 対象とするグラフの型 (graph コンセプトを満たす必要がある)
  */
-template <graph G>
-class Hld {
+template <graph G> class Hld {
 public:
     i32 n;
     i32 root;
@@ -172,4 +171,4 @@ public:
     i32 vertex(i32 i) const { return order[i]; }
 };
 
-} // namespace gwen
+}  // namespace gwen

@@ -13,10 +13,8 @@ namespace atcoder {
 #if __cplusplus >= 201703L
 
 template <class S, auto op, auto e> struct segtree {
-    static_assert(std::is_convertible_v<decltype(op), std::function<S(S, S)>>,
-                  "op must work as S(S, S)");
-    static_assert(std::is_convertible_v<decltype(e), std::function<S()>>,
-                  "e must work as S()");
+    static_assert(std::is_convertible_v<decltype(op), std::function<S(S, S)>>, "op must work as S(S, S)");
+    static_assert(std::is_convertible_v<decltype(e), std::function<S()>>, "e must work as S()");
 
 #else
 
@@ -24,7 +22,7 @@ template <class S, S (*op)(S, S), S (*e)()> struct segtree {
 
 #endif
 
-  public:
+public:
     segtree() : segtree(0) {}
     explicit segtree(int n) : segtree(std::vector<S>(n, e())) {}
     explicit segtree(const std::vector<S>& v) : _n(int(v.size())) {
@@ -120,7 +118,7 @@ template <class S, S (*op)(S, S), S (*e)()> struct segtree {
         return 0;
     }
 
-  private:
+private:
     int _n, size, log;
     std::vector<S> d;
 

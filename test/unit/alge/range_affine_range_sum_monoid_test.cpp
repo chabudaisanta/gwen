@@ -17,8 +17,8 @@ using F = Monoid::F;
 TEST(RangeAffineRangeSumMonoidTest, BasicOperations) {
     mint::set_mod(998244353);
 
-    S a = Monoid::unit(3); // {3, 1}
-    S b = Monoid::unit(5); // {5, 1}
+    S a = Monoid::unit(3);  // {3, 1}
+    S b = Monoid::unit(5);  // {5, 1}
 
     // op
     S c = Monoid::op(a, b);
@@ -29,7 +29,7 @@ TEST(RangeAffineRangeSumMonoidTest, BasicOperations) {
     S e = Monoid::e();
     EXPECT_EQ(e.val.val(), 0);
     EXPECT_EQ(e.len.val(), 0);
-    
+
     S c_e = Monoid::op(c, e);
     EXPECT_EQ(c_e.val.val(), c.val.val());
     EXPECT_EQ(c_e.len.val(), c.len.val());

@@ -14,8 +14,7 @@ namespace gwen {
  * @tparam Abel 加群 (gwen::abel コンセプトを満たす型)
  * @details 各連結成分における要素間の相対的な重みの差分を管理します。
  */
-template <abel Abel>
-class WeightedDsu {
+template <abel Abel> class WeightedDsu {
 public:
     using S = typename Abel::S;
 
@@ -105,7 +104,7 @@ public:
         }
         parent_or_size_[a] += parent_or_size_[b];
         parent_or_size_[b] = static_cast<i32>(a);
-        pot_[b] = Abel::inv(w); // P(b) - P(a) = -w = inv(w)
+        pot_[b] = Abel::inv(w);  // P(b) - P(a) = -w = inv(w)
         return a;
     }
 
@@ -137,11 +136,10 @@ public:
         for (i32 i = 0; i < n_; ++i) {
             result[leader_buf[i]].push_back(i);
         }
-        result.erase(std::remove_if(result.begin(), result.end(),
-                                    [](const std::vector<i32>& v) { return v.empty(); }),
+        result.erase(std::remove_if(result.begin(), result.end(), [](const std::vector<i32>& v) { return v.empty(); }),
                      result.end());
         return result;
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

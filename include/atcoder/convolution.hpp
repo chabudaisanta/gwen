@@ -14,9 +14,7 @@ namespace atcoder {
 
 namespace internal {
 
-template <class mint,
-          int g = internal::primitive_root<mint::mod()>,
-          internal::is_static_modint_t<mint>* = nullptr>
+template <class mint, int g = internal::primitive_root<mint::mod()>, internal::is_static_modint_t<mint>* = nullptr>
 struct fft_info {
     static constexpr int rank2 = countr_zero_constexpr(mint::mod() - 1);
     std::array<mint, rank2 + 1> root;   // root[i]^(2^i) == 1
@@ -57,8 +55,7 @@ struct fft_info {
     }
 };
 
-template <class mint, internal::is_static_modint_t<mint>* = nullptr>
-void butterfly(std::vector<mint>& a) {
+template <class mint, internal::is_static_modint_t<mint>* = nullptr> void butterfly(std::vector<mint>& a) {
     int n = int(a.size());
     int h = internal::countr_zero((unsigned int)n);
 
@@ -77,11 +74,11 @@ void butterfly(std::vector<mint>& a) {
                     a[i + offset] = l + r;
                     a[i + offset + p] = l - r;
                 }
-                if (s + 1 != (1 << len))
-                    rot *= info.rate2[countr_zero(~(unsigned int)(s))];
+                if (s + 1 != (1 << len)) rot *= info.rate2[countr_zero(~(unsigned int)(s))];
             }
             len++;
-        } else {
+        }
+        else {
             // 4-base
             int p = 1 << (h - len - 2);
             mint rot = 1, imag = info.root[2];
@@ -95,24 +92,21 @@ void butterfly(std::vector<mint>& a) {
                     auto a1 = 1ULL * a[i + offset + p].val() * rot.val();
                     auto a2 = 1ULL * a[i + offset + 2 * p].val() * rot2.val();
                     auto a3 = 1ULL * a[i + offset + 3 * p].val() * rot3.val();
-                    auto a1na3imag =
-                        1ULL * mint(a1 + mod2 - a3).val() * imag.val();
+                    auto a1na3imag = 1ULL * mint(a1 + mod2 - a3).val() * imag.val();
                     auto na2 = mod2 - a2;
                     a[i + offset] = a0 + a2 + a1 + a3;
                     a[i + offset + 1 * p] = a0 + a2 + (2 * mod2 - (a1 + a3));
                     a[i + offset + 2 * p] = a0 + na2 + a1na3imag;
                     a[i + offset + 3 * p] = a0 + na2 + (mod2 - a1na3imag);
                 }
-                if (s + 1 != (1 << len))
-                    rot *= info.rate3[countr_zero(~(unsigned int)(s))];
+                if (s + 1 != (1 << len)) rot *= info.rate3[countr_zero(~(unsigned int)(s))];
             }
             len += 2;
         }
     }
 }
 
-template <class mint, internal::is_static_modint_t<mint>* = nullptr>
-void butterfly_inv(std::vector<mint>& a) {
+template <class mint, internal::is_static_modint_t<mint>* = nullptr> void butterfly_inv(std::vector<mint>& a) {
     int n = int(a.size());
     int h = internal::countr_zero((unsigned int)n);
 
@@ -130,15 +124,14 @@ void butterfly_inv(std::vector<mint>& a) {
                     auto r = a[i + offset + p];
                     a[i + offset] = l + r;
                     a[i + offset + p] =
-                        (unsigned long long)((unsigned int)(l.val() - r.val()) + mint::mod()) *
-                        irot.val();
+                        (unsigned long long)((unsigned int)(l.val() - r.val()) + mint::mod()) * irot.val();
                     ;
                 }
-                if (s + 1 != (1 << (len - 1)))
-                    irot *= info.irate2[countr_zero(~(unsigned int)(s))];
+                if (s + 1 != (1 << (len - 1))) irot *= info.irate2[countr_zero(~(unsigned int)(s))];
             }
             len--;
-        } else {
+        }
+        else {
             // 4-base
             int p = 1 << (h - len);
             mint irot = 1, iimag = info.iroot[2];
@@ -152,22 +145,14 @@ void butterfly_inv(std::vector<mint>& a) {
                     auto a2 = 1ULL * a[i + offset + 2 * p].val();
                     auto a3 = 1ULL * a[i + offset + 3 * p].val();
 
-                    auto a2na3iimag =
-                        1ULL *
-                        mint((mint::mod() + a2 - a3) * iimag.val()).val();
+                    auto a2na3iimag = 1ULL * mint((mint::mod() + a2 - a3) * iimag.val()).val();
 
                     a[i + offset] = a0 + a1 + a2 + a3;
-                    a[i + offset + 1 * p] =
-                        (a0 + (mint::mod() - a1) + a2na3iimag) * irot.val();
-                    a[i + offset + 2 * p] =
-                        (a0 + a1 + (mint::mod() - a2) + (mint::mod() - a3)) *
-                        irot2.val();
-                    a[i + offset + 3 * p] =
-                        (a0 + (mint::mod() - a1) + (mint::mod() - a2na3iimag)) *
-                        irot3.val();
+                    a[i + offset + 1 * p] = (a0 + (mint::mod() - a1) + a2na3iimag) * irot.val();
+                    a[i + offset + 2 * p] = (a0 + a1 + (mint::mod() - a2) + (mint::mod() - a3)) * irot2.val();
+                    a[i + offset + 3 * p] = (a0 + (mint::mod() - a1) + (mint::mod() - a2na3iimag)) * irot3.val();
                 }
-                if (s + 1 != (1 << (len - 2)))
-                    irot *= info.irate3[countr_zero(~(unsigned int)(s))];
+                if (s + 1 != (1 << (len - 2))) irot *= info.irate3[countr_zero(~(unsigned int)(s))];
             }
             len -= 2;
         }
@@ -175,8 +160,7 @@ void butterfly_inv(std::vector<mint>& a) {
 }
 
 template <class mint, internal::is_static_modint_t<mint>* = nullptr>
-std::vector<mint> convolution_naive(const std::vector<mint>& a,
-                                    const std::vector<mint>& b) {
+std::vector<mint> convolution_naive(const std::vector<mint>& a, const std::vector<mint>& b) {
     int n = int(a.size()), m = int(b.size());
     std::vector<mint> ans(n + m - 1);
     if (n < m) {
@@ -185,7 +169,8 @@ std::vector<mint> convolution_naive(const std::vector<mint>& a,
                 ans[i + j] += a[i] * b[j];
             }
         }
-    } else {
+    }
+    else {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 ans[i + j] += a[i] * b[j];
@@ -227,8 +212,7 @@ std::vector<mint> convolution(std::vector<mint>&& a, std::vector<mint>&& b) {
     return internal::convolution_fft(std::move(a), std::move(b));
 }
 template <class mint, internal::is_static_modint_t<mint>* = nullptr>
-std::vector<mint> convolution(const std::vector<mint>& a,
-                              const std::vector<mint>& b) {
+std::vector<mint> convolution(const std::vector<mint>& a, const std::vector<mint>& b) {
     int n = int(a.size()), m = int(b.size());
     if (!n || !m) return {};
 
@@ -239,9 +223,7 @@ std::vector<mint> convolution(const std::vector<mint>& a,
     return internal::convolution_fft(a, b);
 }
 
-template <unsigned int mod = 998244353,
-          class T,
-          std::enable_if_t<internal::is_integral<T>::value>* = nullptr>
+template <unsigned int mod = 998244353, class T, std::enable_if_t<internal::is_integral<T>::value>* = nullptr>
 std::vector<T> convolution(const std::vector<T>& a, const std::vector<T>& b) {
     int n = int(a.size()), m = int(b.size());
     if (!n || !m) return {};
@@ -266,8 +248,7 @@ std::vector<T> convolution(const std::vector<T>& a, const std::vector<T>& b) {
     return c;
 }
 
-std::vector<long long> convolution_ll(const std::vector<long long>& a,
-                                      const std::vector<long long>& b) {
+std::vector<long long> convolution_ll(const std::vector<long long>& a, const std::vector<long long>& b) {
     int n = int(a.size()), m = int(b.size());
     if (!n || !m) return {};
 
@@ -279,13 +260,10 @@ std::vector<long long> convolution_ll(const std::vector<long long>& a,
     static constexpr unsigned long long M1M2 = MOD1 * MOD2;
     static constexpr unsigned long long M1M2M3 = MOD1 * MOD2 * MOD3;
 
-    static constexpr unsigned long long i1 =
-        internal::inv_gcd(MOD2 * MOD3, MOD1).second;
-    static constexpr unsigned long long i2 =
-        internal::inv_gcd(MOD1 * MOD3, MOD2).second;
-    static constexpr unsigned long long i3 =
-        internal::inv_gcd(MOD1 * MOD2, MOD3).second;
-        
+    static constexpr unsigned long long i1 = internal::inv_gcd(MOD2 * MOD3, MOD1).second;
+    static constexpr unsigned long long i2 = internal::inv_gcd(MOD1 * MOD3, MOD2).second;
+    static constexpr unsigned long long i3 = internal::inv_gcd(MOD1 * MOD2, MOD3).second;
+
     static constexpr int MAX_AB_BIT = 24;
     static_assert(MOD1 % (1ull << MAX_AB_BIT) == 1, "MOD1 isn't enough to support an array length of 2^24.");
     static_assert(MOD2 % (1ull << MAX_AB_BIT) == 1, "MOD2 isn't enough to support an array length of 2^24.");
@@ -319,11 +297,9 @@ std::vector<long long> convolution_ll(const std::vector<long long>& a,
         //   ((1) mod MOD1) mod 5 = 2
         //   ((2) mod MOD1) mod 5 = 3
         //   ((3) mod MOD1) mod 5 = 4
-        long long diff =
-            c1[i] - internal::safe_mod((long long)(x), (long long)(MOD1));
+        long long diff = c1[i] - internal::safe_mod((long long)(x), (long long)(MOD1));
         if (diff < 0) diff += MOD1;
-        static constexpr unsigned long long offset[5] = {
-            0, 0, M1M2M3, 2 * M1M2M3, 3 * M1M2M3};
+        static constexpr unsigned long long offset[5] = {0, 0, M1M2M3, 2 * M1M2M3, 3 * M1M2M3};
         x -= offset[diff % 5];
         c[i] = x;
     }

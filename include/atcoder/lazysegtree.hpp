@@ -12,41 +12,22 @@ namespace atcoder {
 
 #if __cplusplus >= 201703L
 
-template <class S,
-          auto op,
-          auto e,
-          class F,
-          auto mapping,
-          auto composition,
-          auto id>
-struct lazy_segtree {
-    static_assert(std::is_convertible_v<decltype(op), std::function<S(S, S)>>,
-                  "op must work as S(S, S)");
-    static_assert(std::is_convertible_v<decltype(e), std::function<S()>>,
-                  "e must work as S()");
-    static_assert(
-        std::is_convertible_v<decltype(mapping), std::function<S(F, S)>>,
-        "mapping must work as S(F, S)");
-    static_assert(
-        std::is_convertible_v<decltype(composition), std::function<F(F, F)>>,
-        "composition must work as F(F, F)");
-    static_assert(std::is_convertible_v<decltype(id), std::function<F()>>,
-                  "id must work as F()");
+template <class S, auto op, auto e, class F, auto mapping, auto composition, auto id> struct lazy_segtree {
+    static_assert(std::is_convertible_v<decltype(op), std::function<S(S, S)>>, "op must work as S(S, S)");
+    static_assert(std::is_convertible_v<decltype(e), std::function<S()>>, "e must work as S()");
+    static_assert(std::is_convertible_v<decltype(mapping), std::function<S(F, S)>>, "mapping must work as S(F, S)");
+    static_assert(std::is_convertible_v<decltype(composition), std::function<F(F, F)>>,
+                  "composition must work as F(F, F)");
+    static_assert(std::is_convertible_v<decltype(id), std::function<F()>>, "id must work as F()");
 
 #else
 
-template <class S,
-          S (*op)(S, S),
-          S (*e)(),
-          class F,
-          S (*mapping)(F, S),
-          F (*composition)(F, F),
-          F (*id)()>
+template <class S, S (*op)(S, S), S (*e)(), class F, S (*mapping)(F, S), F (*composition)(F, F), F (*id)()>
 struct lazy_segtree {
 
 #endif
 
-  public:
+public:
     lazy_segtree() : lazy_segtree(0) {}
     explicit lazy_segtree(int n) : lazy_segtree(std::vector<S>(n, e())) {}
     explicit lazy_segtree(const std::vector<S>& v) : _n(int(v.size())) {
@@ -195,7 +176,7 @@ struct lazy_segtree {
         return 0;
     }
 
-  private:
+private:
     int _n, size, log;
     std::vector<S> d;
     std::vector<F> lz;

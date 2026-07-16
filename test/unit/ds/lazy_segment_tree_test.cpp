@@ -34,7 +34,7 @@ TEST(LazySegmentTreeTest, RangeAffineRangeSum) {
     EXPECT_EQ(seg.get(4).val.val(), 5);
 
     EXPECT_EQ(seg.prod(1, 4).val.val(), 21);
-    
+
     seg.set(2, Monoid::unit(10));
     EXPECT_EQ(seg.get(2).val.val(), 10);
     EXPECT_EQ(seg.prod(0, 5).val.val(), 30);

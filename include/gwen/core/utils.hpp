@@ -12,8 +12,7 @@ namespace gwen {
  * @return true 更新された場合
  * @return false 更新されなかった場合
  */
-template <typename T1, typename T2>
-inline bool chmax(T1& a, T2 b) { return (a < b ? a = b, true : false); }
+template <typename T1, typename T2> inline bool chmax(T1& a, T2 b) { return (a < b ? a = b, true : false); }
 
 /**
  * @brief a の値が b より大きい場合、a を b で更新する
@@ -24,8 +23,7 @@ inline bool chmax(T1& a, T2 b) { return (a < b ? a = b, true : false); }
  * @return true 更新された場合
  * @return false 更新されなかった場合
  */
-template <typename T1, typename T2>
-inline bool chmin(T1& a, T2 b) { return (a > b ? a = b, true : false); }
+template <typename T1, typename T2> inline bool chmin(T1& a, T2 b) { return (a > b ? a = b, true : false); }
 
 /**
  * @brief x が半開区間 [l, r) に含まれるか判定する
@@ -36,8 +34,7 @@ inline bool chmin(T1& a, T2 b) { return (a > b ? a = b, true : false); }
  * @return true 区間に含まれる場合
  * @return false 区間に含まれない場合
  */
-template <std::integral T>
-inline bool isIn(T x, T l, T r) { return (l <= x) && (x < r); }
+template <std::integral T> inline bool isIn(T x, T l, T r) { return (l <= x) && (x < r); }
 
 /**
  * @brief x が半開区間 [l, r) の外側にあるか判定する
@@ -48,8 +45,7 @@ inline bool isIn(T x, T l, T r) { return (l <= x) && (x < r); }
  * @return true 区間の外側にある場合
  * @return false 区間に含まれる場合
  */
-template <std::integral T>
-inline bool isOut(T x, T l, T r) { return (x < l) || (r <= x); }
+template <std::integral T> inline bool isOut(T x, T l, T r) { return (x < l) || (r <= x); }
 
 /**
  * @brief 2つの半開区間 [l0, r0) と [l1, r1) が重なっているか判定する
@@ -61,7 +57,6 @@ inline bool isOut(T x, T l, T r) { return (x < l) || (r <= x); }
  * @return true 重なっている場合
  * @return false 重なっていない場合
  */
-template <std::integral T>
-inline bool isOverlap(T l0, T r0, T l1, T r1) { return !(r1 <= l0 || r0 <= l1); }
+template <std::integral T> inline bool isOverlap(T l0, T r0, T l1, T r1) { return !(r1 <= l0 || r0 <= l1); }
 
-} // namespace gwen
+}  // namespace gwen

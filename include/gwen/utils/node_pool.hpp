@@ -11,11 +11,10 @@ namespace gwen {
 /**
  * @brief 動的確保の代わりに配列でノードを管理するメモリプール
  * @details 削除されたノードのIDを再利用する機能を持ちます。
- * 
+ *
  * @tparam Node ノードの型
  */
-template <typename Node>
-class NodePool {
+template <typename Node> class NodePool {
 private:
     std::vector<Node> pool;
     std::vector<i32> free_list;
@@ -25,9 +24,7 @@ public:
      * @brief デフォルトコンストラクタ
      * @details プールの最初の要素（ID=0）にダミーノードを配置します（1-indexed用やNULL扱いとして利用可能）。
      */
-    explicit NodePool() {
-        pool.emplace_back();
-    }
+    explicit NodePool() { pool.emplace_back(); }
 
     /**
      * @brief 新しいノードを確保し、そのIDを返します（右辺値参照）。
@@ -73,7 +70,7 @@ public:
     void free_node(i32 id) {
         assert(id > 0 && id < static_cast<i32>(pool.size()));
         free_list.push_back(id);
-        pool[id] = Node(); // 参照やリソースのリークを防ぐためリセット
+        pool[id] = Node();  // 参照やリソースのリークを防ぐためリセット
     }
 
     /**
@@ -81,9 +78,7 @@ public:
      * @details 計算量: \f$O(1)\f$
      * @return 有効なノード数
      */
-    i32 size() const {
-        return static_cast<i32>(pool.size()) - static_cast<i32>(free_list.size());
-    }
+    i32 size() const { return static_cast<i32>(pool.size()) - static_cast<i32>(free_list.size()); }
 
     /**
      * @brief 指定したIDのノードへアクセスします。
@@ -106,4 +101,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

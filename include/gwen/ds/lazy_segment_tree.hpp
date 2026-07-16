@@ -1,9 +1,9 @@
 #pragma once
 
+#include <algorithm>
+#include <bit>
 #include <cassert>
 #include <vector>
-#include <bit>
-#include <algorithm>
 
 #include "gwen/alge/acted_monoid.hpp"
 #include "gwen/types.hpp"
@@ -14,8 +14,7 @@ namespace gwen {
  * @brief 遅延評価セグメント木
  * @details 作用付きモノイドを要素に持ち、区間更新と区間積の取得を $O(\log N)$ で行います。
  */
-template <acted_monoid M>
-class LazySegmentTree {
+template <acted_monoid M> class LazySegmentTree {
 public:
     using S = typename M::S;
     using F = typename M::F;
@@ -129,13 +128,11 @@ public:
         }
     }
 
-    template <bool (*g)(S)>
-    i32 max_right(i32 l) {
+    template <bool (*g)(S)> i32 max_right(i32 l) {
         return max_right(l, [](S x) { return g(x); });
     }
-    
-    template <class G>
-    i32 max_right(i32 l, G g) {
+
+    template <class G> i32 max_right(i32 l, G g) {
         assert(0 <= l && l <= n);
         assert(g(M::e()));
         if (l == n) return n;
@@ -161,13 +158,11 @@ public:
         return n;
     }
 
-    template <bool (*g)(S)>
-    i32 min_left(i32 r) {
+    template <bool (*g)(S)> i32 min_left(i32 r) {
         return min_left(r, [](S x) { return g(x); });
     }
-    
-    template <class G>
-    i32 min_left(i32 r, G g) {
+
+    template <class G> i32 min_left(i32 r, G g) {
         assert(0 <= r && r <= n);
         assert(g(M::e()));
         if (r == 0) return 0;
@@ -194,4 +189,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

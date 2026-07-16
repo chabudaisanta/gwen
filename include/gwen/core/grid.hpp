@@ -1,6 +1,7 @@
 #pragma once
-#include <utility>
 #include <cassert>
+#include <utility>
+
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -24,4 +25,4 @@ inline std::pair<i32, i32> mv_to(i32 hi, i32 wi, i32 dir) {
     return std::make_pair(hi + dh[dir], wi + dw[dir]);
 }
 
-} // namespace gwen
+}  // namespace gwen

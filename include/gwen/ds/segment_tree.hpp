@@ -1,8 +1,8 @@
 #pragma once
 
+#include <bit>
 #include <cassert>
 #include <vector>
-#include <bit>
 
 #include "gwen/alge/monoid.hpp"
 #include "gwen/types.hpp"
@@ -13,8 +13,7 @@ namespace gwen {
  * @brief 静的セグメント木
  * @details モノイドを要素に持ち、一点更新と区間積の取得を $O(\log N)$ で行います。
  */
-template <monoid M>
-class SegmentTree {
+template <monoid M> class SegmentTree {
 public:
     using S = typename M::S;
 
@@ -66,13 +65,11 @@ public:
 
     S all_prod() const { return d[1]; }
 
-    template <bool (*g)(S)>
-    i32 max_right(i32 l) const {
+    template <bool (*g)(S)> i32 max_right(i32 l) const {
         return max_right(l, [](S x) { return g(x); });
     }
-    
-    template <class G>
-    i32 max_right(i32 l, G g) const {
+
+    template <class G> i32 max_right(i32 l, G g) const {
         assert(0 <= l && l <= n);
         assert(g(M::e()));
         if (l == n) return n;
@@ -96,13 +93,11 @@ public:
         return n;
     }
 
-    template <bool (*g)(S)>
-    i32 min_left(i32 r) const {
+    template <bool (*g)(S)> i32 min_left(i32 r) const {
         return min_left(r, [](S x) { return g(x); });
     }
-    
-    template <class G>
-    i32 min_left(i32 r, G g) const {
+
+    template <class G> i32 min_left(i32 r, G g) const {
         assert(0 <= r && r <= n);
         assert(g(M::e()));
         if (r == 0) return 0;
@@ -127,4 +122,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

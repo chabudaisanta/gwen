@@ -14,12 +14,12 @@ namespace gwen {
  * @brief 順列・組合せ (階乗、階乗の逆元、二項係数など) を高速に計算するクラス
  * @details 内部でテーブルを保持し、必要に応じて自動でサイズを倍加拡張（extend）します。
  * クラスのインスタンスごとにテーブルを持つため、法が変化する DynamicModInt64 でも安全に使用できます。
- * 注意: 階乗の前計算として \f$O(N)\f$ のメモリと時間を消費するため、\f$N\f$ が \f$10^8\f$ を超えるような巨大な値での呼び出しには適しません（MLE/TLEになります）。
- * 
+ * 注意: 階乗の前計算として \f$O(N)\f$ のメモリと時間を消費するため、\f$N\f$ が \f$10^8\f$
+ * を超えるような巨大な値での呼び出しには適しません（MLE/TLEになります）。
+ *
  * @tparam T `gwen::modint` コンセプトを満たす型（`ModInt61` や `DynamicModInt64` など）
  */
-template <gwen::modint T>
-class Combination {
+template <gwen::modint T> class Combination {
     std::vector<T> _fact, _inv;
 
 public:
@@ -39,19 +39,19 @@ public:
         if ((i32)_fact.size() > n) return;
         // n が法以上の場合は階乗が0になり逆元が計算できないため弾く
         assert(std::cmp_less(n, T::mod()) && "n must be strictly less than mod");
-        
+
         i32 old_size = _fact.size();
         i32 new_size = old_size;
         while (new_size <= n) new_size *= 2;
-        
+
         // 倍加によって法を超えてしまうと逆元計算でゼロ除算となるためクリップする
         if (T::mod() <= (u64)2147483647 && std::cmp_greater_equal(new_size, T::mod())) {
             new_size = (i32)T::mod();
         }
-        
+
         _fact.resize(new_size, T(1));
         _inv.resize(new_size, T(1));
-        
+
         for (i32 i = old_size - 1; i < new_size - 1; ++i) {
             _fact[i + 1] = _fact[i] * T(i + 1);
         }
@@ -114,4 +114,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

@@ -32,8 +32,7 @@ concept matrix_field = requires(T a, T b) {
  *
  * @tparam T 行列の要素の型
  */
-template <typename T>
-class Matrix {
+template <typename T> class Matrix {
 private:
     i32 n, m;
     std::vector<T> dat;

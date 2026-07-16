@@ -21,7 +21,7 @@ TEST(GraphWeightedDsuTest, BasicOperations) {
     EXPECT_FALSE(dsu.same(0, 1));
 
     // P(1) - P(0) = 5
-    EXPECT_EQ(dsu.merge(0, 1, 5), 0); // Assuming it returns the leader which is likely 0
+    EXPECT_EQ(dsu.merge(0, 1, 5), 0);  // Assuming it returns the leader which is likely 0
 
     EXPECT_TRUE(dsu.same(0, 1));
     EXPECT_EQ(dsu.diff(1, 0), -5);
@@ -34,12 +34,12 @@ TEST(GraphWeightedDsuTest, BasicOperations) {
     // P(2) - P(1) = 10
     EXPECT_EQ(dsu.merge(1, 2, 10), 0);
     EXPECT_TRUE(dsu.same(0, 2));
-    
+
     // P(0) - P(1) = 5, P(1) - P(2) = 10 => P(0) - P(2) = 15
     EXPECT_EQ(dsu.diff(0, 2), 15);
 
     auto groups = dsu.groups();
-    EXPECT_EQ(groups.size(), 3); // {0,1,2}, {3}, {4}
+    EXPECT_EQ(groups.size(), 3);  // {0,1,2}, {3}, {4}
 }
 
-} // namespace gwen
+}  // namespace gwen

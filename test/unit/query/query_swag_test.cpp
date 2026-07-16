@@ -1,6 +1,8 @@
-#include "gwen/query/swag.hpp"
 #include <gtest/gtest.h>
+
 #include <vector>
+
+#include "gwen/query/swag.hpp"
 
 using namespace gwen;
 
@@ -13,19 +15,15 @@ struct AffineMonoid {
         i64 a, b;
         bool operator==(const S& o) const { return a == o.a && b == o.b; }
     };
-    static S op(const S& l, const S& r) {
-        return S{l.a * r.a, l.a * r.b + l.b};
-    }
-    static S e() {
-        return S{1, 0};
-    }
+    static S op(const S& l, const S& r) { return S{l.a * r.a, l.a * r.b + l.b}; }
+    static S e() { return S{1, 0}; }
 };
 
 TEST(SwagDequeTest, AffineTransform) {
     SwagDeque<AffineMonoid> swag;
     swag.push_back({2, 3});
     swag.push_back({3, 4});
-    
+
     // f1(x) = 2x+3, f2(x) = 3x+4
     // fold = f1(f2(x)) = 2(3x+4)+3 = 6x+11
     auto res = swag.fold();
@@ -39,13 +37,13 @@ TEST(SwagDequeTest, AffineTransform) {
     EXPECT_EQ(res.a, 24);
     EXPECT_EQ(res.b, 49);
 
-    swag.pop_back(); // removes f2
+    swag.pop_back();  // removes f2
     // fold = f0(f1(x)) = 4(2x+3)+5 = 8x+17
     res = swag.fold();
     EXPECT_EQ(res.a, 8);
     EXPECT_EQ(res.b, 17);
 
-    swag.pop_front(); // removes f0
+    swag.pop_front();  // removes f0
     // fold = f1(x) = 2x+3
     res = swag.fold();
     EXPECT_EQ(res.a, 2);
@@ -54,14 +52,12 @@ TEST(SwagDequeTest, AffineTransform) {
 
 TEST(SlidingWindowAggregationTest, AffineTransform) {
     i32 n = 5;
-    std::vector<AffineMonoid::S> data = {
-        {2, 3}, {3, 4}, {4, 5}, {5, 6}, {6, 7}
-    };
-    
+    std::vector<AffineMonoid::S> data = {{2, 3}, {3, 4}, {4, 5}, {5, 6}, {6, 7}};
+
     SlidingWindowAggregation<AffineMonoid> swag(n);
-    swag.add_query(0, 2); // 2x+3, 3x+4 -> 6x+11
-    swag.add_query(1, 3); // 3x+4, 4x+5 -> 12x+19
-    swag.add_query(2, 5); // all
+    swag.add_query(0, 2);  // 2x+3, 3x+4 -> 6x+11
+    swag.add_query(1, 3);  // 3x+4, 4x+5 -> 12x+19
+    swag.add_query(2, 5);  // all
 
     auto naive = [&](i32 l, i32 r) {
         AffineMonoid::S acc = AffineMonoid::e();
@@ -72,7 +68,7 @@ TEST(SlidingWindowAggregationTest, AffineTransform) {
     };
 
     auto res = swag.solve(data, false);
-    
+
     ASSERT_EQ(res.size(), 3);
     EXPECT_EQ(res[0], naive(0, 2));
     EXPECT_EQ(res[1], naive(1, 3));

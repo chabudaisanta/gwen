@@ -19,12 +19,12 @@ TEST(BitVectorTest, BasicOperations) {
     EXPECT_EQ(bv.get(3), false);
 
     EXPECT_EQ(bv.rank1(0), 0);
-    EXPECT_EQ(bv.rank1(2), 1); // [0, 1] has one 1
-    EXPECT_EQ(bv.rank1(6), 3); // 1, 2, 5
-    EXPECT_EQ(bv.rank1(15), 4); // 1, 2, 5, 10
+    EXPECT_EQ(bv.rank1(2), 1);   // [0, 1] has one 1
+    EXPECT_EQ(bv.rank1(6), 3);   // 1, 2, 5
+    EXPECT_EQ(bv.rank1(15), 4);  // 1, 2, 5, 10
 
-    EXPECT_EQ(bv.rank0(2), 1); // 0
-    EXPECT_EQ(bv.rank0(6), 3); // 0, 3, 4
+    EXPECT_EQ(bv.rank0(2), 1);  // 0
+    EXPECT_EQ(bv.rank0(6), 3);  // 0, 3, 4
     EXPECT_EQ(bv.rank0(15), 11);
 
     EXPECT_EQ(bv.select1(0), 1);

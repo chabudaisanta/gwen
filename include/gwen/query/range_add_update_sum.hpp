@@ -16,8 +16,8 @@ template <typename T> struct RangeAddUpdateSum {
     using M = range_affine_range_sum_monoid<T>;
     using Segtree = LazySegmentTree<M>;
 
-    i32 N;         ///< 要素数
-    Segtree seg;   ///< 内部の遅延評価セグメント木
+    i32 N;        ///< 要素数
+    Segtree seg;  ///< 内部の遅延評価セグメント木
 
     /**
      * @brief デフォルトコンストラクタ

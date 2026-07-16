@@ -44,7 +44,7 @@ TEST(GraphTreeLcaTest, BasicOperations) {
     // depth(1) = 1, depth(5) = 3, lca = 0 (depth 0). len = 1 + 3 - 0 + 1 = 5.
     EXPECT_EQ(lca.len(1, 5), 5);
 
-    EXPECT_EQ(lca.len(3, 4), 3); // 3, 2, 4
+    EXPECT_EQ(lca.len(3, 4), 3);  // 3, 2, 4
 }
 
-} // namespace gwen
+}  // namespace gwen

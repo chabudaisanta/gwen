@@ -1,7 +1,8 @@
 #pragma once
-#include <vector>
-#include <utility>
 #include <iterator>
+#include <utility>
+#include <vector>
+
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -13,8 +14,7 @@ namespace gwen {
  * @param end 圧縮対象の終了イテレータ
  * @return std::vector<std::pair<ValueType, i32>> 要素とその連続回数のペアの配列
  */
-template <typename Iterator>
-auto runlength(Iterator begin, Iterator end) {
+template <typename Iterator> auto runlength(Iterator begin, Iterator end) {
     using ValueType = typename std::iterator_traits<Iterator>::value_type;
     std::vector<std::pair<ValueType, i32>> ret;
 
@@ -27,4 +27,4 @@ auto runlength(Iterator begin, Iterator end) {
     return ret;
 }
 
-} // namespace gwen
+}  // namespace gwen

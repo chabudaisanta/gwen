@@ -15,11 +15,10 @@ namespace rhash {
 /**
  * @brief セグメント木等に乗せるためのローリングハッシュ用モノイド
  * @details `ID` ごとに独立した基数 `r` を静的に生成して持ちます。
- * 
+ *
  * @tparam ID 異なる基数を持たせるための識別子（デフォルトは0）
  */
-template <i32 ID = 0>
-struct rolling_hash_monoid {
+template <i32 ID = 0> struct rolling_hash_monoid {
     /// @brief 基数 (法 $2^{61}-1$ 上での乱数)
     static inline const ModInt61 r = ModInt61(rand64() % (ModInt61::mod() - 2) + 2);
 
@@ -60,8 +59,7 @@ struct rolling_hash_monoid {
      * @param x 要素
      * @return 生成されたハッシュ要素
      */
-    template <typename T>
-    static S unit(T x) { return {ModInt61(x), r}; }
+    template <typename T> static S unit(T x) { return {ModInt61(x), r}; }
 
     /**
      * @brief イテレータ範囲からハッシュ値を計算します。
@@ -71,8 +69,7 @@ struct rolling_hash_monoid {
      * @param end 範囲の終端
      * @return 範囲全体のハッシュ
      */
-    template <typename Iterator>
-    static S range(Iterator begin, Iterator end) {
+    template <typename Iterator> static S range(Iterator begin, Iterator end) {
         ModInt61 v = 0, p = 1;
         for (auto it = begin; it != end; ++it) {
             v += p * ModInt61(*it);
@@ -89,8 +86,7 @@ struct rolling_hash_monoid {
      * @param end 範囲の終端
      * @return セグメント木構築用の配列
      */
-    template <typename Iterator>
-    static std::vector<S> build(Iterator begin, Iterator end) {
+    template <typename Iterator> static std::vector<S> build(Iterator begin, Iterator end) {
         std::vector<S> res;
         for (auto it = begin; it != end; ++it) {
             res.push_back(unit(*it));
@@ -105,8 +101,7 @@ struct rolling_hash_monoid {
      * @param seq 変換する対象のシーケンス
      * @return セグメント木構築用の配列
      */
-    template <typename Container>
-    static std::vector<S> build(const Container& seq) {
+    template <typename Container> static std::vector<S> build(const Container& seq) {
         std::vector<S> res;
         if constexpr (requires { std::size(seq); }) {
             res.reserve(std::size(seq));
@@ -122,8 +117,7 @@ struct rolling_hash_monoid {
  * @brief 基数のべき乗をメモ化する内部クラス
  * @tparam ID モノイドと共通の識別子
  */
-template <i32 ID>
-struct PowerTable {
+template <i32 ID> struct PowerTable {
     static std::vector<ModInt61>& data() {
         static std::vector<ModInt61> table{ModInt61(1)};
         return table;
@@ -143,16 +137,15 @@ struct PowerTable {
     }
 };
 
-} // namespace rhash
+}  // namespace rhash
 
 /**
  * @brief 静的文字列用のローリングハッシュクラス
  * @details 構築に \f$O(N)\f$ かかりますが、以降は任意の部分文字列のハッシュを \f$O(1)\f$ で取得できます。
- * 
+ *
  * @tparam ID 異なる基数を持たせるための識別子（デフォルトは0）
  */
-template <i32 ID = 0>
-class RollingHash {
+template <i32 ID = 0> class RollingHash {
 public:
     using Monoid = rhash::rolling_hash_monoid<ID>;
     using S = typename Monoid::S;
@@ -185,8 +178,8 @@ public:
 
     /**
      * @brief 部分区間 `[l, r)` のハッシュ値を取得します。
-     * @details 先頭の要素が基数の $0$ 乗に対応するように正規化されたハッシュと、その長さ（基数のべき乗）の組を返します。
-     * 計算量: \f$O(1)\f$
+     * @details 先頭の要素が基数の $0$
+     * 乗に対応するように正規化されたハッシュと、その長さ（基数のべき乗）の組を返します。 計算量: \f$O(1)\f$
      * @param l 区間の開始インデックス (包含)
      * @param r 区間の終了インデックス (排他)
      * @pre `0 <= l <= r <= n`
@@ -279,4 +272,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

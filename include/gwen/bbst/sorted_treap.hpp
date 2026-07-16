@@ -5,9 +5,9 @@
 #include <utility>
 #include <vector>
 
+#include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
-#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -15,8 +15,7 @@ namespace gwen {
  * @brief キーベースの順序付き多重集合（Treap）
  * @details モノイドを持たず、キーの大小で二分探索ツリーを構築します。
  */
-template <typename K, typename Compare = std::less<K>>
-class SortedTreap {
+template <typename K, typename Compare = std::less<K>> class SortedTreap {
 public:
     using tree = i32;
 
@@ -59,9 +58,10 @@ public:
         }
         auto [m, rr] = split_idx(r, 1);
         if (key_eq(d[m].key, key)) {
-            root = merge(l, rr); // erase m
-        } else {
-            root = merge(merge(l, m), rr); // put it back
+            root = merge(l, rr);  // erase m
+        }
+        else {
+            root = merge(merge(l, m), rr);  // put it back
         }
     }
 
@@ -156,16 +156,16 @@ public:
 
 private:
     static bool key_eq(const K& a, const K& b) { return !cmp(a, b) && !cmp(b, a); }
-    
+
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
-    
+
     static void to_vec_(tree t, std::vector<K>& out) {
         if (t == NIL) return;
         to_vec_(d[t].left, out);
         out.push_back(d[t].key);
         to_vec_(d[t].right, out);
     }
-    
+
     static void update(tree t) {
         if (t == NIL) return;
         d[t].size = 1 + size_(d[t].left) + size_(d[t].right);
@@ -228,4 +228,4 @@ private:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

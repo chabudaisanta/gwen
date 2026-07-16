@@ -16,8 +16,7 @@ namespace gwen {
  * @tparam IsDirected グラフが有向か無向か
  * @details ダブリングを用いて各クエリに O(log N) で応答します。
  */
-template <edge Edge, bool IsDirected>
-class TreeLca {
+template <edge Edge, bool IsDirected> class TreeLca {
 private:
     i32 n_, log_, root_;
     std::vector<i32> anc_;
@@ -124,4 +123,4 @@ public:
     i32 len(i32 u, i32 v) const { return depth(u) + depth(v) - 2 * depth(lca(u, v)) + 1; }
 };
 
-} // namespace gwen
+}  // namespace gwen

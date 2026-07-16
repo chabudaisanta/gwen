@@ -6,9 +6,9 @@
 #include <vector>
 
 #include "gwen/alge/acted_monoid.hpp"
+#include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
-#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -16,8 +16,7 @@ namespace gwen {
  * @brief キーベースで区間作用・区間積が取得可能な順序付き多重集合・辞書（Treap）
  * @details 各キーに値を結びつけ、キーの範囲に対する区間積と遅延評価による区間作用をサポートします。
  */
-template <typename K, acted_monoid M, typename Compare = std::less<K>>
-class LazySortedTreap {
+template <typename K, acted_monoid M, typename Compare = std::less<K>> class LazySortedTreap {
 public:
     using S = typename M::S;
     using F = typename M::F;
@@ -62,11 +61,12 @@ public:
         auto [m, rr] = split_idx(r, 1);
         if (key_eq(d[m].key, key)) {
             root = merge(l, rr);
-        } else {
+        }
+        else {
             root = merge(merge(l, m), rr);
         }
     }
-    
+
     void erase_all(const K& key) {
         auto [l, r] = split_lt(root, key);
         auto [m, rr] = split_le(r, key);
@@ -97,9 +97,7 @@ public:
         return res;
     }
 
-    S all_prod() {
-        return prod_(root);
-    }
+    S all_prod() { return prod_(root); }
 
     bool contains(const K& x) {
         auto [idx, id] = lower_bound(x);
@@ -141,7 +139,7 @@ private:
     static void push(tree t) {
         if (t == NIL) return;
         node& n = d[t];
-        
+
         bool apply_lz = true;
         if constexpr (std::equality_comparable<F>) {
             if (n.lz == M::id()) apply_lz = false;
@@ -233,4 +231,4 @@ private:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

@@ -20,8 +20,7 @@ concept edge = requires(const T& t) {
  * @brief 基本的なエッジ構造体
  * @tparam T 重みの型
  */
-template <typename T = i32>
-struct Edge {
+template <typename T = i32> struct Edge {
     using weight_type = T;
     i32 u, v;
     weight_type w;
@@ -31,4 +30,4 @@ struct Edge {
     Edge(i32 u_, i32 v_, weight_type w_) : u(u_), v(v_), w(w_) {}
 };
 
-} // namespace gwen
+}  // namespace gwen

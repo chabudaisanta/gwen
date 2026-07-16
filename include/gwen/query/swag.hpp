@@ -18,8 +18,7 @@ namespace gwen {
  *
  * @tparam Monoid モノイドを表す型 (`gwen::monoid` コンセプトを満たすこと)
  */
-template <monoid Monoid>
-class SlidingWindowAggregation {
+template <monoid Monoid> class SlidingWindowAggregation {
 public:
     using S = typename Monoid::S;
 
@@ -32,7 +31,7 @@ public:
      * @brief デフォルトコンストラクタ
      */
     SlidingWindowAggregation() : n(0) {}
-    
+
     /**
      * @brief コンストラクタ
      * @param n_ 対象となる配列の要素数 $N$
@@ -60,10 +59,11 @@ public:
     std::vector<S> solve(const std::vector<S>& data, bool sorted = false) {
         const i32 q = static_cast<i32>(l_vec.size());
         std::vector<i32> query(q);
-        
+
         if (sorted) {
             std::iota(query.begin(), query.end(), 0);
-        } else {
+        }
+        else {
             std::vector<i32> pr = counting_sort(r_vec, n);
             std::vector<i32> ls(q);
             for (i32 i = 0; i < q; ++i) {
@@ -78,11 +78,11 @@ public:
         std::vector<S> ret(q), tail;
         S head = Monoid::e();
         i32 l = 0, r = 0;
-        
+
         for (i32 idx : query) {
             i32 nl = l_vec[idx], nr = r_vec[idx];
             assert(l <= nl && r <= nr);
-            
+
             for (; r < nr; ++r) {
                 head = Monoid::op(head, data[r]);
             }
@@ -111,8 +111,7 @@ public:
  *
  * @tparam Monoid モノイドを表す型 (`gwen::monoid` コンセプトを満たすこと)
  */
-template <monoid Monoid>
-class SwagDeque {
+template <monoid Monoid> class SwagDeque {
 public:
     using S = typename Monoid::S;
 
@@ -165,7 +164,8 @@ public:
         data.emplace_front(x);
         if (f.empty()) {
             f.emplace_back(x);
-        } else {
+        }
+        else {
             f.emplace_back(Monoid::op(x, f.back()));
         }
     }
@@ -178,7 +178,8 @@ public:
         data.emplace_back(x);
         if (b.empty()) {
             b.emplace_back(x);
-        } else {
+        }
+        else {
             b.emplace_back(Monoid::op(b.back(), x));
         }
     }

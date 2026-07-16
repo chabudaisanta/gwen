@@ -4,9 +4,9 @@
 #include <utility>
 #include <vector>
 
+#include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
-#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -14,8 +14,7 @@ namespace gwen {
  * @brief インデックスベースの動的配列（Treap）
  * @details 値の保持と反転のみをサポートする最速のTreap。モノイド演算は持たない。
  */
-template <typename T>
-class ImplicitTreap {
+template <typename T> class ImplicitTreap {
 public:
     using tree = i32;
 
@@ -44,7 +43,7 @@ public:
         std::vector<tree> nodes;
         nodes.reserve(vec.size());
         for (const T& x : vec) nodes.push_back(d.new_node(node(x)));
-        
+
         tree r = NIL;
         std::vector<tree> st;
         st.reserve(vec.size());
@@ -201,4 +200,4 @@ private:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

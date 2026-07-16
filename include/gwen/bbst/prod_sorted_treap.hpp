@@ -6,9 +6,9 @@
 #include <vector>
 
 #include "gwen/alge/monoid.hpp"
+#include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
-#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -16,8 +16,7 @@ namespace gwen {
  * @brief キーベースで区間積が取得可能な順序付き多重集合・辞書（Treap）
  * @details 各キーに値を結びつけ、キーの範囲に対する区間積を計算します。
  */
-template <typename K, monoid M, typename Compare = std::less<K>>
-class ProdSortedTreap {
+template <typename K, monoid M, typename Compare = std::less<K>> class ProdSortedTreap {
 public:
     using S = typename M::S;
     using tree = i32;
@@ -66,7 +65,8 @@ public:
         auto [m, rr] = split_idx(r, 1);
         if (key_eq(d[m].key, key)) {
             root = merge(l, rr);
-        } else {
+        }
+        else {
             root = merge(merge(l, m), rr);
         }
     }
@@ -204,4 +204,4 @@ private:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

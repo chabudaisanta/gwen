@@ -31,8 +31,7 @@ concept graph = requires(const T& t, i32 u) {
  * @tparam EdgeType エッジの型
  * @tparam IsDirected 有向グラフか無向グラフか
  */
-template <edge EdgeType, bool IsDirected = true>
-class GraphBase {
+template <edge EdgeType, bool IsDirected = true> class GraphBase {
 public:
     using edge_type = EdgeType;
     using weight_type = typename EdgeType::weight_type;
@@ -46,7 +45,8 @@ private:
 public:
     GraphBase() : GraphBase(0) {}
     explicit GraphBase(i32 n) : n_(n), built_(false) {}
-    GraphBase(i32 n, const std::vector<EdgeType>& edges) : n_(n), built_(true), edge_buf_(edges), csr_(n, edges, IsDirected) {}
+    GraphBase(i32 n, const std::vector<EdgeType>& edges)
+        : n_(n), built_(true), edge_buf_(edges), csr_(n, edges, IsDirected) {}
 
     /**
      * @brief グラフにエッジを追加する
@@ -56,15 +56,15 @@ public:
         assert(!built_);
         edge_buf_.push_back(e);
     }
-    void add_edge(i32 u, i32 v) { 
+    void add_edge(i32 u, i32 v) {
         assert(0 <= u && u < n_);
         assert(0 <= v && u < n_);
         add_edge(EdgeType(u, v));
-     }
-    void add_edge(i32 u, i32 v, weight_type w) { 
+    }
+    void add_edge(i32 u, i32 v, weight_type w) {
         assert(0 <= u && u < n_);
         assert(0 <= v && v < n_);
-        add_edge(EdgeType(u, v, w)); 
+        add_edge(EdgeType(u, v, w));
     }
 
     /**
@@ -113,12 +113,10 @@ public:
      * @param u 頂点
      * @return 隣接する頂点 (v) のビュー
      */
-    auto operator[](i32 u) const {
-        return adjacent(u);
-    }
+    auto operator[](i32 u) const { return adjacent(u); }
 };
 
 template <typename T> using DirectedGraph = GraphBase<Edge<T>, true>;
 template <typename T> using NonDirectedGraph = GraphBase<Edge<T>, false>;
 
-} // namespace gwen
+}  // namespace gwen

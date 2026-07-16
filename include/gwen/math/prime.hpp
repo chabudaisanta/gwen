@@ -5,8 +5,8 @@
 #include <numeric>
 #include <vector>
 
-#include "gwen/types.hpp"
 #include "gwen/mod/modint.hpp"
+#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -126,27 +126,27 @@ public:
 };
 
 namespace internal {
-    inline bool miller_rabin(u64 n, const std::vector<u64>& bases) {
-        if (n <= 1) return false;
-        if (n == 2) return true;
-        if (n % 2 == 0) return false;
-        using mint = DynamicModInt64;
-        mint::set_mod(n);
-        u64 d = n - 1;
-        while (d % 2 == 0) d /= 2;
-        for (u64 a : bases) {
-            if (n <= a) break;
-            u64 t = d;
-            mint y = mint(a).pow(t);
-            while (t != n - 1 && y.val() != 1 && y.val() != n - 1) {
-                y *= y;
-                t *= 2;
-            }
-            if (y.val() != n - 1 && t % 2 == 0) return false;
+inline bool miller_rabin(u64 n, const std::vector<u64>& bases) {
+    if (n <= 1) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+    using mint = DynamicModInt64;
+    mint::set_mod(n);
+    u64 d = n - 1;
+    while (d % 2 == 0) d /= 2;
+    for (u64 a : bases) {
+        if (n <= a) break;
+        u64 t = d;
+        mint y = mint(a).pow(t);
+        while (t != n - 1 && y.val() != 1 && y.val() != n - 1) {
+            y *= y;
+            t *= 2;
         }
-        return true;
+        if (y.val() != n - 1 && t % 2 == 0) return false;
     }
-} // namespace internal
+    return true;
+}
+}  // namespace internal
 
 /**
  * @brief Miller-Rabin法による高速な素数判定
@@ -161,38 +161,39 @@ inline bool is_prime(u64 n) {
     if (n % 2 == 0) return false;
     if (n < 4759123141ull) {
         return internal::miller_rabin(n, {2, 7, 61});
-    } else {
+    }
+    else {
         return internal::miller_rabin(n, {2, 325, 9375, 28178, 450775, 9780504, 1795265022});
     }
 }
 
 namespace internal {
-    inline u64 pollard_rho(u64 n) {
-        if (n % 2 == 0) return 2;
-        if (is_prime(n)) return n;
-        
-        using mint = DynamicModInt64;
-        mint::set_mod(n);
-        
-        u64 step = 0;
+inline u64 pollard_rho(u64 n) {
+    if (n % 2 == 0) return 2;
+    if (is_prime(n)) return n;
+
+    using mint = DynamicModInt64;
+    mint::set_mod(n);
+
+    u64 step = 0;
+    while (true) {
+        ++step;
+        mint c(step);
+        auto f = [&](mint x) { return x * x + c; };
+
+        mint x(step), y = f(x);
         while (true) {
-            ++step;
-            mint c(step);
-            auto f = [&](mint x) { return x * x + c; };
-            
-            mint x(step), y = f(x);
-            while (true) {
-                u64 xv = x.val();
-                u64 yv = y.val();
-                u64 p = std::gcd(yv > xv ? yv - xv : xv - yv, n);
-                if (p == 0 || p == n) break;
-                if (p != 1) return p;
-                x = f(x);
-                y = f(f(y));
-            }
+            u64 xv = x.val();
+            u64 yv = y.val();
+            u64 p = std::gcd(yv > xv ? yv - xv : xv - yv, n);
+            if (p == 0 || p == n) break;
+            if (p != 1) return p;
+            x = f(x);
+            y = f(f(y));
         }
     }
-} // namespace internal
+}
+}  // namespace internal
 
 /**
  * @brief Pollard's rho法による高速な素因数分解
@@ -219,4 +220,4 @@ inline std::vector<u64> factorize(u64 n) {
     return res;
 }
 
-} // namespace gwen
+}  // namespace gwen

@@ -3,6 +3,7 @@
 // clang-format on
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace gwen;
@@ -44,7 +45,7 @@ TEST(GraphTest, NonDirectedGraph) {
 
     auto e1 = g.edges(1);
     ASSERT_EQ(e1.size(), 2);
-    
+
     std::vector<i32> v1(g[1].begin(), g[1].end());
     EXPECT_EQ(v1, (std::vector<i32>{0, 2}));
 }

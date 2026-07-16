@@ -7,11 +7,11 @@
 #include <vector>
 
 #include "gwen/alge/abel.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "testlib.h"
 #include "utils/naive_array.hpp"
 #include "utils/random_seed.hpp"
-#include "gwen/dump.hpp"
 
 using namespace gwen;
 
@@ -90,7 +90,7 @@ TEST(FenwickTreeTest, ToVectorTest) {
     FenwickTree<sum_abel<i64>> ft(A);
     EXPECT_EQ(ft.to_vec(), A);
 
-    A[2] += 39; // [3, 1, 43, 1, 5]
+    A[2] += 39;  // [3, 1, 43, 1, 5]
     ft.add(2, 39);
     EXPECT_EQ(ft.to_vec(), A);
 }

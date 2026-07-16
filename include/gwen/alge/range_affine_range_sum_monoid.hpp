@@ -9,8 +9,7 @@ namespace gwen {
  * @brief 区間アフィン変換・区間和を管理する作用付きモノイド
  * @tparam T 要素の型（加法と乗法が定義されている必要がある）
  */
-template <ring T>
-struct range_affine_range_sum_monoid {
+template <ring T> struct range_affine_range_sum_monoid {
     /**
      * @brief モノイドの要素
      */
@@ -67,4 +66,4 @@ struct range_affine_range_sum_monoid {
     static constexpr F id() { return {T(1), T(0)}; }
 };
 
-} // namespace gwen
+}  // namespace gwen

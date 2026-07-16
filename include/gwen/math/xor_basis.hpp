@@ -15,8 +15,7 @@ namespace gwen {
  *
  * @tparam T 基底の要素の型 (符号なし整数型)
  */
-template <std::unsigned_integral T>
-class XorBasis {
+template <std::unsigned_integral T> class XorBasis {
 private:
     std::vector<T> basis;
 
@@ -97,9 +96,7 @@ public:
      * @brief 空の XOR 基底を返す (モノイドの単位元)
      * @return XorBasis 空の基底
      */
-    static S e() {
-        return S();
-    }
+    static S e() { return S(); }
 };
 
 }  // namespace gwen

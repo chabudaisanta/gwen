@@ -10,7 +10,7 @@
 namespace atcoder {
 
 struct scc_graph {
-  public:
+public:
     scc_graph() : internal(0) {}
     explicit scc_graph(int n) : internal(n) {}
 
@@ -23,7 +23,7 @@ struct scc_graph {
 
     std::vector<std::vector<int>> scc() { return internal.scc(); }
 
-  private:
+private:
     internal::scc_graph internal;
 };
 

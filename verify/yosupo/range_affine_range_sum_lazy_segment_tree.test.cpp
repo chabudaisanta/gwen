@@ -1,8 +1,9 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/range_affine_range_sum"
 
 #include <iostream>
-#include "gwen/ds/lazy_segment_tree.hpp"
+
 #include "gwen/alge/range_affine_range_sum_monoid.hpp"
+#include "gwen/ds/lazy_segment_tree.hpp"
 #include "gwen/mod/modint.hpp"
 
 using namespace std;
@@ -33,7 +34,8 @@ int main() {
             i64 b, c;
             cin >> l >> r >> b >> c;
             seg.apply(l, r, {mint(b), mint(c)});
-        } else {
+        }
+        else {
             int l, r;
             cin >> l >> r;
             cout << seg.prod(l, r).val.val() << "\n";

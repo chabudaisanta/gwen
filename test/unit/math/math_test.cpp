@@ -3,8 +3,9 @@
 #include "gwen/math/basic.hpp"
 // clang-format on
 
-#include "gwen/types.hpp"
 #include <gtest/gtest.h>
+
+#include "gwen/types.hpp"
 
 using namespace gwen;
 
@@ -42,7 +43,7 @@ TEST(MathTest, BasicMath) {
     EXPECT_EQ(sq(5), 25);
     EXPECT_EQ(sq(-5), 25);
 
-    EXPECT_EQ(choose2(5), 10); // 5 * 4 / 2
+    EXPECT_EQ(choose2(5), 10);  // 5 * 4 / 2
     EXPECT_EQ(choose2(1), 0);
     EXPECT_EQ(choose2(2), 1);
 }

@@ -15,13 +15,12 @@ namespace gwen {
  * @param vec 圧縮する配列
  * @return 元の配列の各要素に対応する、0 から始まる圧縮後のインデックス（0-indexed）の配列
  */
-template <typename T>
-std::vector<i32> compress(const std::vector<T>& vec) {
+template <typename T> std::vector<i32> compress(const std::vector<T>& vec) {
     std::vector<T> copy = vec;
     std::ranges::sort(copy);
     auto [first, last] = std::ranges::unique(copy);
     copy.erase(first, last);
-    
+
     std::vector<i32> ret(vec.size());
     for (usize i = 0; i < vec.size(); ++i) {
         auto it = std::ranges::lower_bound(copy, vec[i]);
@@ -30,4 +29,4 @@ std::vector<i32> compress(const std::vector<T>& vec) {
     return ret;
 }
 
-} // namespace gwen
+}  // namespace gwen

@@ -18,11 +18,10 @@ namespace gwen {
  * @param vec 入力配列
  * @return std::vector<T> 最長増加部分列
  */
-template <std::totally_ordered T>
-std::vector<T> lis_strict(const std::vector<T>& vec) {
+template <std::totally_ordered T> std::vector<T> lis_strict(const std::vector<T>& vec) {
     i32 n = static_cast<i32>(vec.size());
     if (n == 0) return {};
-    
+
     // DP テーブル: dp[i] は長さ i+1 の増加部分列の末尾の最小値
     std::vector<T> dp;
     // id[i] は dp[i] に格納されている値の元の vec におけるインデックス
@@ -33,13 +32,14 @@ std::vector<T> lis_strict(const std::vector<T>& vec) {
     for (i32 i = 0; i < n; ++i) {
         auto it = std::lower_bound(dp.begin(), dp.end(), vec[i]);
         i32 p = static_cast<i32>(std::distance(dp.begin(), it));
-        
+
         prv[i] = (p == 0 ? -1 : id[p - 1]);
-        
+
         if (it == dp.end()) {
             dp.push_back(vec[i]);
             id.push_back(i);
-        } else {
+        }
+        else {
             *it = vec[i];
             id[p] = i;
         }
@@ -64,11 +64,10 @@ std::vector<T> lis_strict(const std::vector<T>& vec) {
  * @param vec 入力配列
  * @return std::vector<T> 最長非減少部分列
  */
-template <std::totally_ordered T>
-std::vector<T> lis(const std::vector<T>& vec) {
+template <std::totally_ordered T> std::vector<T> lis(const std::vector<T>& vec) {
     i32 n = static_cast<i32>(vec.size());
     if (n == 0) return {};
-    
+
     std::vector<T> dp;
     std::vector<i32> id;
     std::vector<i32> prv(n, -1);
@@ -76,13 +75,14 @@ std::vector<T> lis(const std::vector<T>& vec) {
     for (i32 i = 0; i < n; ++i) {
         auto it = std::upper_bound(dp.begin(), dp.end(), vec[i]);
         i32 p = static_cast<i32>(std::distance(dp.begin(), it));
-        
+
         prv[i] = (p == 0 ? -1 : id[p - 1]);
-        
+
         if (it == dp.end()) {
             dp.push_back(vec[i]);
             id.push_back(i);
-        } else {
+        }
+        else {
             *it = vec[i];
             id[p] = i;
         }

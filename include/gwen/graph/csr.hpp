@@ -12,8 +12,7 @@ namespace gwen {
  * @brief CSR (Compressed Sparse Row) 形式のグラフ表現
  * @tparam E エッジの型
  */
-template <edge E>
-class Csr {
+template <edge E> class Csr {
 private:
     std::vector<i32> start_;
     std::vector<E> elist_;
@@ -40,7 +39,8 @@ public:
             for (const auto& e : edges) {
                 elist_[counter[e.u]++] = e;
             }
-        } else {
+        }
+        else {
             for (const auto& e : edges) {
                 start_[e.u + 1]++;
                 start_[e.v + 1]++;
@@ -77,9 +77,7 @@ public:
      * @param v 頂点
      * @return std::span<E> エッジのリストのビュー
      */
-    std::span<E> edges(i32 v) {
-        return std::span<E>(elist_).subspan(start_[v], start_[v + 1] - start_[v]);
-    }
+    std::span<E> edges(i32 v) { return std::span<E>(elist_).subspan(start_[v], start_[v + 1] - start_[v]); }
 
     /**
      * @brief 頂点 v から出るエッジのリストを取得する
@@ -91,4 +89,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

@@ -31,8 +31,7 @@ long long inv_mod(long long x, long long m) {
 }
 
 // (rem, mod)
-std::pair<long long, long long> crt(const std::vector<long long>& r,
-                                    const std::vector<long long>& m) {
+std::pair<long long, long long> crt(const std::vector<long long>& r, const std::vector<long long>& m) {
     assert(r.size() == m.size());
     int n = int(r.size());
     // Contracts: 0 <= r0 < m0

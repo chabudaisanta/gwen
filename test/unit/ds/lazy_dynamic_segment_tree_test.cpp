@@ -27,11 +27,11 @@ TEST(LazyDynamicSegmentTreeTest, RangeAffineRangeSum) {
     // apply x -> 2x + 1 to [50, 500)
     // the node at 100 becomes 10 * 2 + 1 = 21
     seg.apply(50, 500, {mint(2), mint(1)});
-    
+
     EXPECT_EQ(seg.get(100).val.val(), 21);
     EXPECT_EQ(seg.get(100).len.val(), 1);
-    
-    EXPECT_EQ(seg.get(1000).val.val(), 20); // unchanged
+
+    EXPECT_EQ(seg.get(1000).val.val(), 20);  // unchanged
 
     EXPECT_EQ(seg.prod(0, n).val.val(), 41);
 }

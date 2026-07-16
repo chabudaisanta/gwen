@@ -1,8 +1,9 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/point_add_range_sum"
 
 #include <iostream>
-#include "gwen/ds/segment_tree.hpp"
+
 #include "gwen/alge/monoid.hpp"
+#include "gwen/ds/segment_tree.hpp"
 
 using namespace std;
 using namespace gwen;
@@ -25,7 +26,8 @@ int main() {
             i64 x;
             cin >> p >> x;
             seg.set(p, seg.get(p) + x);
-        } else {
+        }
+        else {
             int l, r;
             cin >> l >> r;
             cout << seg.prod(l, r) << "\n";

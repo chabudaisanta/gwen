@@ -24,11 +24,10 @@ template <class T> using is_modint_t = std::enable_if_t<is_modint<T>::value>;
 
 }  // namespace internal
 
-template <int m, std::enable_if_t<(1 <= m)>* = nullptr>
-struct static_modint : internal::static_modint_base {
+template <int m, std::enable_if_t<(1 <= m)>* = nullptr> struct static_modint : internal::static_modint_base {
     using mint = static_modint;
 
-  public:
+public:
     static constexpr int mod() { return m; }
     static mint raw(int v) {
         mint x;
@@ -37,14 +36,12 @@ struct static_modint : internal::static_modint_base {
     }
 
     static_modint() : _v(0) {}
-    template <class T, internal::is_signed_int_t<T>* = nullptr>
-    static_modint(T v) {
+    template <class T, internal::is_signed_int_t<T>* = nullptr> static_modint(T v) {
         long long x = (long long)(v % (long long)(umod()));
         if (x < 0) x += umod();
         _v = (unsigned int)(x);
     }
-    template <class T, internal::is_unsigned_int_t<T>* = nullptr>
-    static_modint(T v) {
+    template <class T, internal::is_unsigned_int_t<T>* = nullptr> static_modint(T v) {
         _v = (unsigned int)(v % umod());
     }
 
@@ -106,33 +103,22 @@ struct static_modint : internal::static_modint_base {
         if (prime) {
             assert(_v);
             return pow(umod() - 2);
-        } else {
+        }
+        else {
             auto eg = internal::inv_gcd(_v, m);
             assert(eg.first == 1);
             return eg.second;
         }
     }
 
-    friend mint operator+(const mint& lhs, const mint& rhs) {
-        return mint(lhs) += rhs;
-    }
-    friend mint operator-(const mint& lhs, const mint& rhs) {
-        return mint(lhs) -= rhs;
-    }
-    friend mint operator*(const mint& lhs, const mint& rhs) {
-        return mint(lhs) *= rhs;
-    }
-    friend mint operator/(const mint& lhs, const mint& rhs) {
-        return mint(lhs) /= rhs;
-    }
-    friend bool operator==(const mint& lhs, const mint& rhs) {
-        return lhs._v == rhs._v;
-    }
-    friend bool operator!=(const mint& lhs, const mint& rhs) {
-        return lhs._v != rhs._v;
-    }
+    friend mint operator+(const mint& lhs, const mint& rhs) { return mint(lhs) += rhs; }
+    friend mint operator-(const mint& lhs, const mint& rhs) { return mint(lhs) -= rhs; }
+    friend mint operator*(const mint& lhs, const mint& rhs) { return mint(lhs) *= rhs; }
+    friend mint operator/(const mint& lhs, const mint& rhs) { return mint(lhs) /= rhs; }
+    friend bool operator==(const mint& lhs, const mint& rhs) { return lhs._v == rhs._v; }
+    friend bool operator!=(const mint& lhs, const mint& rhs) { return lhs._v != rhs._v; }
 
-  private:
+private:
     unsigned int _v;
     static constexpr unsigned int umod() { return m; }
     static constexpr bool prime = internal::is_prime<m>;
@@ -141,7 +127,7 @@ struct static_modint : internal::static_modint_base {
 template <int id> struct dynamic_modint : internal::modint_base {
     using mint = dynamic_modint;
 
-  public:
+public:
     static int mod() { return (int)(bt.umod()); }
     static void set_mod(int m) {
         assert(1 <= m);
@@ -154,14 +140,12 @@ template <int id> struct dynamic_modint : internal::modint_base {
     }
 
     dynamic_modint() : _v(0) {}
-    template <class T, internal::is_signed_int_t<T>* = nullptr>
-    dynamic_modint(T v) {
+    template <class T, internal::is_signed_int_t<T>* = nullptr> dynamic_modint(T v) {
         long long x = (long long)(v % (long long)(mod()));
         if (x < 0) x += mod();
         _v = (unsigned int)(x);
     }
-    template <class T, internal::is_unsigned_int_t<T>* = nullptr>
-    dynamic_modint(T v) {
+    template <class T, internal::is_unsigned_int_t<T>* = nullptr> dynamic_modint(T v) {
         _v = (unsigned int)(v % mod());
     }
 
@@ -223,26 +207,14 @@ template <int id> struct dynamic_modint : internal::modint_base {
         return eg.second;
     }
 
-    friend mint operator+(const mint& lhs, const mint& rhs) {
-        return mint(lhs) += rhs;
-    }
-    friend mint operator-(const mint& lhs, const mint& rhs) {
-        return mint(lhs) -= rhs;
-    }
-    friend mint operator*(const mint& lhs, const mint& rhs) {
-        return mint(lhs) *= rhs;
-    }
-    friend mint operator/(const mint& lhs, const mint& rhs) {
-        return mint(lhs) /= rhs;
-    }
-    friend bool operator==(const mint& lhs, const mint& rhs) {
-        return lhs._v == rhs._v;
-    }
-    friend bool operator!=(const mint& lhs, const mint& rhs) {
-        return lhs._v != rhs._v;
-    }
+    friend mint operator+(const mint& lhs, const mint& rhs) { return mint(lhs) += rhs; }
+    friend mint operator-(const mint& lhs, const mint& rhs) { return mint(lhs) -= rhs; }
+    friend mint operator*(const mint& lhs, const mint& rhs) { return mint(lhs) *= rhs; }
+    friend mint operator/(const mint& lhs, const mint& rhs) { return mint(lhs) /= rhs; }
+    friend bool operator==(const mint& lhs, const mint& rhs) { return lhs._v == rhs._v; }
+    friend bool operator!=(const mint& lhs, const mint& rhs) { return lhs._v != rhs._v; }
 
-  private:
+private:
     unsigned int _v;
     static internal::barrett bt;
     static unsigned int umod() { return bt.umod(); }
@@ -255,18 +227,14 @@ using modint = dynamic_modint<-1>;
 
 namespace internal {
 
-template <class T>
-using is_static_modint = std::is_base_of<internal::static_modint_base, T>;
+template <class T> using is_static_modint = std::is_base_of<internal::static_modint_base, T>;
 
-template <class T>
-using is_static_modint_t = std::enable_if_t<is_static_modint<T>::value>;
+template <class T> using is_static_modint_t = std::enable_if_t<is_static_modint<T>::value>;
 
 template <class> struct is_dynamic_modint : public std::false_type {};
-template <int id>
-struct is_dynamic_modint<dynamic_modint<id>> : public std::true_type {};
+template <int id> struct is_dynamic_modint<dynamic_modint<id>> : public std::true_type {};
 
-template <class T>
-using is_dynamic_modint_t = std::enable_if_t<is_dynamic_modint<T>::value>;
+template <class T> using is_dynamic_modint_t = std::enable_if_t<is_dynamic_modint<T>::value>;
 
 }  // namespace internal
 

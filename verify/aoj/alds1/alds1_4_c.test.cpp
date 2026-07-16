@@ -21,10 +21,12 @@ int main() {
         std::cin >> op >> str;
         if (op == "insert") {
             trie.insert(str);
-        } else if (op == "find") {
+        }
+        else if (op == "find") {
             if (trie.contains(str)) {
                 std::cout << "yes\n";
-            } else {
+            }
+            else {
                 std::cout << "no\n";
             }
         }

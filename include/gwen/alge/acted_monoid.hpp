@@ -28,4 +28,4 @@ concept acted_monoid = monoid<M> && requires(typename M::F f, typename M::F g, t
     { M::id() } -> std::same_as<typename M::F>;
 };
 
-} // namespace gwen
+}  // namespace gwen

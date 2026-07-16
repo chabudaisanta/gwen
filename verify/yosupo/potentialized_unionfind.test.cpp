@@ -36,18 +36,20 @@ int main() {
             // p_v - p_u = x
             // merge(a, b, w) creates P(a) - P(b) = w
             // So merge(v, u, x)
-            if(dsu.merge(v, u, mint(x)) == -1) {
+            if (dsu.merge(v, u, mint(x)) == -1) {
                 std::cout << 0 << '\n';
             }
             else {
                 std::cout << 1 << '\n';
             }
-        } else {
+        }
+        else {
             int u, v;
             std::cin >> u >> v;
             if (dsu.same(u, v)) {
                 std::cout << dsu.diff(v, u).val() << "\n";
-            } else {
+            }
+            else {
                 std::cout << -1 << "\n";
             }
         }

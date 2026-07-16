@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 #include "gwen/graph/graph.hpp"
 #include "gwen/types.hpp"
@@ -14,8 +14,7 @@ namespace gwen {
  * @tparam IsDirected グラフが有向か無向か
  * @details 全頂点に対して DFS を行い、ダブリングのテーブルを構築します。
  */
-template <edge Edge, bool IsDirected>
-class Forest {
+template <edge Edge, bool IsDirected> class Forest {
 private:
     i32 n_;
     i32 lg_;
@@ -146,4 +145,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

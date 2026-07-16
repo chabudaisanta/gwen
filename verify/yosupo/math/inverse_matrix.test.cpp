@@ -31,7 +31,8 @@ int main() {
     auto inv = a.inverse();
     if (inv.rows() == 0) {
         std::cout << "-1\n";
-    } else {
+    }
+    else {
         for (i32 i = 0; i < n; ++i) {
             for (i32 j = 0; j < n; ++j) {
                 std::cout << inv[i][j].val() << (j + 1 == n ? "" : " ");

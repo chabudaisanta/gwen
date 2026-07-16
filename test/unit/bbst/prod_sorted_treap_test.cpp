@@ -3,6 +3,7 @@
 // clang-format on
 
 #include <gtest/gtest.h>
+
 #include "gwen/alge/monoid.hpp"
 
 using namespace gwen;
@@ -25,15 +26,15 @@ TEST(ProdSortedTreapTest, BasicOperations) {
     EXPECT_EQ(t.prod(0, 100), 350);
     EXPECT_EQ(t.all_prod(), 350);
 
-    t.insert(10, 100); // multiple keys
+    t.insert(10, 100);  // multiple keys
     EXPECT_EQ(t.count(10), 2);
     EXPECT_EQ(t.prod(10, 11), 200);
 
-    t.erase(10); // erase one
+    t.erase(10);  // erase one
     EXPECT_EQ(t.count(10), 1);
     EXPECT_EQ(t.prod(10, 11), 100);
 
-    t.set(10, 99); // erase all 10s and set 99
+    t.set(10, 99);  // erase all 10s and set 99
     EXPECT_EQ(t.count(10), 1);
     EXPECT_EQ(t.prod(10, 11), 99);
 

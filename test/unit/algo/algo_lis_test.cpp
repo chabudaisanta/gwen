@@ -1,5 +1,6 @@
-#include "gwen/algo/lis.hpp"
 #include <gtest/gtest.h>
+
+#include "gwen/algo/lis.hpp"
 
 using namespace gwen;
 

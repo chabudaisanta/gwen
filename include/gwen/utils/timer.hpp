@@ -67,8 +67,8 @@ public:
 
     /** @brief タイマーの現在状態を文字列として出力します (ダンプ用) */
     std::string dump() const {
-        return std::format("Timer{{\n  elapsed: {}ms\n  delta: {}ms\n  limit: {}ms\n}}", elapsed<ms>().count(), delta<ms>().count(),
-                           std::chrono::duration_cast<ms>(limit).count());
+        return std::format("Timer{{\n  elapsed: {}ms\n  delta: {}ms\n  limit: {}ms\n}}", elapsed<ms>().count(),
+                           delta<ms>().count(), std::chrono::duration_cast<ms>(limit).count());
     }
 
 private:

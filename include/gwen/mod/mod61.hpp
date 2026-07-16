@@ -48,8 +48,7 @@ public:
     /**
      * @brief 符号なし整数からのコンストラクタ
      */
-    template <std::unsigned_integral T>
-    constexpr ModInt61(T x) {
+    template <std::unsigned_integral T> constexpr ModInt61(T x) {
         static_assert(sizeof(T) <= sizeof(u64), "T must be 64-bit or smaller");
         tr = calc_mod(static_cast<u64>(x));
     }
@@ -57,14 +56,14 @@ public:
     /**
      * @brief 符号付き整数からのコンストラクタ
      */
-    template <std::signed_integral T>
-    constexpr ModInt61(T x) {
+    template <std::signed_integral T> constexpr ModInt61(T x) {
         static_assert(sizeof(T) <= sizeof(u64), "T must be 64-bit or smaller");
         if (x < 0) {
             i64 v = x % static_cast<i64>(mod61);
             if (v < 0) v += mod61;
             tr = v;
-        } else {
+        }
+        else {
             tr = calc_mod(static_cast<u64>(x));
         }
     }
@@ -109,8 +108,7 @@ public:
      * @param x 指数
      * @return this^x
      */
-    template <std::integral T>
-    constexpr m61 pow(T x) const {
+    template <std::integral T> constexpr m61 pow(T x) const {
         if constexpr (std::is_signed_v<T>) {
             assert(x >= 0);
         }
@@ -134,4 +132,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

@@ -17,4 +17,4 @@ concept ring = requires(T a, T b) {
     { a *= b } -> std::same_as<T&>;
 };
 
-} // namespace gwen
+}  // namespace gwen

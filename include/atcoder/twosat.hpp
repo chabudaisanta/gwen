@@ -13,7 +13,7 @@ namespace atcoder {
 // A Linear-Time Algorithm for Testing the Truth of Certain Quantified Boolean
 // Formulas
 struct two_sat {
-  public:
+public:
     two_sat() : _n(0), scc(0) {}
     explicit two_sat(int n) : _n(n), _answer(n), scc(2 * n) {}
 
@@ -33,7 +33,7 @@ struct two_sat {
     }
     std::vector<bool> answer() { return _answer; }
 
-  private:
+private:
     int _n;
     std::vector<bool> _answer;
     internal::scc_graph scc;

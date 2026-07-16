@@ -4,6 +4,7 @@
 // clang-format on
 
 #include <gtest/gtest.h>
+
 #include <sstream>
 #include <vector>
 

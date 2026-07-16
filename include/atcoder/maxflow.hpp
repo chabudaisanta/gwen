@@ -12,7 +12,7 @@
 namespace atcoder {
 
 template <class Cap> struct mf_graph {
-  public:
+public:
     mf_graph() : _n(0) {}
     explicit mf_graph(int n) : _n(n), g(n) {}
 
@@ -60,9 +60,7 @@ template <class Cap> struct mf_graph {
         _re.cap = new_flow;
     }
 
-    Cap flow(int s, int t) {
-        return flow(s, t, std::numeric_limits<Cap>::max());
-    }
+    Cap flow(int s, int t) { return flow(s, t, std::numeric_limits<Cap>::max()); }
     Cap flow(int s, int t, Cap flow_limit) {
         assert(0 <= s && s < _n);
         assert(0 <= t && t < _n);
@@ -94,8 +92,7 @@ template <class Cap> struct mf_graph {
             for (int& i = iter[v]; i < int(g[v].size()); i++) {
                 _edge& e = g[v][i];
                 if (level_v <= level[e.to] || g[e.to][e.rev].cap == 0) continue;
-                Cap d =
-                    self(self, e.to, std::min(up - res, g[e.to][e.rev].cap));
+                Cap d = self(self, e.to, std::min(up - res, g[e.to][e.rev].cap));
                 if (d <= 0) continue;
                 g[v][i].cap += d;
                 g[e.to][e.rev].cap -= d;
@@ -136,7 +133,7 @@ template <class Cap> struct mf_graph {
         return visited;
     }
 
-  private:
+private:
     int _n;
     struct _edge {
         int to, rev;

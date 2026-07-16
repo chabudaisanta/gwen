@@ -11,8 +11,7 @@ namespace gwen {
  * @param i 取得するビットの位置 (0-indexed)
  * @return T1 i番目のビットのみを残した値（0 または 1<<i）
  */
-template <std::integral T1, std::integral T2>
-constexpr T1 getBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 getBit(T1 bit, T2 i) {
     return bit & (static_cast<T1>(1) << i);
 }
 
@@ -24,8 +23,7 @@ constexpr T1 getBit(T1 bit, T2 i) {
  * @param i 設定するビットの位置 (0-indexed)
  * @return T1 設定後の整数
  */
-template <std::integral T1, std::integral T2>
-constexpr T1 setBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 setBit(T1 bit, T2 i) {
     return bit | (static_cast<T1>(1) << i);
 }
 
@@ -37,8 +35,7 @@ constexpr T1 setBit(T1 bit, T2 i) {
  * @param i クリアするビットの位置 (0-indexed)
  * @return T1 クリア後の整数
  */
-template <std::integral T1, std::integral T2>
-constexpr T1 clearBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 clearBit(T1 bit, T2 i) {
     return bit & ~(static_cast<T1>(1) << i);
 }
 
@@ -50,9 +47,8 @@ constexpr T1 clearBit(T1 bit, T2 i) {
  * @param i 反転するビットの位置 (0-indexed)
  * @return T1 反転後の整数
  */
-template <std::integral T1, std::integral T2>
-constexpr T1 toggleBit(T1 bit, T2 i) {
+template <std::integral T1, std::integral T2> constexpr T1 toggleBit(T1 bit, T2 i) {
     return bit ^ (static_cast<T1>(1) << i);
 }
 
-} // namespace gwen
+}  // namespace gwen

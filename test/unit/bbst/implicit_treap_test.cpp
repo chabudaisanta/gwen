@@ -43,11 +43,11 @@ TEST(ImplicitTreapTest, BasicOperations) {
 
 TEST(ImplicitTreapTest, Reverse) {
     ImplicitTreap<int> t;
-    for (int i = 0; i < 5; ++i) t.push_back(i); // [0, 1, 2, 3, 4]
+    for (int i = 0; i < 5; ++i) t.push_back(i);  // [0, 1, 2, 3, 4]
 
-    t.reverse(1, 4); // Reverse [1, 4) -> 1, 2, 3 becomes 3, 2, 1
+    t.reverse(1, 4);  // Reverse [1, 4) -> 1, 2, 3 becomes 3, 2, 1
     // [0, 3, 2, 1, 4]
-    
+
     auto vec = t.to_vec();
     EXPECT_EQ(vec[0], 0);
     EXPECT_EQ(vec[1], 3);
@@ -68,7 +68,7 @@ TEST(ImplicitTreapTest, Concat) {
     t1.concat(t2);
     EXPECT_EQ(t1.size(), 4);
     EXPECT_EQ(t2.size(), 0);
-    
+
     auto vec = t1.to_vec();
     EXPECT_EQ(vec[0], 1);
     EXPECT_EQ(vec[3], 4);

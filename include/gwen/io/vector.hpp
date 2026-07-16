@@ -10,8 +10,7 @@
  * @param vec 出力対象のベクター
  * @return std::ostream& 出力後のストリーム
  */
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
+template <typename T> std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
     for (auto it = vec.begin(); it != vec.end(); ++it) {
         os << *it << (it == std::prev(vec.end()) ? "" : " ");
     }
@@ -25,8 +24,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
  * @param vec 入力対象のベクター
  * @return std::istream& 入力後のストリーム
  */
-template <typename T>
-std::istream& operator>>(std::istream& is, std::vector<T>& vec) {
+template <typename T> std::istream& operator>>(std::istream& is, std::vector<T>& vec) {
     for (T& e : vec) is >> e;
     return is;
 }

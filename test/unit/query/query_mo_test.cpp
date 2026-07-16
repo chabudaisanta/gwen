@@ -1,6 +1,8 @@
-#include "gwen/query/mo.hpp"
 #include <gtest/gtest.h>
+
 #include <vector>
+
+#include "gwen/query/mo.hpp"
 
 using namespace gwen;
 
@@ -16,22 +18,16 @@ TEST(MoAlgorithmTest, RangeSum) {
     mo.add_query(0, 10);
     mo.add_query(10, 20);
     mo.add_query(0, 100);
-    mo.add_query(50, 50); // empty range
+    mo.add_query(50, 50);  // empty range
     mo.add_query(20, 80);
 
     i64 current_sum = 0;
-    
-    auto add = [&](i32 idx) {
-        current_sum += a[idx];
-    };
-    
-    auto del = [&](i32 idx) {
-        current_sum -= a[idx];
-    };
-    
-    auto get_res = [&](i32 /*idx*/) {
-        return current_sum;
-    };
+
+    auto add = [&](i32 idx) { current_sum += a[idx]; };
+
+    auto del = [&](i32 idx) { current_sum -= a[idx]; };
+
+    auto get_res = [&](i32 /*idx*/) { return current_sum; };
 
     auto res = mo.solve(add, del, get_res);
 
@@ -65,32 +61,22 @@ TEST(MoAlgorithmTest, FiveCallbackVersion) {
     mo.add_query(0, 50);
 
     i64 current_sum = 0;
-    
+
     // decrement_l expands the left side
-    auto decrement_l = [&](i32 l, i32 /*r*/) {
-        current_sum += a[l];
-    };
+    auto decrement_l = [&](i32 l, i32 /*r*/) { current_sum += a[l]; };
     // increment_l shrinks the left side
-    auto increment_l = [&](i32 l, i32 /*r*/) {
-        current_sum -= a[l];
-    };
+    auto increment_l = [&](i32 l, i32 /*r*/) { current_sum -= a[l]; };
     // increment_r expands the right side
-    auto increment_r = [&](i32 /*l*/, i32 r) {
-        current_sum += a[r];
-    };
+    auto increment_r = [&](i32 /*l*/, i32 r) { current_sum += a[r]; };
     // decrement_r shrinks the right side
-    auto decrement_r = [&](i32 /*l*/, i32 r) {
-        current_sum -= a[r];
-    };
-    
-    auto get_res = [&](i32 /*idx*/) {
-        return current_sum;
-    };
+    auto decrement_r = [&](i32 /*l*/, i32 r) { current_sum -= a[r]; };
+
+    auto get_res = [&](i32 /*idx*/) { return current_sum; };
 
     auto res = mo.solve(increment_l, decrement_l, increment_r, decrement_r, get_res);
 
     ASSERT_EQ(res.size(), 2);
-    
+
     auto expected_sum = [&](i32 l, i32 r) {
         i64 sum = 0;
         for (i32 i = l; i < r; ++i) {

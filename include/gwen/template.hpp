@@ -11,19 +11,19 @@
 #include <bits/stdc++.h>
 
 // gwen includes
-#include "gwen/types.hpp"
 #include "gwen/dump.hpp"
+#include "gwen/types.hpp"
 
 // core
-#include "gwen/core/macro.hpp"
 #include "gwen/core/constants.hpp"
 #include "gwen/core/grid.hpp"
+#include "gwen/core/macro.hpp"
 #include "gwen/core/utils.hpp"
 // #include "gwen/core/bit.hpp"
 
 // math
-#include "gwen/math/integer.hpp"
 #include "gwen/math/basic.hpp"
+#include "gwen/math/integer.hpp"
 
 // io
 #include "gwen/io/vector.hpp"

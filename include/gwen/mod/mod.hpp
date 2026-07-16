@@ -73,4 +73,4 @@ u64 inv_mod_64(u64 a, u64 m) {
     return (x % m + m) % m;
 }
 
-} // namespace gwen
+}  // namespace gwen

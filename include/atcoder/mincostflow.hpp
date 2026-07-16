@@ -13,7 +13,7 @@
 namespace atcoder {
 
 template <class Cap, class Cost> struct mcf_graph {
-  public:
+public:
     mcf_graph() {}
     explicit mcf_graph(int n) : _n(n) {}
 
@@ -40,15 +40,9 @@ template <class Cap, class Cost> struct mcf_graph {
     }
     std::vector<edge> edges() { return _edges; }
 
-    std::pair<Cap, Cost> flow(int s, int t) {
-        return flow(s, t, std::numeric_limits<Cap>::max());
-    }
-    std::pair<Cap, Cost> flow(int s, int t, Cap flow_limit) {
-        return slope(s, t, flow_limit).back();
-    }
-    std::vector<std::pair<Cap, Cost>> slope(int s, int t) {
-        return slope(s, t, std::numeric_limits<Cap>::max());
-    }
+    std::pair<Cap, Cost> flow(int s, int t) { return flow(s, t, std::numeric_limits<Cap>::max()); }
+    std::pair<Cap, Cost> flow(int s, int t, Cap flow_limit) { return slope(s, t, flow_limit).back(); }
+    std::vector<std::pair<Cap, Cost>> slope(int s, int t) { return slope(s, t, std::numeric_limits<Cap>::max()); }
     std::vector<std::pair<Cap, Cost>> slope(int s, int t, Cap flow_limit) {
         assert(0 <= s && s < _n);
         assert(0 <= t && t < _n);
@@ -89,7 +83,7 @@ template <class Cap, class Cost> struct mcf_graph {
         return result;
     }
 
-  private:
+private:
     int _n;
     std::vector<edge> _edges;
 
@@ -100,10 +94,7 @@ template <class Cap, class Cost> struct mcf_graph {
         Cost cost;
     };
 
-    std::vector<std::pair<Cap, Cost>> slope(internal::csr<_edge>& g,
-                                            int s,
-                                            int t,
-                                            Cap flow_limit) {
+    std::vector<std::pair<Cap, Cost>> slope(internal::csr<_edge>& g, int s, int t, Cap flow_limit) {
         // variants (C = maxcost):
         // -(n-1)C <= dual[s] <= dual[i] <= dual[t] = 0
         // reduced cost (= e.cost + dual[e.from] - dual[e.to]) >= 0 for all edge
@@ -137,7 +128,8 @@ template <class Cap, class Cost> struct mcf_graph {
                 if (!que_min.empty()) {
                     v = que_min.back();
                     que_min.pop_back();
-                } else {
+                }
+                else {
                     while (heap_r < que.size()) {
                         heap_r++;
                         std::push_heap(que.begin(), que.begin() + heap_r);
@@ -166,7 +158,8 @@ template <class Cap, class Cost> struct mcf_graph {
                         prev_e[e.to] = e.rev;
                         if (dist_to == dist_v) {
                             que_min.push_back(e.to);
-                        } else {
+                        }
+                        else {
                             que.push_back(Q{dist_to, e.to});
                         }
                     }

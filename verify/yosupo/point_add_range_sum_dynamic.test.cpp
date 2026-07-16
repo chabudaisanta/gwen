@@ -1,8 +1,9 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/point_add_range_sum"
 
 #include <iostream>
-#include "gwen/ds/dynamic_segment_tree.hpp"
+
 #include "gwen/alge/monoid.hpp"
+#include "gwen/ds/dynamic_segment_tree.hpp"
 
 using namespace std;
 using namespace gwen;
@@ -12,7 +13,7 @@ int main() {
     cin.tie(nullptr);
     int n, q;
     if (!(cin >> n >> q)) return 0;
-    
+
     DynamicSegmentTree<sum_monoid<i64>> seg(n);
     for (int i = 0; i < n; i++) {
         i64 x;
@@ -28,7 +29,8 @@ int main() {
             i64 x;
             cin >> p >> x;
             seg.set(p, seg.get(p) + x);
-        } else {
+        }
+        else {
             int l, r;
             cin >> l >> r;
             cout << seg.prod(l, r) << "\n";

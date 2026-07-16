@@ -59,9 +59,7 @@ int main() {
         current_inv -= bit.sum(v + 1, comp_max + 1);
         bit.add(v, -1);
     };
-    auto get_res = [&](i32 idx) {
-        return current_inv;
-    };
+    auto get_res = [&](i32 idx) { return current_inv; };
 
     auto res = mo.solve(increment_l, decrement_l, increment_r, decrement_r, get_res);
 

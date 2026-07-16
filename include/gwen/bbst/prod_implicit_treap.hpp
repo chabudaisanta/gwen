@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "gwen/alge/monoid.hpp"
+#include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
-#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -15,8 +15,7 @@ namespace gwen {
  * @brief 区間積取得が可能なインデックスベースの動的配列（Treap）
  * @details 反転操作（非可換モノイド対応）と区間積取得をサポートします。
  */
-template <monoid M>
-class ProdImplicitTreap {
+template <monoid M> class ProdImplicitTreap {
 public:
     using S = typename M::S;
     using tree = i32;
@@ -46,7 +45,7 @@ public:
         std::vector<tree> nodes;
         nodes.reserve(vec.size());
         for (const S& x : vec) nodes.push_back(d.new_node(node(x)));
-        
+
         tree r = NIL;
         std::vector<tree> st;
         st.reserve(vec.size());
@@ -227,4 +226,4 @@ private:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

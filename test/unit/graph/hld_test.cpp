@@ -35,10 +35,10 @@ TEST(HldTest, BasicOperations) {
     EXPECT_EQ(hld.get_lca(0, 4), 0);
 
     // Dist
-    EXPECT_EQ(hld.get_dist(3, 4), 2); // 3-1-4
-    EXPECT_EQ(hld.get_dist(3, 6), 5); // 3-1-0-2-5-6
+    EXPECT_EQ(hld.get_dist(3, 4), 2);  // 3-1-4
+    EXPECT_EQ(hld.get_dist(3, 6), 5);  // 3-1-0-2-5-6
     EXPECT_EQ(hld.get_dist(5, 6), 1);
-    EXPECT_EQ(hld.get_dist(0, 4), 2); // 0-1-4
+    EXPECT_EQ(hld.get_dist(0, 4), 2);  // 0-1-4
 
     // Kth Ancestor
     EXPECT_EQ(hld.kth_ancestor(6, 1), 5);
@@ -59,7 +59,7 @@ TEST(HldTest, BasicOperations) {
     auto st2 = hld.subtree(2);
     // The subtree size of 2 should be 3 (2, 5, 6)
     EXPECT_EQ(st2.second - st2.first, 3);
-    
+
     // Verify path coverage
     auto p = hld.path(3, 6);
     i32 covered = 0;

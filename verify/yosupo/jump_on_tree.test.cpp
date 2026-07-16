@@ -33,9 +33,11 @@ int main() {
 
         if (k <= dist_u) {
             std::cout << forest.get_kth_ancestor(u, k) << "\n";
-        } else if (k <= dist_u + dist_v) {
+        }
+        else if (k <= dist_u + dist_v) {
             std::cout << forest.get_kth_ancestor(v, dist_u + dist_v - k) << "\n";
-        } else {
+        }
+        else {
             std::cout << -1 << "\n";
         }
     }

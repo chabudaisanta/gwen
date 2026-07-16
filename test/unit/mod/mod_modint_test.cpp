@@ -14,8 +14,8 @@ TEST(DynamicModInt64Test, BasicOperations) {
     DynamicModInt64::set_mod(998244353);
 
     DynamicModInt64 a(100);
-    DynamicModInt64 b(998244352); // -1 mod 998244353
-    DynamicModInt64 c(-1); // -1 mod 998244353
+    DynamicModInt64 b(998244352);  // -1 mod 998244353
+    DynamicModInt64 c(-1);         // -1 mod 998244353
 
     EXPECT_EQ(b.val(), 998244352);
     EXPECT_EQ(c.val(), 998244352);

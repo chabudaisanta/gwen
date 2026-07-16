@@ -95,20 +95,23 @@ template <typename... Args> void dump(Args&&... args) {
  * @param ... 出力対象の変数（カンマ区切り）
  */
 #ifdef LOCAL
-#define DUMP(...)                                                                                                   \
-    do {                                                                                                            \
-        auto loc = std::source_location::current();                                                                 \
+#define DUMP(...)                                                                                                     \
+    do {                                                                                                              \
+        auto loc = std::source_location::current();                                                                   \
         std::cerr << ::gwen::internal::CYAN << "[gwen::DUMP @ " << ::gwen::internal::basename(loc.file_name()) << ':' \
-                  << loc.line() << "]\n" << ::gwen::internal::RESET;                                                \
-        constexpr std::string_view __vars_sv = #__VA_ARGS__;                                                        \
-        if constexpr (__vars_sv.empty() || __vars_sv.find_first_not_of(" \t\r\n") == std::string_view::npos) {      \
-            std::cerr << ::gwen::internal::RED << "[empty]\n" << ::gwen::internal::RESET;                           \
-        }                                                                                                           \
-        else {                                                                                                      \
-            std::cerr << ::gwen::internal::YELLOW << "[vars]\n" << ::gwen::internal::RESET << #__VA_ARGS__ << "\n"  \
-                      << ::gwen::internal::GREEN << "[dump]\n" << ::gwen::internal::RESET;                          \
-            ::gwen::dump(__VA_ARGS__);                                                                              \
-        }                                                                                                           \
+                  << loc.line() << "]\n"                                                                              \
+                  << ::gwen::internal::RESET;                                                                         \
+        constexpr std::string_view __vars_sv = #__VA_ARGS__;                                                          \
+        if constexpr (__vars_sv.empty() || __vars_sv.find_first_not_of(" \t\r\n") == std::string_view::npos) {        \
+            std::cerr << ::gwen::internal::RED << "[empty]\n" << ::gwen::internal::RESET;                             \
+        }                                                                                                             \
+        else {                                                                                                        \
+            std::cerr << ::gwen::internal::YELLOW << "[vars]\n"                                                       \
+                      << ::gwen::internal::RESET << #__VA_ARGS__ << "\n"                                              \
+                      << ::gwen::internal::GREEN << "[dump]\n"                                                        \
+                      << ::gwen::internal::RESET;                                                                     \
+            ::gwen::dump(__VA_ARGS__);                                                                                \
+        }                                                                                                             \
     } while (0)
 #else
 #define DUMP(...) \

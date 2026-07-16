@@ -3,6 +3,7 @@
 // clang-format on
 
 #include <gtest/gtest.h>
+
 #include <unordered_set>
 
 using namespace gwen;
@@ -21,7 +22,7 @@ TEST(XorShiftTest, Range32) {
         u32 v = rand32(10);
         EXPECT_GE(v, 0);
         EXPECT_LT(v, 10);
-        
+
         u32 v2 = rand32(5, 15);
         EXPECT_GE(v2, 5);
         EXPECT_LT(v2, 15);

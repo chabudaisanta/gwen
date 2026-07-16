@@ -76,12 +76,11 @@ public:
      * @param get_res クエリIDを受け取り、現在の区間の計算結果を返す関数 `f(id)`
      * @return std::vector<decltype(get_res(0))> 各クエリの答えの配列
      */
-    template <
-        std::invocable<i32, i32> IL,
-        std::invocable<i32, i32> DL,
-        std::invocable<i32, i32> IR,
-        std::invocable<i32, i32> DR,
-        std::invocable<i32> GR>
+    template <std::invocable<i32, i32> IL,
+              std::invocable<i32, i32> DL,
+              std::invocable<i32, i32> IR,
+              std::invocable<i32, i32> DR,
+              std::invocable<i32> GR>
     auto solve(IL increment_l, DL decrement_l, IR increment_r, DR decrement_r, GR get_res) {
         std::vector<i32> query(q);
         std::iota(query.begin(), query.end(), 0);
@@ -115,10 +114,7 @@ public:
      * @param calc クエリIDを受け取り、現在の区間の計算結果を返す関数 `f(id)`
      * @return std::vector<decltype(calc(0))> 各クエリの答えの配列
      */
-    template <
-        std::invocable<i32> Add,
-        std::invocable<i32> Del,
-        std::invocable<i32> Calc>
+    template <std::invocable<i32> Add, std::invocable<i32> Del, std::invocable<i32> Calc>
     auto solve(Add add, Del del, Calc calc) {
         auto increment_l = [&](i32 l, i32 /*r*/) { del(l); };
         auto decrement_l = [&](i32 l, i32 /*r*/) { add(l); };

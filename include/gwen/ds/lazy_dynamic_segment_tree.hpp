@@ -3,8 +3,8 @@
 #include <cassert>
 
 #include "gwen/alge/acted_monoid.hpp"
-#include "gwen/utils/node_pool.hpp"
 #include "gwen/types.hpp"
+#include "gwen/utils/node_pool.hpp"
 
 namespace gwen {
 
@@ -12,8 +12,7 @@ namespace gwen {
  * @brief 遅延評価付き動的セグメント木
  * @details 座標圧縮なしで広大な区間への作用と区間積を扱えるセグメント木です。
  */
-template <acted_monoid M>
-class LazyDynamicSegmentTree {
+template <acted_monoid M> class LazyDynamicSegmentTree {
 public:
     using S = typename M::S;
     using F = typename M::F;
@@ -76,7 +75,8 @@ private:
         if (p < m) {
             tree cl = set_(d[t].left, l, m, p, x);
             d[t].left = cl;
-        } else {
+        }
+        else {
             tree cr = set_(d[t].right, m, r, p, x);
             d[t].right = cr;
         }
@@ -133,9 +133,7 @@ public:
         return prod_(root, 0, n, l, r);
     }
 
-    S all_prod() const {
-        return root == NIL ? M::e() : d[root].val;
-    }
+    S all_prod() const { return root == NIL ? M::e() : d[root].val; }
 
     void apply(i64 l, i64 r, F f) {
         assert(0 <= l && l <= r && r <= n);
@@ -144,4 +142,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

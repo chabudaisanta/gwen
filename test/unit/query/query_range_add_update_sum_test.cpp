@@ -15,7 +15,7 @@ TEST(RangeAddUpdateSumTest, Simple) {
     RangeAddUpdateSum<mint> seg(a);
 
     EXPECT_EQ(seg.prod(0, 5), mint(15));
-    
+
     // add 1 to [1, 4) -> {1, 3, 4, 5, 5}
     seg.add(1, 4, mint(1));
     EXPECT_EQ(seg.get(0), mint(1));

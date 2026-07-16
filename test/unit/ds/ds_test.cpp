@@ -17,13 +17,9 @@ TEST(DsTest, PrefixSum) {
 }
 
 TEST(DsTest, PrefixSum2D) {
-    std::vector<std::vector<int>> v = {
-        {1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9}
-    };
+    std::vector<std::vector<int>> v = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
     PrefixSum2d<int> ps2(v);
-    
+
     // get(l, r, u, d) [u, d) x [l, r)
     // l=0, r=3, u=0, d=3 -> 全体 45
     EXPECT_EQ(ps2.get(0, 3, 0, 3), 45);

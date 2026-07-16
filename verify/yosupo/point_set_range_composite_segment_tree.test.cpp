@@ -1,8 +1,9 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/point_set_range_composite"
 
 #include <iostream>
-#include "gwen/ds/segment_tree.hpp"
+
 #include "gwen/alge/monoid.hpp"
+#include "gwen/ds/segment_tree.hpp"
 #include "gwen/mod/modint.hpp"
 
 using namespace std;
@@ -40,7 +41,8 @@ int main() {
             i64 c, d;
             cin >> p >> c >> d;
             seg.set(p, {mint(c), mint(d)});
-        } else {
+        }
+        else {
             int l, r;
             i64 x;
             cin >> l >> r >> x;

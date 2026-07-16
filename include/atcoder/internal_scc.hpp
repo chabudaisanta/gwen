@@ -14,7 +14,7 @@ namespace internal {
 // R. Tarjan,
 // Depth-First Search and Linear Graph Algorithms
 struct scc_graph {
-  public:
+public:
     explicit scc_graph(int n) : _n(n) {}
 
     int num_vertices() { return _n; }
@@ -35,7 +35,8 @@ struct scc_graph {
                 if (ord[to] == -1) {
                     self(self, to);
                     low[v] = std::min(low[v], low[to]);
-                } else {
+                }
+                else {
                     low[v] = std::min(low[v], ord[to]);
                 }
             }
@@ -74,7 +75,7 @@ struct scc_graph {
         return groups;
     }
 
-  private:
+private:
     int _n;
     struct edge {
         int to;

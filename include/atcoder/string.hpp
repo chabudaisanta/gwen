@@ -60,7 +60,8 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
     if (n == 2) {
         if (s[0] < s[1]) {
             return {0, 1};
-        } else {
+        }
+        else {
             return {1, 0};
         }
     }
@@ -80,7 +81,8 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
     for (int i = 0; i < n; i++) {
         if (!ls[i]) {
             sum_s[s[i]]++;
-        } else {
+        }
+        else {
             sum_l[s[i] + 1]++;
         }
     }
@@ -147,7 +149,8 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
             bool same = true;
             if (end_l - l != end_r - r) {
                 same = false;
-            } else {
+            }
+            else {
                 while (l < end_l) {
                     if (s[l] != s[r]) {
                         break;
@@ -161,8 +164,7 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
             rec_s[lms_map[sorted_lms[i]]] = rec_upper;
         }
 
-        auto rec_sa =
-            sa_is<THRESHOLD_NAIVE, THRESHOLD_DOUBLING>(rec_s, rec_upper);
+        auto rec_sa = sa_is<THRESHOLD_NAIVE, THRESHOLD_DOUBLING>(rec_s, rec_upper);
 
         for (int i = 0; i < m; i++) {
             sorted_lms[i] = lms[rec_sa[i]];
@@ -210,9 +212,7 @@ std::vector<int> suffix_array(const std::string& s) {
 // T. Kasai, G. Lee, H. Arimura, S. Arikawa, and K. Park,
 // Linear-Time Longest-Common-Prefix Computation in Suffix Arrays and Its
 // Applications
-template <class T>
-std::vector<int> lcp_array(const std::vector<T>& s,
-                           const std::vector<int>& sa) {
+template <class T> std::vector<int> lcp_array(const std::vector<T>& s, const std::vector<int>& sa) {
     assert(s.size() == sa.size());
     int n = int(s.size());
     assert(n >= 1);
