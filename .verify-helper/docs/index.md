@@ -23,6 +23,8 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [エラー出力マクロ(dump.hpp)](include/gwen/dump.hpp)
 - [時間計測・制限時間管理 (timer.hpp)](doc/utils/timer.md)
 - [XorShift乱数 (xorshift.hpp)](doc/utils/xorshift.md)
+- [座標圧縮 (compress.hpp)](doc/utils/compress.md)
+- [ノードプール (node_pool.hpp)](doc/utils/node_pool.md)
 
 ### 数学 (Math)
 - [素数・素因数分解 (prime.hpp)](doc/math/prime.md)
