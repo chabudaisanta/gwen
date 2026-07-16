@@ -1,4 +1,5 @@
 [languages.cpp]
+source_extensions = [".hpp", ".cpp"]
 
 [[languages.cpp.environments]]
 CXX = "g++"
