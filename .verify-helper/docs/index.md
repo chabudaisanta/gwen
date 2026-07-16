@@ -84,6 +84,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 
 ### クエリ (Query)
 - [Range Add Update Sum (range_add_update_sum.hpp)](doc/query/range_add_update_sum.md)
+- [Mo's Algorithm (mo.hpp)](doc/query/mo.md)
 
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)
