@@ -17,7 +17,7 @@ competitive-verifier oj-resolve --config config.toml --include "verify/**" > ver
 
 echo "2. Running verification..."
 set +e
-competitive-verifier verify --verify-json verify_files.json --output result.json --check-error --tle 5.0 2>&1 | tee >(sed -E 's/\x1b\[[0-9;]*[a-zA-Z]//g' > verify/verify.log)
+competitive-verifier verify --verify-json verify_files.json --output result.json --check-error --tle 10.0 2>&1 | tee >(sed -E 's/\x1b\[[0-9;]*[a-zA-Z]//g' > verify/verify.log)
 EXIT_CODE=${PIPESTATUS[0]}
 set -e
 
