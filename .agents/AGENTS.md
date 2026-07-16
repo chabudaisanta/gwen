@@ -50,17 +50,17 @@
 
 <RULE>
 ## Verify コードでの modint の利用
-- Verify 用のコードを作成する際、`atcoder/modint` は使用せず、必ず gwen 内の modint 実装を使用してください。
-- 以下のスニペットのように、`#define USE_ACL_MODINT 1` と設定し、`DynamicModInt64` やその他 gwen 提供の型を利用するパターンを記述してください。
+- Verify 用のコードを作成する際、基本的には gwen 内の modint 実装を使用してください。
+- 以下のスニペットのように、`#define USE_ACL_MODINT 0` と設定し、`DynamicModInt64` やその他 gwen 提供の型を利用するパターンを記述してください。
 ```cpp
-#include "gwen/mod/modint.hpp"
-#define USE_ACL_MODINT 1
+#define USE_ACL_MODINT 0
 #if USE_ACL_MODINT
-using mint = DynamicModInt64;
-auto gwen_dummy_setmod = [](){mint::set_mod(998244353); return 0; }();
-#else
 #include <atcoder/modint>
 using mint = atcoder::modint998244353;
+#else
+#include "gwen/mod/modint.hpp"
+using mint = gwen::DynamicModInt64;
+auto gwen_dummy_setmod = [](){mint::set_mod(998244353); return 0; }();
 #endif
 ```
 </RULE>

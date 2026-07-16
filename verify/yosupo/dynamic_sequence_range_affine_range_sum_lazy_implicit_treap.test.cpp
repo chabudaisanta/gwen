@@ -9,14 +9,14 @@
 using namespace gwen;
 using namespace std;
 
-#include "gwen/mod/modint.hpp"
-#define USE_ACL_MODINT 1
+#define USE_ACL_MODINT 0
 #if USE_ACL_MODINT
-using mint = DynamicModInt64;
-auto gwen_dummy_setmod = [](){mint::set_mod(998244353); return 0; }();
-#else
 #include <atcoder/modint>
 using mint = atcoder::modint998244353;
+#else
+#include "gwen/mod/modint.hpp"
+using mint = gwen::DynamicModInt64;
+auto gwen_dummy_setmod = [](){mint::set_mod(998244353); return 0; }();
 #endif
 using Monoid = range_affine_range_sum_monoid<mint>;
 using Treap = LazyImplicitTreap<Monoid>;
