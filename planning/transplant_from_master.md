@@ -30,7 +30,7 @@
 - [x] graph/weighted_dsu.hpp
 - [x] graph/forest.hpp
 - [x] graph/tree_lca.hpp
-- [ ] math/matrix.hpp
+- [x] math/matrix.hpp
 - [ ] misc/lis.hpp
 - [x] mod/mod.hpp (依存関係がよくわかってない。何かに使ってる?)
 
@@ -54,6 +54,6 @@
 - [ ] graph/xor_linked_tree.hpp (いらない?)
 - [ ] hash/zobrist.hpp
 - [ ] math/binom.hpp
-- [ ] math/xor_basis.hpp (noshi基底にしたい)
+- [x] math/xor_basis.hpp (noshi基底にしたい)
 - [ ] query/functional_query.hpp
 - [ ] query/polynomial_difference_array.hpp
