@@ -209,6 +209,26 @@ static S range(Iterator begin, Iterator end)
 
 - $O(N)$ （$N$ は範囲の長さ）
 
+## build
+
+```cpp
+template <typename Iterator>
+static std::vector<S> build(Iterator begin, Iterator end)
+
+template <typename Container>
+static std::vector<S> build(const Container& seq)
+```
+
+文字列などのシーケンスやイテレータ範囲を、セグメント木の初期化用として扱える `std::vector<S>` に変換して返します。
+
+**制約**
+
+- なし
+
+**計算量**
+
+- $O(N)$ （$N$ はシーケンスの長さ）
+
 ## 使用例
 
 ```cpp

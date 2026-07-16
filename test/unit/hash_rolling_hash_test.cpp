@@ -88,3 +88,18 @@ TEST(RollingHashTest, Monoid) {
     EXPECT_EQ(Monoid::op(h1, e), h1);
     EXPECT_EQ(Monoid::op(e, h2), h2);
 }
+
+TEST(RollingHashTest, BuildSegmentTree) {
+    using Monoid = rhash::rolling_hash_monoid<5>;
+    std::string s = "gwen";
+    
+    // Container build
+    auto vec1 = Monoid::build(s);
+    EXPECT_EQ(vec1.size(), 4);
+    EXPECT_EQ(vec1[0], Monoid::unit('g'));
+    EXPECT_EQ(vec1[3], Monoid::unit('n'));
+    
+    // Iterator build
+    auto vec2 = Monoid::build(s.begin(), s.end());
+    EXPECT_EQ(vec1, vec2);
+}

@@ -80,6 +80,42 @@ struct rolling_hash_monoid {
         }
         return {v, p};
     }
+
+    /**
+     * @brief イテレータ範囲をセグメント木用の要素配列（`std::vector<S>`）に変換します。
+     * @details 計算量: \f$O(N)\f$
+     * @tparam Iterator イテレータの型
+     * @param begin 範囲の開始
+     * @param end 範囲の終端
+     * @return セグメント木構築用の配列
+     */
+    template <typename Iterator>
+    static std::vector<S> build(Iterator begin, Iterator end) {
+        std::vector<S> res;
+        for (auto it = begin; it != end; ++it) {
+            res.push_back(unit(*it));
+        }
+        return res;
+    }
+
+    /**
+     * @brief シーケンスをセグメント木用の要素配列（`std::vector<S>`）に変換します。
+     * @details 計算量: \f$O(N)\f$
+     * @tparam Container シーケンスの型
+     * @param seq 変換する対象のシーケンス
+     * @return セグメント木構築用の配列
+     */
+    template <typename Container>
+    static std::vector<S> build(const Container& seq) {
+        std::vector<S> res;
+        if constexpr (requires { std::size(seq); }) {
+            res.reserve(std::size(seq));
+        }
+        for (const auto& x : seq) {
+            res.push_back(unit(x));
+        }
+        return res;
+    }
 };
 
 /**
