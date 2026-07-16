@@ -44,6 +44,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 ### アルゴリズム (Algo)
 - [インデックスソート (idxsort.hpp)](doc/algo/idxsort.md)
 - [ランレングス圧縮 (runlength.hpp)](doc/algo/runlength.md)
+- [カウンティングソート (counting_sort.hpp)](doc/algo/counting_sort.md)
 
 ### ハッシュ (Hash)
 - [ローリングハッシュ (rolling_hash.hpp)](doc/hash/rolling_hash.md)
@@ -85,6 +86,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 ### クエリ (Query)
 - [Range Add Update Sum (range_add_update_sum.hpp)](doc/query/range_add_update_sum.md)
 - [Mo's Algorithm (mo.hpp)](doc/query/mo.md)
+- [SWAG (swag.hpp)](doc/query/swag.md)
 
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)
