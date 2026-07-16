@@ -52,6 +52,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [モノイド (monoid.hpp)](include/gwen/alge/monoid.hpp)
 - [アーベル群 (abel.hpp)](include/gwen/alge/abel.hpp)
 - [環 (ring.hpp)](doc/alge/ring.md)
+- [区間アフィン変換・区間和モノイド (range_affine_range_sum_monoid.hpp)](doc/alge/range_affine_range_sum_monoid.md)
 
 ### データ構造 (Data Structures)
 - [累積和 (prefix_sum.hpp)](doc/ds/prefix_sum.md)
