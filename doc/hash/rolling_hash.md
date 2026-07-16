@@ -35,6 +35,22 @@ explicit rolling_hash(const Container& seq)
 
 - $O(N)$ （$N$ はシーケンスの長さ）
 
+## size
+
+```cpp
+i32 size() const
+```
+
+シーケンスの長さ（要素数）を返します。
+
+**制約**
+
+- なし
+
+**計算量**
+
+- $O(1)$
+
 ## get
 
 ```cpp
@@ -127,12 +143,71 @@ struct rolling_hash_monoid
 セグメント木等に乗せるためのローリングハッシュ用モノイドです。
 要素 `S` はハッシュ値 `v` と基数のべき乗 `p` の組となります。
 
+## op
+
+```cpp
+static S op(S a, S b)
+```
+
+2つのハッシュ値を結合します。左側のハッシュ値 `a` に、右側のハッシュ値 `b` を連結します。
+
+**制約**
+
+- なし
+
 **計算量**
 
-- `op(a, b)`: $O(1)$
-- `e()`: $O(1)$
-- `unit(x)`: $O(1)$
-- `range(begin, end)`: $O(N)$
+- $O(1)$
+
+## e
+
+```cpp
+static S e()
+```
+
+単位元（空文字列のハッシュ）を返します。
+
+**制約**
+
+- なし
+
+**計算量**
+
+- $O(1)$
+
+## unit
+
+```cpp
+template <typename T>
+static S unit(T x)
+```
+
+1文字からハッシュ（長さ1の要素）を生成します。
+
+**制約**
+
+- なし
+
+**計算量**
+
+- $O(1)$
+
+## range
+
+```cpp
+template <typename Iterator>
+static S range(Iterator begin, Iterator end)
+```
+
+イテレータ範囲から全体のハッシュ値を計算します。
+
+**制約**
+
+- なし
+
+**計算量**
+
+- $O(N)$ （$N$ は範囲の長さ）
 
 ## 使用例
 

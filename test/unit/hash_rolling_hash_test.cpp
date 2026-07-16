@@ -58,6 +58,9 @@ TEST(RollingHashTest, Rotations) {
     auto h_rotl_neg = rh.rotl(0, 5, -3); // equivalent to right shift 3
     EXPECT_EQ(h_rotl, h_rotl_neg);
     
+    auto h_rotr_neg = rh.rotr(0, 5, -2); // equivalent to left shift 2
+    EXPECT_EQ(h_rotl, h_rotr_neg);
+    
     // Manual construction of "cdeab"
     rolling_hash<3> rh_manual(std::string("cdeab"));
     EXPECT_EQ(h_rotl, rh_manual.get(0, 5));
