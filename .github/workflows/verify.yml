@@ -41,7 +41,7 @@ jobs:
         uses: competitive-verifier/actions/oj-resolve@v2
         with:
           output-path: verify_files.json
-          include: include
+          include: include verify
           config: config.toml
       - name: parse-doxygen
         uses: competitive-verifier/actions/parse-doxygen@v2
