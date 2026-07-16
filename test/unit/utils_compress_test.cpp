@@ -24,3 +24,23 @@ TEST(CompressTest, Basic) {
     std::vector<i32> expected = {2, 0, 3, 0, 4, 6, 1, 5, 4, 2, 4};
     EXPECT_EQ(res, expected);
 }
+
+TEST(CompressTest, Empty) {
+    std::vector<int> v;
+    std::vector<i32> res = compress(v);
+    EXPECT_TRUE(res.empty());
+}
+
+TEST(CompressTest, SameElements) {
+    std::vector<int> v = {7, 7, 7, 7};
+    std::vector<i32> res = compress(v);
+    std::vector<i32> expected = {0, 0, 0, 0};
+    EXPECT_EQ(res, expected);
+}
+
+TEST(CompressTest, AlreadySorted) {
+    std::vector<int> v = {10, 20, 30, 40};
+    std::vector<i32> res = compress(v);
+    std::vector<i32> expected = {0, 1, 2, 3};
+    EXPECT_EQ(res, expected);
+}

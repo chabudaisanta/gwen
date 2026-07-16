@@ -17,6 +17,7 @@ std::vector<i32> compress(const std::vector<T>& vec)
 
 **制約**
 - 戻り値のインデックスが `i32` に収まること（通常は元の要素数と同じ）。
+- テンプレート引数 `T` は比較可能（`operator<` および `operator==` を提供する）であること。
 
 **計算量**
 - $O(N \log N)$ （ソートと二分探索にかかる時間）
