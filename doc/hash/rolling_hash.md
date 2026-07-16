@@ -8,11 +8,11 @@ documentation_of: //include/gwen/hash/rolling_hash.hpp
 文字列の一致判定や最長共通接頭辞 (LCP) などを高速に計算するローリングハッシュです。
 法として $2^{61}-1$ を使用し、ハッシュの衝突確率を極めて低く抑えています。
 
-## rolling_hash
+## RollingHash
 
 ```cpp
 template <i32 ID = 0>
-class rolling_hash
+class RollingHash
 ```
 
 静的文字列に対するローリングハッシュを管理するクラスです。
@@ -22,7 +22,7 @@ class rolling_hash
 
 ```cpp
 template <typename Container>
-explicit rolling_hash(const Container& seq)
+explicit RollingHash(const Container& seq)
 ```
 
 `std::string` や `std::vector` などのシーケンスからローリングハッシュを構築します。
@@ -240,7 +240,7 @@ using namespace gwen;
 
 int main() {
     std::string s = "abracadabra";
-    rolling_hash<0> rh(s);
+    RollingHash<0> rh(s);
     
     // "abra" == "abra" -> 1 (true)
     std::cout << rh.equal(0, 4, 7, 11) << "\n";

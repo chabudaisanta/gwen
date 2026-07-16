@@ -22,7 +22,7 @@ TEST(DsTest, PrefixSum2D) {
         {4, 5, 6},
         {7, 8, 9}
     };
-    prefix_sum_2d<int> ps2(v);
+    PrefixSum2d<int> ps2(v);
     
     // get(l, r, u, d) [u, d) x [l, r)
     // l=0, r=3, u=0, d=3 -> 全体 45

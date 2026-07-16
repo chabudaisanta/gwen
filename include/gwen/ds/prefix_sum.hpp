@@ -24,7 +24,7 @@ std::vector<T> prefix_sum(const std::vector<T>& vec) {
  * @tparam T 要素の型
  */
 template <typename T>
-struct prefix_sum_2d {
+struct PrefixSum2d {
     std::vector<std::vector<T>> dat;
     i32 H, W;
 
@@ -32,7 +32,7 @@ struct prefix_sum_2d {
      * @brief 2次元配列から累積和を構築する
      * @param vec 元の2次元配列
      */
-    explicit prefix_sum_2d(const std::vector<std::vector<T>>& vec)
+    explicit PrefixSum2d(const std::vector<std::vector<T>>& vec)
         : H(vec.size()), W(H > 0 ? vec[0].size() : 0) {
         dat.resize(H + 1, std::vector<T>(W + 1, T{}));
         for (i32 i = 0; i < H; ++i)

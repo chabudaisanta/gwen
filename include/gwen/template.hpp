@@ -47,7 +47,12 @@ using namespace gwen::literals;
 
 using namespace gwen;
 
-// Accumulate wrapper
+/**
+ * @brief コンテナの全要素の累積和を返す
+ * @tparam Container 要素型が `T` のコンテナ型
+ * @param vec 対象のコンテナ
+ * @return 全要素の値の累積和
+ */
 template <typename Container> auto SUM(const Container& vec) {
     using T = typename Container::value_type;
     return std::accumulate(vec.begin(), vec.end(), T{});

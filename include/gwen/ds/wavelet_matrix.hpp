@@ -47,7 +47,7 @@ template <std::integral T> struct WaveletMatrix {
         if (lg == 0) lg = 1;
 
         bv.assign(lg, BitVector(n));
-        std::vector<T> cur = a, nxt(static_cast<size_t>(n));
+        std::vector<T> cur = a, nxt(static_cast<usize>(n));
 
         for (i32 h = lg - 1; h >= 0; --h) {
             for (i32 i = 0; i < n; ++i)

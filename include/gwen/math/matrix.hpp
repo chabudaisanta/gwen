@@ -108,7 +108,7 @@ public:
      * @param m_ 列数
      * @param val 初期値
      */
-    Matrix(i32 n_, i32 m_, T val = T{}) : n(n_), m(m_), dat(static_cast<size_t>(n_) * m_, val) {}
+    Matrix(i32 n_, i32 m_, T val = T{}) : n(n_), m(m_), dat(static_cast<usize>(n_) * m_, val) {}
 
     /**
      * @brief 行数を取得する
@@ -129,13 +129,13 @@ public:
      * @brief 指定した行へのアクセスを提供する
      * @param i 行インデックス (0-indexed)
      */
-    std::span<T> operator[](i32 i) { return std::span<T>(&dat[static_cast<size_t>(i) * m], m); }
+    std::span<T> operator[](i32 i) { return std::span<T>(&dat[static_cast<usize>(i) * m], m); }
 
     /**
      * @brief 指定した行への読み取り専用アクセスを提供する
      * @param i 行インデックス (0-indexed)
      */
-    std::span<const T> operator[](i32 i) const { return std::span<const T>(&dat[static_cast<size_t>(i) * m], m); }
+    std::span<const T> operator[](i32 i) const { return std::span<const T>(&dat[static_cast<usize>(i) * m], m); }
 
     /** @brief 行列の加算 */
     Matrix operator+(const Matrix& other) const { return add(*this, other); }
@@ -180,7 +180,7 @@ public:
         Matrix ret(m, n);
         for (i32 i = 0; i < n; ++i) {
             for (i32 j = 0; j < m; ++j) {
-                ret.dat[static_cast<size_t>(j) * n + i] = dat[static_cast<size_t>(i) * m + j];
+                ret.dat[static_cast<usize>(j) * n + i] = dat[static_cast<usize>(i) * m + j];
             }
         }
         return ret;
@@ -213,7 +213,7 @@ public:
     T trace() const {
         assert(is_square());
         T s = T(0);
-        for (i32 i = 0; i < n; ++i) s += dat[static_cast<size_t>(i) * m + i];
+        for (i32 i = 0; i < n; ++i) s += dat[static_cast<usize>(i) * m + i];
         return s;
     }
 
@@ -228,15 +228,15 @@ public:
         Matrix aug(n, 2 * n);
         for (i32 i = 0; i < n; ++i) {
             for (i32 j = 0; j < n; ++j) {
-                aug.dat[static_cast<size_t>(i) * (2 * n) + j] = dat[static_cast<size_t>(i) * n + j];
+                aug.dat[static_cast<usize>(i) * (2 * n) + j] = dat[static_cast<usize>(i) * n + j];
             }
-            aug.dat[static_cast<size_t>(i) * (2 * n) + n + i] = T(1);
+            aug.dat[static_cast<usize>(i) * (2 * n) + n + i] = T(1);
         }
         if (gauss(aug, n, true).first != n) return Matrix();
         Matrix ret(n);
         for (i32 i = 0; i < n; ++i) {
             for (i32 j = 0; j < n; ++j) {
-                ret.dat[static_cast<size_t>(i) * n + j] = aug.dat[static_cast<size_t>(i) * (2 * n) + n + j];
+                ret.dat[static_cast<usize>(i) * n + j] = aug.dat[static_cast<usize>(i) * (2 * n) + n + j];
             }
         }
         return ret;
@@ -280,10 +280,10 @@ public:
         for (i32 i = 0; i < a.n; ++i) {
             const i32 row = i * b.m;
             for (i32 k = 0; k < a.m; ++k) {
-                const T aik = a.dat[static_cast<size_t>(i) * a.m + k];
+                const T aik = a.dat[static_cast<usize>(i) * a.m + k];
                 const i32 krow = k * b.m;
                 for (i32 j = 0; j < b.m; ++j) {
-                    ret.dat[static_cast<size_t>(row) + j] += aik * b.dat[static_cast<size_t>(krow) + j];
+                    ret.dat[static_cast<usize>(row) + j] += aik * b.dat[static_cast<usize>(krow) + j];
                 }
             }
         }

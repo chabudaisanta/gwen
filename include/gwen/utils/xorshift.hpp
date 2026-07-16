@@ -9,7 +9,7 @@
 namespace gwen {
 
 namespace internal {
-    struct xorshift {
+    struct XorShift {
         u64 x = []() {
             u64 seed = static_cast<u64>(std::random_device{}()) ^ 
                        static_cast<u64>(std::chrono::steady_clock::now().time_since_epoch().count());
@@ -32,7 +32,7 @@ namespace internal {
  * @return 64ビットの乱数値
  */
 inline u64 rand64() {
-    static internal::xorshift rng;
+    static internal::XorShift rng;
     return rng.get();
 }
 

@@ -23,7 +23,7 @@ std::vector<i32> compress(const std::vector<T>& vec) {
     copy.erase(first, last);
     
     std::vector<i32> ret(vec.size());
-    for (size_t i = 0; i < vec.size(); ++i) {
+    for (usize i = 0; i < vec.size(); ++i) {
         auto it = std::ranges::lower_bound(copy, vec[i]);
         ret[i] = static_cast<i32>(it - copy.begin());
     }

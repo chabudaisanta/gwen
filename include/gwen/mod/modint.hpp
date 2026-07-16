@@ -15,7 +15,7 @@ namespace gwen {
  * ACLのmodintと互換性のあるインターフェースを持つことを要求する。
  */
 template <typename T>
-concept modint = ring<T> && requires(T a, T b, unsigned long long n) {
+concept modint = ring<T> && requires(T a, T b, u64 n) {
     { a / b } -> std::same_as<T>;
     { a /= b } -> std::same_as<T&>;
     { a.val() } -> std::integral;
@@ -55,7 +55,7 @@ public:
         assert(n_ & 1);
         n = n_;
         ns = n;
-        for (int i = 0; i < 5; ++i) ns *= 2 - ns * n;
+        for (i32 i = 0; i < 5; ++i) ns *= 2 - ns * n;
         assert(ns * n == 1);
         ns = -ns;
         r2 = -static_cast<u128>(n) % n;

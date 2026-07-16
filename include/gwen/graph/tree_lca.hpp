@@ -23,8 +23,8 @@ private:
     std::vector<i32> anc_;
     std::vector<i32> d_;
 
-    i32 get_anc(i32 v, i32 i) const { return anc_[static_cast<size_t>(i) * n_ + v]; }
-    i32& set_anc(i32 v, i32 i) { return anc_[static_cast<size_t>(i) * n_ + v]; }
+    i32 get_anc(i32 v, i32 i) const { return anc_[static_cast<usize>(i) * n_ + v]; }
+    i32& set_anc(i32 v, i32 i) { return anc_[static_cast<usize>(i) * n_ + v]; }
 
 public:
     /**
@@ -36,7 +36,7 @@ public:
         n_ = G.size();
         root_ = root;
         log_ = n_ > 0 ? std::bit_width(static_cast<u32>(n_)) : 0;
-        anc_.assign(static_cast<size_t>(log_) * n_, -1);
+        anc_.assign(static_cast<usize>(log_) * n_, -1);
         d_.assign(n_, 0);
 
         auto dfs = [&](i32 cur, i32 par, i32 depth, auto self) -> void {

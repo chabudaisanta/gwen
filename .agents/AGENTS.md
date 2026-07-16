@@ -8,12 +8,12 @@
 <RULE>
 ## ドキュメントとテストの必須対応
 - 新規実装・移植時は、必ず「Google Testによる単体テスト (`test/unit/`)」と「Verifyコード (`verify/`)」の両方を作成し、テストをパスさせてください。
-- ドキュメント (`doc/`) は必ず **AC Library スタイル**（メソッド名、制約、計算量を太字で記載する形式）で記述し、`.verify-helper/docs/index.md` に目次を追加してください。
+- ドキュメント (`doc/`) は必ず **AC Library スタイル**（メソッド名、制約、計算量を太字で記載する形式）で記述し、全てのドキュメントへのリンクを必ず `.verify-helper/docs/index.md` の目次に登録してください。
 </RULE>
 
 <RULE>
 ## コーディング規約 (Naming Conventions)
-- **クラス・構造体**: PascalCase (`FenwickTree` 等) を使用してください。
+- **クラス・構造体**: データを直接扱うデータ構造（`FenwickTree` 等）は PascalCase を使用してください。ただし、実体のない代数構造（モノイドや群などの定義）は snake_case (`sum_monoid` 等) を許容します。
 - **メソッド・変数・コンセプト名**: snake_case (`add`, `is_same`, `edge` 等) を使用してください (コンセプトに `_concept` などの接尾辞はつけないこと)。
 - すべての公開 API (クラス、関数、Concept等) に Doxygen 形式のコメント (`@brief`, `@tparam` 等) を付与してください。
 </RULE>

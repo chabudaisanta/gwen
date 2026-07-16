@@ -123,7 +123,7 @@ struct rolling_hash_monoid {
  * @tparam ID モノイドと共通の識別子
  */
 template <i32 ID>
-struct power_table {
+struct PowerTable {
     static std::vector<ModInt61>& data() {
         static std::vector<ModInt61> table{ModInt61(1)};
         return table;
@@ -139,7 +139,7 @@ struct power_table {
 
     static ModInt61 pow(i32 len) {
         assert(0 <= len && len < static_cast<i32>(data().size()));
-        return data()[static_cast<size_t>(len)];
+        return data()[static_cast<usize>(len)];
     }
 };
 
@@ -152,7 +152,7 @@ struct power_table {
  * @tparam ID 異なる基数を持たせるための識別子（デフォルトは0）
  */
 template <i32 ID = 0>
-class rolling_hash {
+class RollingHash {
 public:
     using Monoid = rhash::rolling_hash_monoid<ID>;
     using S = typename Monoid::S;
@@ -169,8 +169,8 @@ public:
      * @param seq ハッシュ化する対象のシーケンス
      */
     template <typename Container>
-    explicit rolling_hash(const Container& seq) : n(static_cast<i32>(std::size(seq))), suf(n + 1, ModInt61(0)) {
-        rhash::power_table<ID>::ensure(n);
+    explicit RollingHash(const Container& seq) : n(static_cast<i32>(std::size(seq))), suf(n + 1, ModInt61(0)) {
+        rhash::PowerTable<ID>::ensure(n);
         for (i32 i = n - 1; i >= 0; --i) {
             suf[i] = ModInt61(seq[i]) + Monoid::r * suf[i + 1];
         }
@@ -196,7 +196,7 @@ public:
         assert(0 <= l && l <= r && r <= n);
         if (l == r) return Monoid::e();
         const i32 len = r - l;
-        const ModInt61 rp = rhash::power_table<ID>::pow(len);
+        const ModInt61 rp = rhash::PowerTable<ID>::pow(len);
         ModInt61 v = suf[l] - suf[r] * rp;
         return {v, rp};
     }

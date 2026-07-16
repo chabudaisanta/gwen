@@ -8,7 +8,7 @@ documentation_of: //include/gwen/graph/graph.hpp
 CSR形式をベースにした静的グラフの基底クラスです。
 頂点数とエッジのリストを登録し、`build()` を呼び出すことで高速な隣接リストを構築します。
 
-## コンストラクタ
+## **コンストラクタ**
 
 ```cpp
 GraphBase(i32 n)
@@ -17,7 +17,15 @@ GraphBase(i32 n, const std::vector<EdgeType>& edges)
 
 - $n$ 頂点のグラフを作成します。
 
-## add_edge
+**制約**
+
+- $n \ge 0$
+
+**計算量**
+
+- $O(N)$
+
+## **add_edge**
 
 ```cpp
 void add_edge(const EdgeType& e)
@@ -27,11 +35,15 @@ void add_edge(i32 u, i32 v, weight_type w)
 
 グラフにエッジを追加します。`build()` 呼び出し前のみ可能です。
 
+**制約**
+
+- `build()` 呼び出し前であること
+
 **計算量**
 
 - $O(1)$ 償却
 
-## build
+## **build**
 
 ```cpp
 void build()
@@ -43,7 +55,7 @@ void build()
 
 - $O(N + M)$
 
-## edges
+## **edges**
 
 ```cpp
 std::span<const EdgeType> edges(i32 u) const
@@ -55,7 +67,7 @@ std::span<const EdgeType> edges(i32 u) const
 
 - $O(1)$
 
-## adjacent / operator[]
+## **adjacent / operator[]**
 
 ```cpp
 auto adjacent(i32 u) const

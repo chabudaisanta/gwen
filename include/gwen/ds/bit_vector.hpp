@@ -78,7 +78,7 @@ struct BitVector {
      * @details 全ての set 操作が完了した後に呼ぶ必要がある
      */
     void build() {
-        for (size_t i = 1; i < block.size(); ++i) {
+        for (usize i = 1; i < block.size(); ++i) {
             count[i] = count[i - 1] + std::popcount(block[i - 1]);
         }
     }
