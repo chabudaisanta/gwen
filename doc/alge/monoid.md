@@ -1,6 +1,6 @@
 ---
 title: monoid
-documentation_of: //include//gwen/alge/monoid.hpp
+documentation_of: //include/gwen/alge/monoid.hpp
 ---
 
 # monoid.hpp

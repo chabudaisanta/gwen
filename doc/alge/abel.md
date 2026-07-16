@@ -1,6 +1,6 @@
 ---
 title: abel
-documentation_of: //include//gwen/alge/abel.hpp
+documentation_of: //include/gwen/alge/abel.hpp
 ---
 
 # abel.hpp

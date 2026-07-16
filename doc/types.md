@@ -1,6 +1,6 @@
 ---
 title: types
-documentation_of: //include//gwen/types.hpp
+documentation_of: //include/gwen/types.hpp
 ---
 # types.hpp
 

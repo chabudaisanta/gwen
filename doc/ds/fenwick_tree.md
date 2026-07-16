@@ -1,6 +1,6 @@
 ---
 title: FenwickTree
-documentation_of: //include//gwen/ds/fenwick_tree.hpp
+documentation_of: //include/gwen/ds/fenwick_tree.hpp
 ---
 
 # fenwick_tree.hpp
