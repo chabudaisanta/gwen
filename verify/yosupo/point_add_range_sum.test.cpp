@@ -14,12 +14,12 @@ int main() {
     int n, q;
     if (!(std::cin >> n >> q)) return 0;
 
-    std::vector<long long> a(n);
+    std::vector<i64> a(n);
     for (int i = 0; i < n; ++i) {
         std::cin >> a[i];
     }
 
-    FenwickTree<sum_abel<long long>> bit(a);
+    FenwickTree<sum_abel<i64>> bit(a);
 
     for (int i = 0; i < q; ++i) {
         int type;
