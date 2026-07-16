@@ -22,6 +22,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [型エイリアス (types.hpp)](include/gwen/types.hpp)
 - [エラー出力マクロ(dump.hpp)](include/gwen/dump.hpp)
 - [時間計測・制限時間管理 (timer.hpp)](doc/utils/timer.md)
+- [XorShift乱数 (xorshift.hpp)](doc/utils/xorshift.md)
 
 ### 数学 (Math)
 - [素数・素因数分解 (prime.hpp)](doc/math/prime.md)
@@ -41,6 +42,9 @@ AtCoder(https://atcoder.jp/users/chaby)
 ### アルゴリズム (Algo)
 - [インデックスソート (idxsort.hpp)](doc/algo/idxsort.md)
 - [ランレングス圧縮 (runlength.hpp)](doc/algo/runlength.md)
+
+### ハッシュ (Hash)
+- [ローリングハッシュ (rolling_hash.hpp)](doc/hash/rolling_hash.md)
 
 ### 代数構造 (Algebra)
 - [モノイド (monoid.hpp)](include/gwen/alge/monoid.hpp)
