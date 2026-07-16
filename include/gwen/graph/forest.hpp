@@ -29,16 +29,16 @@ public:
      * @param G グラフ
      */
     explicit Forest(const GraphBase<Edge, IsDirected>& G) : n_(G.size()) {
-        lg_ = 0;
+        lg_ = 1;
         while ((1 << lg_) <= n_) lg_++;
         root_.assign(n_, -1);
         depth_.assign(n_, -1);
         parent_.assign(lg_ * n_, -1);
 
-        auto dfs = [&](i32 cur, i32 par, i32 r, i32 d, auto self) -> i32 {
+        auto dfs = [&](i32 cur, i32 par, i32 r, i32 d, auto& self) -> i32 {
             if (cur != r) root_[cur] = r;
             depth_[cur] = d;
-            parent_[0 * n_ + cur] = par;
+            parent_[cur * lg_ + 0] = par;
             i32 sz = 1;
             for (i32 nxt : G.adjacent(cur)) {
                 if (nxt != par) {
@@ -56,9 +56,9 @@ public:
 
         for (i32 k = 0; k < lg_ - 1; ++k) {
             for (i32 i = 0; i < n_; ++i) {
-                i32 p = parent_[k * n_ + i];
+                i32 p = parent_[i * lg_ + k];
                 if (p != -1) {
-                    parent_[(k + 1) * n_ + i] = parent_[k * n_ + p];
+                    parent_[i * lg_ + k + 1] = parent_[p * lg_ + k];
                 }
             }
         }
@@ -103,7 +103,7 @@ public:
         if (k < 0 || k > depth_[v]) return -1;
         for (i32 i = 0; i < lg_; ++i) {
             if ((k >> i) & 1) {
-                v = parent_[i * n_ + v];
+                v = parent_[v * lg_ + i];
                 if (v == -1) break;
             }
         }
@@ -124,14 +124,14 @@ public:
         if (u == v) return u;
 
         for (i32 i = lg_ - 1; i >= 0; --i) {
-            i32 pu = parent_[i * n_ + u];
-            i32 pv = parent_[i * n_ + v];
+            i32 pu = parent_[u * lg_ + i];
+            i32 pv = parent_[v * lg_ + i];
             if (pu != pv) {
                 u = pu;
                 v = pv;
             }
         }
-        return parent_[0 * n_ + u];
+        return parent_[u * lg_ + 0];
     }
 
     /**
