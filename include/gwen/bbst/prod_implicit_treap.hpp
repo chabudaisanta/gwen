@@ -15,7 +15,7 @@ namespace gwen {
  * @brief 区間積取得が可能なインデックスベースの動的配列（Treap）
  * @details 反転操作（非可換モノイド対応）と区間積取得をサポートします。
  */
-template <monoid M> class ProdImplicitTreap {
+template <monoid M, bool Commutative = false> class ProdImplicitTreap {
 public:
     using S = typename M::S;
     using tree = i32;
@@ -80,6 +80,7 @@ public:
         auto [l, r] = split(root, pos);
         auto [m, rr] = split(r, 1);
         root = merge(l, rr);
+        d.free_node(m);
     }
 
     void reverse(i32 l, i32 r) {
@@ -87,8 +88,10 @@ public:
         if (l >= r) return;
         auto [left, mid_r] = split(root, l);
         auto [mid, right] = split(mid_r, r - l);
-        d[mid].rev ^= true;
-        std::swap(d[mid].prod, d[mid].rev_prod);
+        if (mid != NIL) {
+            d[mid].rev ^= true;
+            if constexpr (!Commutative) std::swap(d[mid].prod, d[mid].rev_prod);
+        }
         root = merge(merge(left, mid), right);
     }
 
@@ -150,7 +153,10 @@ public:
 private:
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
     static S prod_(tree t) { return t == NIL ? M::e() : d[t].prod; }
-    static S rev_prod_(tree t) { return t == NIL ? M::e() : d[t].rev_prod; }
+    static S rev_prod_(tree t) {
+        if constexpr (Commutative) return prod_(t);
+        return t == NIL ? M::e() : d[t].rev_prod;
+    }
 
     static void push(tree t) {
         if (t == NIL) return;
@@ -160,11 +166,11 @@ private:
             std::swap(n.left, n.right);
             if (n.left != NIL) {
                 d[n.left].rev ^= true;
-                std::swap(d[n.left].prod, d[n.left].rev_prod);
+                if constexpr (!Commutative) std::swap(d[n.left].prod, d[n.left].rev_prod);
             }
             if (n.right != NIL) {
                 d[n.right].rev ^= true;
-                std::swap(d[n.right].prod, d[n.right].rev_prod);
+                if constexpr (!Commutative) std::swap(d[n.right].prod, d[n.right].rev_prod);
             }
         }
     }
@@ -172,11 +178,11 @@ private:
     static void update(tree t) {
         if (t == NIL) return;
         node& n = d[t];
-        push(n.left);
-        push(n.right);
         n.size = 1 + size_(n.left) + size_(n.right);
         n.prod = M::op(M::op(prod_(n.left), n.val), prod_(n.right));
-        n.rev_prod = M::op(M::op(rev_prod_(n.right), n.val), rev_prod_(n.left));
+        if constexpr (!Commutative) {
+            n.rev_prod = M::op(M::op(rev_prod_(n.right), n.val), rev_prod_(n.left));
+        }
     }
 
     static void update_all(tree t) {
@@ -189,13 +195,13 @@ private:
     static tree merge(tree l, tree r) {
         if (l == NIL) return r;
         if (r == NIL) return l;
-        push(l);
-        push(r);
         if (d[l].prio > d[r].prio) {
+            push(l);
             d[l].right = merge(d[l].right, r);
             update(l);
             return l;
         }
+        push(r);
         d[r].left = merge(l, d[r].left);
         update(r);
         return r;

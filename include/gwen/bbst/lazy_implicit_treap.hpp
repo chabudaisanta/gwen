@@ -17,7 +17,7 @@ namespace gwen {
  * @details 区間作用、区間反転、区間積取得をサポートします。
  * @tparam M 作用付きモノイド（acted_monoid）
  */
-template <acted_monoid M> class LazyImplicitTreap {
+template <acted_monoid M, bool Commutative = false> class LazyImplicitTreap {
 public:
     using S = typename M::S;
     using F = typename M::F;
@@ -30,6 +30,7 @@ public:
         i32 size = 0;
         u32 prio = 0;
         bool rev = false;
+        bool has_lazy = false;
 
         node() = default;
         explicit node(const S& v) : val(v), prod(v), rev_prod(v), lz(M::id()), size(1), prio(rand32()) {}
@@ -104,6 +105,7 @@ public:
         auto [l, r] = split(root, pos);
         auto [m, rr] = split(r, 1);
         root = merge(l, rr);
+        d.free_node(m);
     }
 
     /**
@@ -118,7 +120,7 @@ public:
         auto [mid, right] = split(mid_r, r - l);
         if (mid != NIL) {
             d[mid].rev ^= true;
-            std::swap(d[mid].prod, d[mid].rev_prod);
+            if constexpr (!Commutative) std::swap(d[mid].prod, d[mid].rev_prod);
         }
         root = merge(merge(left, mid), right);
     }
@@ -137,8 +139,9 @@ public:
         if (mid != NIL) {
             d[mid].val = M::mapping(f, d[mid].val);
             d[mid].prod = M::mapping(f, d[mid].prod);
-            d[mid].rev_prod = M::mapping(f, d[mid].rev_prod);
+            if constexpr (!Commutative) d[mid].rev_prod = M::mapping(f, d[mid].rev_prod);
             d[mid].lz = M::composition(f, d[mid].lz);
+            d[mid].has_lazy = true;
         }
         root = merge(merge(left, mid), right);
     }
@@ -151,8 +154,9 @@ public:
         if (root != NIL) {
             d[root].val = M::mapping(f, d[root].val);
             d[root].prod = M::mapping(f, d[root].prod);
-            d[root].rev_prod = M::mapping(f, d[root].rev_prod);
+            if constexpr (!Commutative) d[root].rev_prod = M::mapping(f, d[root].rev_prod);
             d[root].lz = M::composition(f, d[root].lz);
+            d[root].has_lazy = true;
         }
     }
 
@@ -168,7 +172,6 @@ public:
         tree left, mid, right;
         std::tie(left, mid) = split(root, l);
         std::tie(mid, right) = split(mid, r - l);
-        push(mid);
         S res = prod_(mid);
         root = merge(merge(left, mid), right);
         return res;
@@ -180,7 +183,6 @@ public:
      */
     S all_prod() {
         if (empty()) return M::e();
-        push(root);
         return d[root].prod;
     }
 
@@ -253,55 +255,56 @@ public:
 private:
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
     static S prod_(tree t) { return t == NIL ? M::e() : d[t].prod; }
-    static S rev_prod_(tree t) { return t == NIL ? M::e() : d[t].rev_prod; }
+    static S rev_prod_(tree t) {
+        if constexpr (Commutative) return prod_(t);
+        return t == NIL ? M::e() : d[t].rev_prod;
+    }
 
     static void push(tree t) {
         if (t == NIL) return;
         node& n = d[t];
-
-        bool apply_lz = true;
-        if constexpr (std::equality_comparable<F>) {
-            if (n.lz == M::id()) apply_lz = false;
-        }
 
         if (n.rev) {
             n.rev = false;
             std::swap(n.left, n.right);
             if (n.left != NIL) {
                 d[n.left].rev ^= true;
-                std::swap(d[n.left].prod, d[n.left].rev_prod);
+                if constexpr (!Commutative) std::swap(d[n.left].prod, d[n.left].rev_prod);
             }
             if (n.right != NIL) {
                 d[n.right].rev ^= true;
-                std::swap(d[n.right].prod, d[n.right].rev_prod);
+                if constexpr (!Commutative) std::swap(d[n.right].prod, d[n.right].rev_prod);
             }
         }
 
-        if (apply_lz) {
+        if (n.has_lazy) {
             if (n.left != NIL) {
                 d[n.left].val = M::mapping(n.lz, d[n.left].val);
                 d[n.left].prod = M::mapping(n.lz, d[n.left].prod);
-                d[n.left].rev_prod = M::mapping(n.lz, d[n.left].rev_prod);
+                if constexpr (!Commutative) d[n.left].rev_prod = M::mapping(n.lz, d[n.left].rev_prod);
                 d[n.left].lz = M::composition(n.lz, d[n.left].lz);
+                d[n.left].has_lazy = true;
             }
             if (n.right != NIL) {
                 d[n.right].val = M::mapping(n.lz, d[n.right].val);
                 d[n.right].prod = M::mapping(n.lz, d[n.right].prod);
-                d[n.right].rev_prod = M::mapping(n.lz, d[n.right].rev_prod);
+                if constexpr (!Commutative) d[n.right].rev_prod = M::mapping(n.lz, d[n.right].rev_prod);
                 d[n.right].lz = M::composition(n.lz, d[n.right].lz);
+                d[n.right].has_lazy = true;
             }
             n.lz = M::id();
+            n.has_lazy = false;
         }
     }
 
     static void update(tree t) {
         if (t == NIL) return;
         node& n = d[t];
-        push(n.left);
-        push(n.right);
         n.size = 1 + size_(n.left) + size_(n.right);
         n.prod = M::op(M::op(prod_(n.left), n.val), prod_(n.right));
-        n.rev_prod = M::op(M::op(rev_prod_(n.right), n.val), rev_prod_(n.left));
+        if constexpr (!Commutative) {
+            n.rev_prod = M::op(M::op(rev_prod_(n.right), n.val), rev_prod_(n.left));
+        }
     }
 
     static void update_all(tree t) {
@@ -314,13 +317,13 @@ private:
     static tree merge(tree l, tree r) {
         if (l == NIL) return r;
         if (r == NIL) return l;
-        push(l);
-        push(r);
         if (d[l].prio > d[r].prio) {
+            push(l);
             d[l].right = merge(d[l].right, r);
             update(l);
             return l;
         }
+        push(r);
         d[r].left = merge(l, d[r].left);
         update(r);
         return r;

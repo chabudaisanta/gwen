@@ -78,6 +78,7 @@ public:
         auto [l, r] = split(root, pos);
         auto [m, rr] = split(r, 1);
         root = merge(l, rr);
+        d.free_node(m);
     }
 
     void reverse(i32 l, i32 r) {
@@ -148,8 +149,6 @@ private:
     static void update(tree t) {
         if (t == NIL) return;
         node& n = d[t];
-        push(n.left);
-        push(n.right);
         n.size = 1 + size_(n.left) + size_(n.right);
     }
 
@@ -163,13 +162,13 @@ private:
     static tree merge(tree l, tree r) {
         if (l == NIL) return r;
         if (r == NIL) return l;
-        push(l);
-        push(r);
         if (d[l].prio > d[r].prio) {
+            push(l);
             d[l].right = merge(d[l].right, r);
             update(l);
             return l;
         }
+        push(r);
         d[r].left = merge(l, d[r].left);
         update(r);
         return r;

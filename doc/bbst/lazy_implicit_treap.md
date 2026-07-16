@@ -9,9 +9,10 @@ title: LazyImplicitTreap
 ## テンプレート引数
 
 ```cpp
-template <acted_monoid M> class LazyImplicitTreap;
+template <acted_monoid M, bool Commutative = false> class LazyImplicitTreap;
 ```
 - `M`: 作用付きモノイド（`gwen::acted_monoid` を満たす必要があります）
+- `Commutative`: 区間積の演算（`M::op`）が可換であるかどうか。`true` を指定すると、区間反転 (`reverse`) 時の非可換用の計算（`rev_prod`）を省略するため、定数倍が高速になります。デフォルトは `false` です。
 
 ## コンストラクタ
 

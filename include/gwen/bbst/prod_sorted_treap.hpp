@@ -65,6 +65,7 @@ public:
         auto [m, rr] = split_idx(r, 1);
         if (key_eq(d[m].key, key)) {
             root = merge(l, rr);
+            d.free_node(m);
         }
         else {
             root = merge(merge(l, m), rr);

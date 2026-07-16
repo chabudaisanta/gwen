@@ -10,9 +10,10 @@ documentation_of: //include/gwen/bbst/prod_implicit_treap.hpp
 ## テンプレート引数
 
 ```cpp
-template <monoid M> class ProdImplicitTreap;
+template <monoid M, bool Commutative = false> class ProdImplicitTreap;
 ```
 - `M`: モノイド（`gwen::monoid` を満たす必要があります）
+- `Commutative`: 区間積の演算（`M::op`）が可換であるかどうか。`true` を指定すると、区間反転 (`reverse`) 時の非可換用の計算（`rev_prod`）を省略するため、定数倍が高速になります。デフォルトは `false` です。
 
 ## コンストラクタ
 

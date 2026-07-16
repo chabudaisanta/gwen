@@ -1,5 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum"
-
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("unroll-loops")
 #include <iostream>
 
 #include "gwen/alge/range_affine_range_sum_monoid.hpp"
@@ -10,11 +11,11 @@ using namespace gwen;
 using namespace std;
 
 #define USE_ACL_MODINT 0
+#include "atcoder/modint.hpp"
+#include "gwen/mod/modint.hpp"
 #if USE_ACL_MODINT
-#include <atcoder/modint>
 using mint = atcoder::modint998244353;
 #else
-#include "gwen/mod/modint.hpp"
 using mint = gwen::DynamicModInt64;
 auto gwen_dummy_setmod = []() {
     mint::set_mod(998244353);
@@ -22,7 +23,7 @@ auto gwen_dummy_setmod = []() {
 }();
 #endif
 using Monoid = range_affine_range_sum_monoid<mint>;
-using Treap = LazyImplicitTreap<Monoid>;
+using Treap = LazyImplicitTreap<Monoid, true>;
 
 int main() {
     std::ios_base::sync_with_stdio(false);

@@ -29,6 +29,7 @@ public:
         F lz = M::id();
         i32 size = 0;
         u32 prio = 0;
+        bool has_lazy = false;
 
         node() = default;
         explicit node(const K& k, const S& v) : key(k), val(v), prod(v), lz(M::id()), size(1), prio(rand32()) {}
@@ -61,6 +62,7 @@ public:
         auto [m, rr] = split_idx(r, 1);
         if (key_eq(d[m].key, key)) {
             root = merge(l, rr);
+            d.free_node(m);
         }
         else {
             root = merge(merge(l, m), rr);
@@ -85,6 +87,7 @@ public:
             d[mid].val = M::mapping(f, d[mid].val);
             d[mid].prod = M::mapping(f, d[mid].prod);
             d[mid].lz = M::composition(f, d[mid].lz);
+            d[mid].has_lazy = true;
         }
         root = merge(merge(l, mid), r2);
     }
@@ -135,36 +138,31 @@ private:
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
     static S prod_(tree t) { return t == NIL ? M::e() : d[t].prod; }
 
-    // std::equality_comparable is in <concepts>
     static void push(tree t) {
         if (t == NIL) return;
         node& n = d[t];
 
-        bool apply_lz = true;
-        if constexpr (std::equality_comparable<F>) {
-            if (n.lz == M::id()) apply_lz = false;
-        }
-
-        if (apply_lz) {
+        if (n.has_lazy) {
             if (n.left != NIL) {
                 d[n.left].val = M::mapping(n.lz, d[n.left].val);
                 d[n.left].prod = M::mapping(n.lz, d[n.left].prod);
                 d[n.left].lz = M::composition(n.lz, d[n.left].lz);
+                d[n.left].has_lazy = true;
             }
             if (n.right != NIL) {
                 d[n.right].val = M::mapping(n.lz, d[n.right].val);
                 d[n.right].prod = M::mapping(n.lz, d[n.right].prod);
                 d[n.right].lz = M::composition(n.lz, d[n.right].lz);
+                d[n.right].has_lazy = true;
             }
             n.lz = M::id();
+            n.has_lazy = false;
         }
     }
 
     static void update(tree t) {
         if (t == NIL) return;
         node& n = d[t];
-        push(n.left);
-        push(n.right);
         n.size = 1 + size_(n.left) + size_(n.right);
         n.prod = M::op(M::op(prod_(n.left), n.val), prod_(n.right));
     }
@@ -218,13 +216,13 @@ private:
     static tree merge(tree l, tree r) {
         if (l == NIL) return r;
         if (r == NIL) return l;
-        push(l);
-        push(r);
         if (d[l].prio > d[r].prio) {
+            push(l);
             d[l].right = merge(d[l].right, r);
             update(l);
             return l;
         }
+        push(r);
         d[r].left = merge(l, d[r].left);
         update(r);
         return r;
