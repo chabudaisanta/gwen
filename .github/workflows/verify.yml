@@ -2,7 +2,7 @@ name: verify
 on:
   push:
     branches:
-      - "main"
+      - "master"
       - "rebuild-v2"
   pull_request:
   workflow_dispatch:
@@ -186,7 +186,7 @@ jobs:
         with:
           verify-result: ${{ steps.all-artifacts.outputs.artifacts-root }}/Result-*/result.json
   deploy:
-    if: (success() || failure()) && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/rebuild-v2') && needs.docs-and-check.outputs.upload-pages == 'true'
+    if: (success() || failure()) && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rebuild-v2') && needs.docs-and-check.outputs.upload-pages == 'true'
     needs: docs-and-check
     environment:
       name: github-pages
