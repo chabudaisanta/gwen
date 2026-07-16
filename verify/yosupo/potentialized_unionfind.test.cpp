@@ -1,4 +1,4 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/potentialized_unionfind"
+#define PROBLEM "https://judge.yosupo.jp/problem/unionfind_with_potential"
 
 #include <iostream>
 
@@ -7,7 +7,7 @@
 
 using namespace gwen;
 
-using mint = modint998244353;
+using mint = DynamicModInt64;
 
 struct MintAddAbel {
     using S = mint;
@@ -19,6 +19,7 @@ struct MintAddAbel {
 int main() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(nullptr);
+    mint::set_mod(998244353);
 
     int n, q;
     if (!(std::cin >> n >> q)) return 0;
@@ -35,7 +36,12 @@ int main() {
             // p_v - p_u = x
             // merge(a, b, w) creates P(a) - P(b) = w
             // So merge(v, u, x)
-            dsu.merge(v, u, mint(x));
+            if(dsu.merge(v, u, mint(x)) == -1) {
+                std::cout << 0 << '\n';
+            }
+            else {
+                std::cout << 1 << '\n';
+            }
         } else {
             int u, v;
             std::cin >> u >> v;

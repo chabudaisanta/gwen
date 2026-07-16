@@ -3,6 +3,7 @@
 // clang-format on
 
 #include <gtest/gtest.h>
+using namespace gwen;
 
 TEST(TemplateTest, CompileTest) {
     // Just a compilation test to ensure all includes and macros are working

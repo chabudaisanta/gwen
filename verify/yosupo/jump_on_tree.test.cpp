@@ -18,7 +18,6 @@ int main() {
         int u, v;
         std::cin >> u >> v;
         G.add_edge(u, v);
-        G.add_edge(v, u);
     }
     G.build();
 

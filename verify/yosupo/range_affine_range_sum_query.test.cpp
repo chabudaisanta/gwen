@@ -7,11 +7,12 @@
 #include "gwen/query/range_add_update_sum.hpp"
 
 using namespace gwen;
-using mint = DynamicModInt998244353;
+using mint = DynamicModInt64;
 
 int main() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(nullptr);
+    mint::set_mod(998244353);
 
     int n, q;
     std::cin >> n >> q;

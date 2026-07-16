@@ -56,8 +56,16 @@ public:
         assert(!built_);
         edge_buf_.push_back(e);
     }
-    void add_edge(i32 u, i32 v) { add_edge(EdgeType(u, v)); }
-    void add_edge(i32 u, i32 v, weight_type w) { add_edge(EdgeType(u, v, w)); }
+    void add_edge(i32 u, i32 v) { 
+        assert(0 <= u && u < n_);
+        assert(0 <= v && u < n_);
+        add_edge(EdgeType(u, v));
+     }
+    void add_edge(i32 u, i32 v, weight_type w) { 
+        assert(0 <= u && u < n_);
+        assert(0 <= v && v < n_);
+        add_edge(EdgeType(u, v, w)); 
+    }
 
     /**
      * @brief 内部データ構造(CSR)を構築する。クエリ応答の前に一度だけ呼ぶ。

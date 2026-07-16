@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "gwen/container/trie.hpp"
+#include "gwen/ds/trie.hpp"
 #include "gwen/types.hpp"
 
 using namespace gwen;

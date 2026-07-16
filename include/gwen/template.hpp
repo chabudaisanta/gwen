@@ -19,7 +19,7 @@
 #include "gwen/core/constants.hpp"
 #include "gwen/core/grid.hpp"
 #include "gwen/core/utils.hpp"
-#include "gwen/core/bit.hpp"
+// #include "gwen/core/bit.hpp"
 
 // math
 #include "gwen/math/integer.hpp"
@@ -44,8 +44,6 @@ using gwen::u64;
 using ll = long long;
 using ull = unsigned long long;
 using namespace gwen::literals;
-
-using namespace gwen;
 
 /**
  * @brief コンテナの全要素の累積和を返す

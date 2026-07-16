@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -eo pipefail
 
 # カレントディレクトリをプロジェクトルートに移動
 cd "$(dirname "$0")/.."
@@ -16,4 +16,15 @@ echo "1. Resolving dependencies..."
 competitive-verifier oj-resolve --config config.toml --include "verify/**" > verify_files.json
 
 echo "2. Running verification..."
-competitive-verifier verify --verify-json verify_files.json
+set +e
+competitive-verifier verify --verify-json verify_files.json --output result.json --check-error --tle 5.0 2>&1 | tee >(sed -E 's/\x1b\[[0-9;]*[a-zA-Z]//g' > verify/verify.log)
+EXIT_CODE=${PIPESTATUS[0]}
+set -e
+
+echo ""
+echo "=== Verification Summary ==="
+if [ -f result.json ]; then
+    python3 scripts/summary.py result.json
+fi
+
+exit $EXIT_CODE

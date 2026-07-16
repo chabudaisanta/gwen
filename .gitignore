@@ -10,5 +10,6 @@ __pycache__/
 result.json
 verify_files.json
 test/test.log
+verify/verify.log
 _jekyll/
 temp/
