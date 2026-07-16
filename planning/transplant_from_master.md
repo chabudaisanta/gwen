@@ -41,9 +41,9 @@
 - [ ] geo/graham_scan.hpp
 - [ ] graph/range_edge_graph.hpp
 - [ ] hash/to_hash.hpp
-- [ ] misc/counting_sort.hpp
-- [ ] query/mo.hpp
-- [ ] query/swag.hpp
+- [x] misc/counting_sort.hpp
+- [x] query/mo.hpp
+- [x] query/swag.hpp
 - [x] io.hpp
 
 ## クオリティが低いので1から作り直すべきヘッダー
