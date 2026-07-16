@@ -1,3 +1,8 @@
+---
+title: ImplicitTreap
+documentation_of: //include/gwen/bbst/implicit_treap.hpp
+---
+
 # ImplicitTreap
 
 インデックスベースの動的配列（Treap）です。値の保持と反転のみをサポートする最速のTreapです。

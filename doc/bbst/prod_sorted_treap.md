@@ -1,3 +1,8 @@
+---
+title: ProdSortedTreap
+documentation_of: //include/gwen/bbst/prod_sorted_treap.hpp
+---
+
 # ProdSortedTreap
 
 キーベースで区間積が取得可能な順序付き多重集合・辞書（Treap）です。各キーに値を結びつけ、キーの範囲に対する区間積を計算します。

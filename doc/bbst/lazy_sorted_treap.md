@@ -1,3 +1,8 @@
+---
+title: LazySortedTreap
+documentation_of: //include/gwen/bbst/lazy_sorted_treap.hpp
+---
+
 # LazySortedTreap
 
 キーベースで区間作用・区間積が取得可能な順序付き多重集合・辞書（Treap）です。各キーに値を結びつけ、キーの範囲に対する区間積と遅延評価による区間作用をサポートします。

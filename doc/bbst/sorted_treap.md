@@ -1,3 +1,8 @@
+---
+title: SortedTreap
+documentation_of: //include/gwen/bbst/sorted_treap.hpp
+---
+
 # SortedTreap
 
 キーベースの順序付き多重集合（Treap）です。モノイドを持たず、キーの大小で二分探索ツリーを構築します。`std::multiset` に近い振る舞いをしますが、インデックス（$k$番目）でのアクセスが高速です。

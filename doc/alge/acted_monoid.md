@@ -1,3 +1,8 @@
+---
+title: 作用付きモノイド (Acted Monoid)
+documentation_of: //include/gwen/alge/acted_monoid.hpp
+---
+
 # 作用付きモノイド (Acted Monoid)
 
 遅延評価セグメント木やTreapなどで、要素（モノイド）に対して作用させる操作とその合成を定義するコンセプトです。

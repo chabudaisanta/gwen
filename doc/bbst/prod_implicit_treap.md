@@ -1,3 +1,8 @@
+---
+title: ProdImplicitTreap
+documentation_of: //include/gwen/bbst/prod_implicit_treap.hpp
+---
+
 # ProdImplicitTreap
 
 区間積取得が可能なインデックスベースの動的配列（Treap）です。反転操作（非可換モノイド対応）と区間積取得をサポートします。

@@ -1,3 +1,7 @@
+---
+title: LazyImplicitTreap
+---
+
 # LazyImplicitTreap
 
 遅延評価付きインデックスベース動的配列（Lazy Implicit Treap）です。区間反転、区間作用、区間取得をサポートします。
