@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "gwen/graph/tree_lca.hpp"
+#include "gwen/graph/forest.hpp"
 
 using namespace gwen;
 
