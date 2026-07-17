@@ -101,6 +101,8 @@ jobs:
 
       - name: Verify
         uses: competitive-verifier/actions/verify@v2
+        env:
+          YUKICODER_TOKEN: ${{ secrets.YUKICODER_TOKEN }}
         with:
           destination: ${{runner.temp}}/result.json
           split-size: ${{ env.SPLIT_SIZE }}

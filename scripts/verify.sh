@@ -9,11 +9,17 @@ if [ -d ".venv" ]; then
     source .venv/bin/activate
 fi
 
+# 引数で指定されたターゲットがあればそれを使用し、なければ verify/** を指定する
+TARGET="verify/**"
+if [ "$#" -gt 0 ]; then
+    TARGET="$1"
+fi
+
 echo "==> Running competitive-verifier <=="
 export CPLUSINCLUDEPATH="$(pwd)/include"
 export PATH="$HOME/.local/bin:$PATH"
-echo "1. Resolving dependencies..."
-competitive-verifier oj-resolve --config config.toml --include "verify/**" > verify_files.json
+echo "1. Resolving dependencies for ${TARGET}..."
+competitive-verifier oj-resolve --config config.toml --include "${TARGET}" > verify_files.json
 
 echo "2. Running verification..."
 set +e
