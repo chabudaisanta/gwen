@@ -18,9 +18,8 @@ int main() {
     // pq takes the maximum value
     // 4 < m < 1e5, 1 <= a <= b <= 1000
     // Q = 2000
-    std::vector<i64> P;
-    auto LPF = LpfTable(200000);
-    for(i64 i = 2; i < 200000; ++i) if(LPF.is_prime(i)) P.push_back(i);
+    vector<i64> P;
+    for(i64 i = 2; i < 200000; ++i) if(is_prime(i)) P.push_back(i);
 
     i64 m, a, b;
     while(true) {
