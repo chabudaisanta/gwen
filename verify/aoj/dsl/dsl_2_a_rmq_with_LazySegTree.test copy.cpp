@@ -16,7 +16,7 @@ struct Monoid {
     using F = i32;
     static S op(S a, S b) { return min(a, b); }
     static S e() { return numeric_limits<i32>::max(); }
-    static S mapping(F, S) { return 0; }
+    static S mapping(F, S x) { return x; }
     static F composition(F, F) { return 0; }
     static F id() { return 0; }
 };
