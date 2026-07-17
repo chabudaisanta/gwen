@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "gwen/graph/forest.hpp"
+#include "gwen/graph/tree_lca.hpp"
 
 using namespace gwen;
 
@@ -21,21 +21,21 @@ int main() {
     }
     G.build();
 
-    Forest<Edge<int>, false> forest(G);
+    TreeLca forest(0, G);
 
     for (int i = 0; i < q; ++i) {
         int u, v, k;
         std::cin >> u >> v >> k;
 
-        int lca = forest.get_lca(u, v);
-        int dist_u = forest.get_depth(u) - forest.get_depth(lca);
-        int dist_v = forest.get_depth(v) - forest.get_depth(lca);
+        int lca = forest.lca(u, v);
+        int dist_u = forest.depth(u) - forest.depth(lca);
+        int dist_v = forest.depth(v) - forest.depth(lca);
 
         if (k <= dist_u) {
-            std::cout << forest.get_kth_ancestor(u, k) << "\n";
+            std::cout << forest.kth_anc(u, k) << "\n";
         }
         else if (k <= dist_u + dist_v) {
-            std::cout << forest.get_kth_ancestor(v, dist_u + dist_v - k) << "\n";
+            std::cout << forest.kth_anc(v, dist_u + dist_v - k) << "\n";
         }
         else {
             std::cout << -1 << "\n";
