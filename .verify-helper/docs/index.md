@@ -76,6 +76,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [Lazy Dynamic Segment Tree (lazy_dynamic_segment_tree.hpp)](include/gwen/ds/lazy_dynamic_segment_tree.hpp)
 - [Wavelet Matrix (wavelet_matrix.hpp)](include/gwen/ds/wavelet_matrix.hpp)
 - [Trie木 (trie.hpp)](include/gwen/ds/trie.hpp)
+- [FastSet (fast_set.hpp)](include/gwen/ds/fast_set.hpp)
 
 ### グラフ (Graph)
 - [グラフ基盤 (graph.hpp)](include/gwen/graph/graph.hpp)
