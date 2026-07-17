@@ -46,4 +46,44 @@ TEST(SortedTreapTest, BasicOperations) {
     EXPECT_EQ(vec.size(), 2);
     EXPECT_EQ(vec[0], 5);
     EXPECT_EQ(vec[1], 20);
+
+    auto it_begin = t.begin();
+    EXPECT_NE(it_begin, t.end());
+    EXPECT_EQ(*it_begin, 5);
+    auto it_next = it_begin;
+    ++it_next;
+    EXPECT_NE(it_next, t.end());
+    EXPECT_EQ(*it_next, 20);
+    ++it_next;
+    EXPECT_EQ(it_next, t.end());
+
+    auto it_end = t.end();
+    --it_end;
+    EXPECT_EQ(*it_end, 20);
+    --it_end;
+    EXPECT_EQ(*it_end, 5);
+
+    auto lb20 = t.lower_bound(20);
+    EXPECT_EQ(*lb20, 20);
+
+    auto ub10 = t.upper_bound(10);
+    EXPECT_EQ(*ub10, 20);
+
+    auto ub20 = t.upper_bound(20);
+    EXPECT_EQ(ub20, t.end());
+
+    auto lb5 = t.lower_bound(5);
+    EXPECT_EQ(*lb5, 5);
+
+    // Test largest/smallest equivalent
+    auto largest_20 = t.upper_bound(20);
+    if (largest_20 != t.begin()) --largest_20;
+    EXPECT_EQ(*largest_20, 20);
+
+    auto largest_10 = t.upper_bound(10);
+    if (largest_10 != t.begin()) --largest_10;
+    EXPECT_EQ(*largest_10, 5);
+
+    auto smallest_10 = t.lower_bound(10);
+    EXPECT_EQ(*smallest_10, 20);
 }

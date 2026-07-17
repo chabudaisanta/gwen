@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <functional>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -23,7 +24,7 @@ public:
     using tree = i32;
 
     struct node {
-        tree left = 0, right = 0;
+        tree left = 0, right = 0, parent = 0;
         K key{};
         S val = M::e(), prod = M::e();
         F lz = M::id();
@@ -45,18 +46,105 @@ private:
 public:
     LazySortedTreap() = default;
 
+    /**
+     * @brief 双方向イテレータ
+     */
+    class iterator {
+    public:
+        using iterator_category = std::bidirectional_iterator_tag;
+        using value_type        = K;
+        using difference_type   = isize;
+        using pointer           = const K*;
+        using reference         = const K&;
+
+    private:
+        tree id;
+        const LazySortedTreap* tr;
+
+        friend class LazySortedTreap;
+        iterator(tree id, const LazySortedTreap* tr) : id(id), tr(tr) {}
+
+    public:
+        iterator() : id(NIL), tr(nullptr) {}
+
+        reference operator*() const { return d[id].key; }
+        pointer operator->() const { return &d[id].key; }
+
+        iterator& operator++() {
+            if (id == NIL) return *this;
+            if (d[id].right != NIL) {
+                id = d[id].right;
+                while (d[id].left != NIL) id = d[id].left;
+            } else {
+                tree p = d[id].parent;
+                while (p != NIL && d[p].right == id) {
+                    id = p;
+                    p = d[p].parent;
+                }
+                id = p;
+            }
+            return *this;
+        }
+
+        iterator operator++(int) { iterator tmp = *this; ++(*this); return tmp; }
+
+        iterator& operator--() {
+            if (id == NIL) {
+                if (tr && tr->root != NIL) {
+                    id = tr->root;
+                    while (d[id].right != NIL) id = d[id].right;
+                }
+                return *this;
+            }
+            if (d[id].left != NIL) {
+                id = d[id].left;
+                while (d[id].right != NIL) id = d[id].right;
+            } else {
+                tree p = d[id].parent;
+                while (p != NIL && d[p].left == id) {
+                    id = p;
+                    p = d[p].parent;
+                }
+                id = p;
+            }
+            return *this;
+        }
+
+        iterator operator--(int) { iterator tmp = *this; --(*this); return tmp; }
+
+        bool operator==(const iterator& other) const { return id == other.id; }
+        bool operator!=(const iterator& other) const { return id != other.id; }
+    };
+
+    /**
+     * @brief 最小要素を指すイテレータを取得します。
+     */
+    iterator begin() const {
+        tree curr = root;
+        if (curr == NIL) return end();
+        while (d[curr].left != NIL) curr = d[curr].left;
+        return iterator(curr, this);
+    }
+
+    /**
+     * @brief 番兵（終端）イテレータを取得します。
+     */
+    iterator end() const { return iterator(NIL, this); }
+
     i32 size() const { return size_(root); }
     bool empty() const { return root == NIL; }
 
     void insert(const K& key, const S& val = M::e()) {
         auto [l, r] = split_lt(root, key);
         root = merge(merge(l, d.new_node(node(key, val))), r);
+        if (root != NIL) d[root].parent = NIL;
     }
 
     void erase(const K& key) {
         auto [l, r] = split_lt(root, key);
         if (r == NIL) {
             root = l;
+            if (root != NIL) d[root].parent = NIL;
             return;
         }
         auto [m, rr] = split_idx(r, 1);
@@ -67,12 +155,14 @@ public:
         else {
             root = merge(merge(l, m), rr);
         }
+        if (root != NIL) d[root].parent = NIL;
     }
 
     void erase_all(const K& key) {
         auto [l, r] = split_lt(root, key);
         auto [m, rr] = split_le(r, key);
         root = merge(l, rr);
+        if (root != NIL) d[root].parent = NIL;
     }
 
     void set(const K& key, const S& val) {
@@ -90,6 +180,7 @@ public:
             d[mid].has_lazy = true;
         }
         root = merge(merge(l, mid), r2);
+        if (root != NIL) d[root].parent = NIL;
     }
 
     S prod(const K& lower, const K& upper) {
@@ -102,10 +193,13 @@ public:
 
     S all_prod() { return prod_(root); }
 
-    bool contains(const K& x) {
-        auto [idx, id] = lower_bound(x);
-        if (id == NIL) return false;
-        return key_eq(d[id].key, x);
+    /**
+     * @brief 指定したキー x が含まれているか判定します。
+     */
+    bool contains(const K& x) const {
+        auto it = lower_bound(x);
+        if (it == end()) return false;
+        return key_eq(*it, x);
     }
 
     i32 count(const K& x) {
@@ -120,16 +214,39 @@ public:
         return res;
     }
 
-    std::pair<i32, tree> lower_bound(const K& x) {
-        auto [l, r] = split_lt(root, x);
-        i32 idx = size_(l);
-        if (r == NIL) {
-            root = l;
-            return {idx, NIL};
+    /**
+     * @brief 指定したキー x 以上の最初の要素を指すイテレータを返します。
+     * @details 検索時は木の構造や遅延評価 (lazy) の値が影響しないため、単なる二分探索を行います。
+     */
+    iterator lower_bound(const K& x) const {
+        tree curr = root;
+        tree res = NIL;
+        while (curr != NIL) {
+            if (!cmp(d[curr].key, x)) {
+                res = curr;
+                curr = d[curr].left;
+            } else {
+                curr = d[curr].right;
+            }
         }
-        auto [m, rr] = split_idx(r, 1);
-        root = merge(merge(l, m), rr);
-        return {idx, m};
+        return iterator(res, this);
+    }
+
+    /**
+     * @brief 指定したキー x より真に大きい最初の要素を指すイテレータを返します。
+     */
+    iterator upper_bound(const K& x) const {
+        tree curr = root;
+        tree res = NIL;
+        while (curr != NIL) {
+            if (cmp(x, d[curr].key)) {
+                res = curr;
+                curr = d[curr].left;
+            } else {
+                curr = d[curr].right;
+            }
+        }
+        return iterator(res, this);
     }
 
 private:
@@ -165,6 +282,8 @@ private:
         node& n = d[t];
         n.size = 1 + size_(n.left) + size_(n.right);
         n.prod = M::op(M::op(prod_(n.left), n.val), prod_(n.right));
+        if (n.left != NIL) d[n.left].parent = t;
+        if (n.right != NIL) d[n.right].parent = t;
     }
 
     static std::pair<tree, tree> split_lt(tree t, const K& key) {
@@ -174,11 +293,13 @@ private:
             auto [a, b] = split_lt(d[t].right, key);
             d[t].right = a;
             update(t);
+            if (b != NIL) d[b].parent = NIL;
             return {t, b};
         }
         auto [a, b] = split_lt(d[t].left, key);
         d[t].left = b;
         update(t);
+        if (a != NIL) d[a].parent = NIL;
         return {a, t};
     }
 
@@ -189,11 +310,13 @@ private:
             auto [a, b] = split_le(d[t].right, key);
             d[t].right = a;
             update(t);
+            if (b != NIL) d[b].parent = NIL;
             return {t, b};
         }
         auto [a, b] = split_le(d[t].left, key);
         d[t].left = b;
         update(t);
+        if (a != NIL) d[a].parent = NIL;
         return {a, t};
     }
 
@@ -205,11 +328,13 @@ private:
             auto [a, b] = split_idx(n.left, k);
             n.left = b;
             update(t);
+            if (a != NIL) d[a].parent = NIL;
             return {a, t};
         }
         auto [a, b] = split_idx(n.right, k - size_(n.left) - 1);
         n.right = a;
         update(t);
+        if (b != NIL) d[b].parent = NIL;
         return {t, b};
     }
 

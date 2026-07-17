@@ -41,4 +41,18 @@ TEST(LazySortedTreapTest, BasicOperations) {
     auto p_all = t.all_prod();
     EXPECT_EQ(p_all.val.val(), 30);  // 7 + 13 + 10
     EXPECT_EQ(p_all.len.val(), 3);
+
+    auto it_begin = t.begin();
+    EXPECT_NE(it_begin, t.end());
+    EXPECT_EQ(*it_begin, 5);
+
+    auto lb20 = t.lower_bound(20);
+    EXPECT_EQ(*lb20, 20);
+
+    auto ub5 = t.upper_bound(5);
+    EXPECT_EQ(*ub5, 10);
+
+    auto it_end = t.end();
+    --it_end;
+    EXPECT_EQ(*it_end, 20);
 }
