@@ -1,3 +1,8 @@
+---
+layout: default
+title: README
+---
+
 # gwen
 
 競技プログラミングのための C++ ヘッダーオンリーライブラリ。

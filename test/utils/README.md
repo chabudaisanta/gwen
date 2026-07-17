@@ -1,5 +1,9 @@
-# test/utils
+---
+layout: default
+title: テスト用ユーティリティ
+---
 
+# test/utils
 このディレクトリには、ユニットテスト（特にランダムテスト）の実装を補助するためのユーティリティが含まれています。
 
 ## 1. `naive_array.hpp`
