@@ -1,5 +1,5 @@
 # https://competitive-verifier.github.io/competitive-verifier/
-# theme: jekyll-theme-cayman
+remote_theme: just-the-docs/just-the-docs
 title: gwen
 description: Competitive Programming Library (C++23)
 url: ""
