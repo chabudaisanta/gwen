@@ -36,7 +36,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 
 ### 剰余演算 (Mod)
 - [モジュラ演算基盤 (mod.hpp)](include/gwen/mod/mod.hpp)
-- [Dynamic ModInt (modint.hpp)](include/gwen/mod/modint.hpp)
+- [ModInt (modint.hpp)](include/gwen/mod/modint.hpp)
 - [ModInt61 (mod61.hpp)](include/gwen/mod/mod61.hpp)
 
 ### 入出力 (IO)

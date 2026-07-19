@@ -8,13 +8,12 @@
 
 using namespace gwen;
 
-using mint = DynamicModInt64;
+using mint = modint998244353;
 
 int main() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(nullptr);
 
-    mint::set_mod(998244353);
 
     i32 n, m, k;
     if (!(std::cin >> n >> m >> k)) return 0;
