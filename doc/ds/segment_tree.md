@@ -102,3 +102,15 @@ template <class G> int SegmentTree<M>::min_left(int r, G g)
 
 **計算量**
 - $O(\log n)$
+
+## **dump**
+
+```cpp
+std::string dump() const
+```
+
+デバッグ用にデータ構造の内部状態を文字列として返します。
+
+**計算量**
+
+- $O(N)$

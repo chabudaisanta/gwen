@@ -75,3 +75,14 @@ i32 max_right(i32 l, F&& f) const
 $f(sum(l, r)) = \text{true}$ となる最大の $r$ を返します。
 - 制約: $f(sum(0, r))$ が $r$ に対して単調性を持つこと
 - 計算量: $O(\log N)$
+## **dump**
+
+```cpp
+std::string dump() const
+```
+
+デバッグ用にデータ構造の内部状態を文字列として返します。
+
+**計算量**
+
+- $O(N)$

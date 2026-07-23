@@ -138,3 +138,15 @@ std::vector<std::vector<int>> dsu.groups()
 
 - $O(n)$
 
+
+## **dump**
+
+```cpp
+std::string dump() const
+```
+
+デバッグ用にデータ構造の内部状態を文字列として返します。
+
+**計算量**
+
+- $O(N)$

@@ -141,3 +141,15 @@ int forest.get_dist(int u, int v)
 **計算量**
 
 - $O(\log N)$
+
+## **dump**
+
+```cpp
+std::string dump() const
+```
+
+デバッグ用にデータ構造の内部状態を文字列として返します。
+
+**計算量**
+
+- $O(N)$
