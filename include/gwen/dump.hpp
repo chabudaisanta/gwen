@@ -61,7 +61,11 @@ constexpr Color RESET{"\033[0m"};
 
 template <gwen::internal::dumpable T>
 struct std::formatter<T, char> {
-    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context& ctx) {
+        auto it = ctx.begin();
+        if (it != ctx.end() && *it != '}') throw std::format_error("invalid format");
+        return it;
+    }
     template <typename FormatContext>
     auto format(const T& t, FormatContext& ctx) const {
         return std::format_to(ctx.out(), "{}", t.dump());
@@ -70,7 +74,11 @@ struct std::formatter<T, char> {
 
 template <gwen::internal::value_formattable T>
 struct std::formatter<T, char> {
-    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+    constexpr auto parse(std::format_parse_context& ctx) {
+        auto it = ctx.begin();
+        if (it != ctx.end() && *it != '}') throw std::format_error("invalid format");
+        return it;
+    }
     template <typename FormatContext>
     auto format(const T& t, FormatContext& ctx) const {
         return std::format_to(ctx.out(), "{}", t.val());
