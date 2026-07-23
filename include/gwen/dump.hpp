@@ -102,7 +102,7 @@ template <std::ranges::range R> std::string format_range(R&& r) {
     std::string s = std::format("{}", first_part);
     std::string inner = s.length() >= 2 ? s.substr(1, s.length() - 2) : s;
 
-    if constexpr (std::ranges::bidirectional_range<R>) {
+    if constexpr (std::ranges::bidirectional_range<R> && std::ranges::common_range<R>) {
         auto last = *std::ranges::rbegin(r);
         return std::format("[{}, ... , {}]", inner, last);
     }
