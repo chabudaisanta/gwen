@@ -64,3 +64,10 @@ auto gwen_dummy_setmod = [](){mint::set_mod(998244353); return 0; }();
 #endif
 ```
 </RULE>
+
+<RULE>
+## コマンド実行時の注意点 (WSL環境)
+- OSがWindowsで、開発ターゲットがWSL (`\\wsl.localhost\Ubuntu\...`) の場合、PowerShellから直接Linuxコマンド (`cmake`, `make`, `git` 等) を実行するとエラーになることがあります。
+- AIエージェントがコマンドを実行する際は、必ず `wsl -e sh -c "コマンド"` のようにWSL経由で実行してください。
+</RULE>
+
