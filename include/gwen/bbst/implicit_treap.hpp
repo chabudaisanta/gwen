@@ -1,9 +1,12 @@
 #pragma once
 
 #include <cassert>
+#include <string>
+#include <format>
 #include <utility>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
@@ -130,6 +133,11 @@ public:
         res.reserve(size());
         to_vec_(root, res);
         return res;
+    }
+
+    std::string dump() const {
+        std::vector<T> vec = const_cast<ImplicitTreap*>(this)->to_vec();
+        return std::format("ImplicitTreap{{\n  size = {},\n  data = {},\n}}", size(), internal::format_range(vec));
     }
 
 private:

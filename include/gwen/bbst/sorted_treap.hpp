@@ -2,10 +2,13 @@
 
 #include <cassert>
 #include <functional>
-#include <optional>
+#include <string>
+#include <format>
+#include <tuple>
 #include <utility>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
@@ -255,6 +258,11 @@ public:
         res.reserve(size());
         to_vec_(root, res);
         return res;
+    }
+
+    std::string dump() const {
+        std::vector<K> vec = to_vec();
+        return std::format("SortedTreap{{\n  size = {},\n  data = {},\n}}", size(), internal::format_range(vec));
     }
 
 private:
