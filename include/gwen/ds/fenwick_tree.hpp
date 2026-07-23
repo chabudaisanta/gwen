@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cassert>
-#include <format>
 #include <string>
+#include <format>
 #include <vector>
 
 #include "gwen/alge/abel.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -90,7 +91,8 @@ template <abel Abel> struct FenwickTree {
     }
 
     std::string dump() const {
-        return std::format("FenwickTree{{\n  N = {},\n  data = {},\n  data(restored) = {},\n}}", N, data, to_vec());
+        return std::format("FenwickTree{{\n  N = {},\n  data = {},\n  data(restored) = {},\n}}", N,
+                           internal::format_range(data), internal::format_range(to_vec()));
     }
 
 private:

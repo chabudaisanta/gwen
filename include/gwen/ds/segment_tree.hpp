@@ -3,8 +3,11 @@
 #include <bit>
 #include <cassert>
 #include <vector>
+#include <string>
+#include <format>
 
 #include "gwen/alge/monoid.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -119,6 +122,16 @@ public:
             sm = M::op(d[r], sm);
         } while ((r & -r) != r);
         return 0;
+    }
+
+    std::vector<S> to_vec() const {
+        std::vector<S> res(n);
+        for (i32 i = 0; i < n; i++) res[i] = get(i);
+        return res;
+    }
+
+    std::string dump() const {
+        return std::format("SegmentTree{{\n  N = {},\n  data(restored) = {}\n}}", n, internal::format_range(to_vec()));
     }
 };
 

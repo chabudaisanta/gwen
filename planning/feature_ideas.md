@@ -17,6 +17,7 @@
 *   **区間を set で管理するテク**: 連続する区間を `std::set` などで管理し、区間の追加・削除・結合をならし $O(\log N)$ で行う手法のクラス化。
 *   `container/associative_treap.hpp`: 連想配列のように振る舞う Treap。
 *   `container/sq_div.hpp`: 平方分割 (Square Root Decomposition) の一般的なデータ構造ベース。
+*   **Deque**: std::deque/queue は実装依存で低速のため、高速なdequeを作成したい。実装は2べきサイズのリングバッファになる予定で、vectorのラッパーでなくallocatorを直に叩く方がよさそう。
 
 ## 3. グラフ・木構造 (Graph & Tree)
 *   **Tree全般**: 木の直径、重心、オイラーツアーなど、木に関する基本・頻出アルゴリズムを「全部入り」にした利便性の高いモジュール。

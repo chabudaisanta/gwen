@@ -1,8 +1,11 @@
 #pragma once
 
 #include <cassert>
+#include <string>
+#include <format>
 
 #include "gwen/alge/monoid.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 
@@ -66,6 +69,17 @@ private:
         return get_(d[t].right, m, r, p);
     }
 
+    void get_elements_(tree t, i64 l, i64 r, std::vector<std::pair<i64, S>>& res) const {
+        if (t == NIL) return;
+        if (r - l == 1) {
+            res.emplace_back(l, d[t].val);
+            return;
+        }
+        i64 m = l + (r - l) / 2;
+        get_elements_(d[t].left, l, m, res);
+        get_elements_(d[t].right, m, r, res);
+    }
+
 public:
     DynamicSegmentTree() : n(0) {}
     explicit DynamicSegmentTree(i64 n_) : n(n_) {}
@@ -86,6 +100,12 @@ public:
     }
 
     S all_prod() const { return root == NIL ? M::e() : d[root].val; }
+
+    std::string dump() const {
+        std::vector<std::pair<i64, S>> elements;
+        get_elements_(root, 0, n, elements);
+        return std::format("DynamicSegmentTree{{\n  N = {},\n  elements = {}\n}}", n, internal::format_range(elements));
+    }
 };
 
 }  // namespace gwen

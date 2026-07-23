@@ -71,3 +71,8 @@ auto gwen_dummy_setmod = [](){mint::set_mod(998244353); return 0; }();
 - AIエージェントがコマンドを実行する際は、必ず `wsl -e sh -c "コマンド"` のようにWSL経由で実行してください。
 </RULE>
 
+
+<RULE>
+## dump機能の実装ルール
+- dump機能の拡張や各モジュールの dump() を実装する際は、必ず \.agents/DUMP_RULES.md\ に記載された仕様（DUMP_SIZE_LIMITの適用、復元配列の出力など）に従うこと。
+</RULE>

@@ -9,6 +9,7 @@
 #if __has_include(<unistd.h>)
 #include <unistd.h>
 #endif
+#include <ranges>
 
 #include "gwen/types.hpp"
 
@@ -56,6 +57,64 @@ constexpr Color WHITE{"\033[1;37m"};
 constexpr Color RESET{"\033[0m"};
 
 }  // namespace internal
+}  // namespace gwen
+
+template <gwen::internal::dumpable T>
+struct std::formatter<T, char> {
+    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+    template <typename FormatContext>
+    auto format(const T& t, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "{}", t.dump());
+    }
+};
+
+template <gwen::internal::value_formattable T>
+struct std::formatter<T, char> {
+    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+    template <typename FormatContext>
+    auto format(const T& t, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "{}", t.val());
+    }
+};
+
+namespace gwen {
+namespace internal {
+
+template <std::ranges::range R> std::string format_range(R&& r) {
+#ifdef DUMP_SIZE_LIMIT
+    constexpr usize limit = DUMP_SIZE_LIMIT;
+    bool exceed = false;
+    if constexpr (std::ranges::sized_range<R>) {
+        if (std::ranges::size(r) > limit + 1) exceed = true;
+    }
+    else if constexpr (std::ranges::forward_range<R>) {
+        if (std::ranges::distance(r) > limit + 1) exceed = true;
+    }
+    else {
+        exceed = true;
+    }
+
+    if (!exceed) {
+        return std::format("{}", r);
+    }
+
+    auto first_part = r | std::views::take(limit);
+    std::string s = std::format("{}", first_part);
+    std::string inner = s.length() >= 2 ? s.substr(1, s.length() - 2) : s;
+
+    if constexpr (std::ranges::bidirectional_range<R>) {
+        auto last = *std::ranges::rbegin(r);
+        return std::format("[{}, ... , {}]", inner, last);
+    }
+    else {
+        return std::format("[{}, ...]", inner);
+    }
+#else
+    return std::format("{}", std::forward<R>(r));
+#endif
+}
+
+}  // namespace internal
 
 /**
  * @brief 変数の内容を標準エラー出力 (std::cerr) に出力するユーティリティ
@@ -76,7 +135,11 @@ template <typename... Args> void dump(Args&&... args) {
             return std::format("{}", arg.val());
         }
         else if constexpr (std::formattable<T, char>) {
-            return std::format("{}", arg);
+            if constexpr (std::ranges::range<T> && !std::convertible_to<T, std::string_view>) {
+                return internal::format_range(arg);
+            } else {
+                return std::format("{}", arg);
+            }
         }
         else {
             return "[unformattable token]";

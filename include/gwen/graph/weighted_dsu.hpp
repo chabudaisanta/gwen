@@ -1,10 +1,13 @@
 #pragma once
 
+#include <string>
+#include <format>
 #include <algorithm>
 #include <cassert>
 #include <vector>
 
 #include "gwen/alge/abel.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -139,6 +142,11 @@ public:
         result.erase(std::remove_if(result.begin(), result.end(), [](const std::vector<i32>& v) { return v.empty(); }),
                      result.end());
         return result;
+    }
+
+    std::string dump() const {
+        WeightedDsu copy = *this;
+        return std::format("WeightedDsu{{\n  N = {},\n  groups = {}\n}}", n_, internal::format_range(copy.groups()));
     }
 };
 

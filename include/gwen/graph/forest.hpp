@@ -1,9 +1,12 @@
 #pragma once
 
+#include <string>
+#include <format>
 #include <algorithm>
 #include <vector>
 
 #include "gwen/graph/graph.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -142,6 +145,13 @@ public:
     i32 get_dist(i32 u, i32 v) const {
         if (!is_same(u, v)) return -1;
         return depth_[u] + depth_[v] - 2 * depth_[get_lca(u, v)];
+    }
+
+    std::string dump() const {
+        std::vector<i32> p(n_);
+        for (i32 i = 0; i < n_; ++i) p[i] = parent_[i * lg_];
+        return std::format("Forest{{\n  V = {},\n  root = {},\n  parents = {},\n  depths = {}\n}}",
+                           n_, internal::format_range(root_), internal::format_range(p), internal::format_range(depth_));
     }
 };
 

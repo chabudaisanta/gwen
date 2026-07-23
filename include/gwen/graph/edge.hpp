@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+#include <format>
 #include <concepts>
 
 #include "gwen/types.hpp"
@@ -28,6 +30,10 @@ template <typename T = i32> struct Edge {
     Edge() : u(-1), v(-1), w(0) {}
     Edge(i32 u_, i32 v_) : u(u_), v(v_), w(1) {}
     Edge(i32 u_, i32 v_, weight_type w_) : u(u_), v(v_), w(w_) {}
+
+    std::string dump() const {
+        return std::format("Edge{{u={}, v={}, w={}}}", u, v, w);
+    }
 };
 
 }  // namespace gwen
