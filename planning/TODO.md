@@ -6,16 +6,17 @@
 ## 1. インフラ・検証の強化
 - [ ] 既存モジュール (Graph, BBST, Math, Hash 等) の `competitive-verifier` 向け Verify 問題の追加実装
 - [ ] 既存各モジュールの単体テストへのランダムテストの追加
-- [ ] ドキュメントの拡充および AC Library スタイルでのフォーマット統一 (`.verify-helper/docs/` への登録)
+- [x] ドキュメントの拡充および AC Library スタイルでのフォーマット統一 (`.verify-helper/docs/` への登録)
 - [ ] dump機能の強化
-  - [ ] 各種 gwen モジュール（データ構造など）への dump 対応
-  - [ ] dumpサイズ（出力サイズや要素数）の制限機能の実装
+  - [ ] 各種 gwen モジュール（データ構造など）への dump 対応(部分的に実装中)
+  - [x] dumpサイズ（出力サイズや要素数）の制限機能の実装
 
 ## 2. 新規機能の追加 (Pending)
 ※ アイデア一覧は `planning/feature_ideas.md` を参照。実装に着手するものが決まり次第、ここにタスクとして追加してください。
 
 - [x] FastSet (64分木) の新規実装
+- [ ] Deque の新規実装: std::deque(std::queue)が低速のため、高速な実装を作成。
 
 ## 3. リファクタリング・改善
-- [ ] 動的セグ木 (`dynamic_segment_tree`, `lazy_dynamic_segment_tree`) のドキュメントコメント改善 (現在コメントが不足しているため、Doxygen形式等で詳細化)
+- [x] 動的セグ木 (`dynamic_segment_tree`, `lazy_dynamic_segment_tree`) のドキュメントコメント改善 (現在コメントが不足しているため、Doxygen形式等で詳細化)
 - [ ] `hash/zobrist.hpp` のクオリティ改善・リファクタリング

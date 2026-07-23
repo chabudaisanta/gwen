@@ -77,6 +77,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [Wavelet Matrix (wavelet_matrix.hpp)](include/gwen/ds/wavelet_matrix.hpp)
 - [Trie木 (trie.hpp)](include/gwen/ds/trie.hpp)
 - [FastSet (fast_set.hpp)](include/gwen/ds/fast_set.hpp)
+- [Deque (deque.hpp)](include/gwen/ds/deque.hpp)
 
 ### グラフ (Graph)
 - [グラフ基盤 (graph.hpp)](include/gwen/graph/graph.hpp)
