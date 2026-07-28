@@ -55,14 +55,3 @@ template <typename Container> auto SUM(const Container& vec) {
     using T = typename Container::value_type;
     return std::accumulate(vec.begin(), vec.end(), T{});
 }
-
-#if __has_include(<atcoder/all>)
-#include <atcoder/all>
-using mint998 = atcoder::modint998244353;
-using mint107 = atcoder::modint1000000007;
-#endif
-
-#if __has_include(<gmpxx.h>)
-#include <gmpxx.h>
-using gmp_int = mpz_class;
-#endif

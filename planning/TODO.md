@@ -15,7 +15,6 @@
 ※ アイデア一覧は `planning/feature_ideas.md` を参照。実装に着手するものが決まり次第、ここにタスクとして追加してください。
 
 - [x] FastSet (64分木) の新規実装
-- [ ] Deque の新規実装: std::deque(std::queue)が低速のため、高速な実装を作成。
 
 ## 3. リファクタリング・改善
 - [x] 動的セグ木 (`dynamic_segment_tree`, `lazy_dynamic_segment_tree`) のドキュメントコメント改善 (現在コメントが不足しているため、Doxygen形式等で詳細化)
