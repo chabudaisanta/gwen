@@ -8,13 +8,9 @@
 using namespace std;
 using namespace gwen::geo;
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-
+void solve() {
     int n;
-    if (!(cin >> n)) return 0;
-
+    cin >> n;
     vector<Point<long long>> pts(n);
     for (int i = 0; i < n; ++i) {
         cin >> pts[i].x >> pts[i].y;
@@ -26,6 +22,17 @@ int main() {
     for (const auto& p : hull) {
         cout << p.x << " " << p.y << "\n";
     }
+}
 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    if (cin >> t) {
+        while (t--) {
+            solve();
+        }
+    }
     return 0;
 }
