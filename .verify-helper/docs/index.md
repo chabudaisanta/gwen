@@ -80,6 +80,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [Trie木 (trie.hpp)](include/gwen/ds/trie.hpp)
 - [FastSet (fast_set.hpp)](include/gwen/ds/fast_set.hpp)
 - [Deque (deque.hpp)](include/gwen/ds/deque.hpp)
+- [TransformableMatrix (transformable_matrix.hpp)](doc/ds/transformable_matrix.md)
 
 ### グラフ (Graph)
 - [グラフ基盤 (graph.hpp)](include/gwen/graph/graph.hpp)
