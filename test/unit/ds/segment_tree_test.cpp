@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include "gwen/alge/monoid.hpp"
+#include <random>
 
 using namespace gwen;
 
@@ -56,3 +57,43 @@ TEST(SegmentTreeTest, EdgeCases) {
     EXPECT_EQ(st2.prod(0, 0), 0);
     EXPECT_EQ(st2.prod(1, 1), 0);
 }
+
+TEST(SegmentTreeTest, DumpTest) {
+    SegmentTree<sum_monoid<int>> st(5);
+    st.set(0, 10);
+    st.set(1, 20);
+    std::string dump_str = st.dump();
+    EXPECT_NE(dump_str.find("SegmentTree"), std::string::npos);
+    EXPECT_NE(dump_str.find("N = 5"), std::string::npos);
+    EXPECT_NE(dump_str.find("10, 20"), std::string::npos);
+}
+
+TEST(SegmentTreeTest, RandomTest) {
+    std::mt19937 rng(42);
+    int n = 100;
+    std::vector<int> v(n);
+    SegmentTree<sum_monoid<int>> st(n);
+    
+    for (int i = 0; i < n; ++i) {
+        v[i] = rng() % 1000;
+        st.set(i, v[i]);
+    }
+    
+    for (int q = 0; q < 1000; ++q) {
+        int type = rng() % 2;
+        if (type == 0) {
+            int p = rng() % n;
+            int x = rng() % 1000;
+            v[p] = x;
+            st.set(p, x);
+        } else {
+            int l = rng() % n;
+            int r = rng() % (n + 1);
+            if (l > r) std::swap(l, r);
+            int expected = 0;
+            for (int i = l; i < r; ++i) expected += v[i];
+            EXPECT_EQ(st.prod(l, r), expected);
+        }
+    }
+}
+

@@ -5,6 +5,8 @@
 #include <gtest/gtest.h>
 
 #include "gwen/alge/monoid.hpp"
+#include <random>
+#include <map>
 
 using namespace gwen;
 
@@ -31,3 +33,32 @@ TEST(DynamicSegmentTreeTest, BasicOperations) {
     EXPECT_EQ(st.get(1000000), 50);
     EXPECT_EQ(st.prod(0, n), 90);
 }
+
+TEST(DynamicSegmentTreeTest, RandomTest) {
+    std::mt19937_64 rng(42);
+    i64 n = 1000000000000LL;
+    DynamicSegmentTree<sum_monoid<i64>> st(n);
+    std::map<i64, i64> ref;
+    
+    for (int q = 0; q < 1000; ++q) {
+        int type = rng() % 2;
+        if (type == 0) {
+            i64 p = rng() % n;
+            i64 x = rng() % 1000;
+            ref[p] = x;
+            st.set(p, x);
+        } else {
+            i64 l = rng() % n;
+            i64 r = rng() % (n + 1);
+            if (l > r) std::swap(l, r);
+            i64 expected = 0;
+            auto it = ref.lower_bound(l);
+            while (it != ref.end() && it->first < r) {
+                expected += it->second;
+                ++it;
+            }
+            EXPECT_EQ(st.prod(l, r), expected);
+        }
+    }
+}
+

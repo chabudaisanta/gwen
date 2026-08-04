@@ -25,8 +25,21 @@ template <abel Abel> struct FenwickTree {
     i32 N;
     std::vector<S> data;
 
+    /**
+     * @brief デフォルトコンストラクタ。空の木を生成する。
+     */
     FenwickTree() : N(0) {}
+    
+    /**
+     * @brief 長さ N_ の配列で初期化する
+     * @param N_ 配列の長さ
+     */
     explicit FenwickTree(i32 N_) : N(N_), data(N_ + 1, Abel::e()) {}
+    
+    /**
+     * @brief 与えられた配列で初期化する
+     * @param vec 初期値の配列
+     */
     explicit FenwickTree(const std::vector<S>& vec) : N(vec.size()), data(N + 1) {
         for (i32 i = 1; i <= N; ++i) data[i] = vec[i - 1];
         for (i32 i = 1; i <= N; ++i) {
@@ -35,6 +48,11 @@ template <abel Abel> struct FenwickTree {
         }
     }
 
+    /**
+     * @brief 座標 p に値 x を加算する
+     * @param p 対象のインデックス (0 <= p < N)
+     * @param x 加算する値
+     */
     void add(i32 p, S x) {
         assert(0 <= p && p < N);
         p++;
@@ -44,6 +62,11 @@ template <abel Abel> struct FenwickTree {
         }
     }
 
+    /**
+     * @brief 区間 [0, r) の和を求める
+     * @param r 区間の右端 (0 <= r <= N)
+     * @return S 区間 [0, r) の和
+     */
     S sum(i32 r) const {
         assert(0 <= r && r <= N);
         S ret = Abel::e();
@@ -54,6 +77,12 @@ template <abel Abel> struct FenwickTree {
         return ret;
     }
 
+    /**
+     * @brief 区間 [l, r) の和を求める
+     * @param l 区間の左端 (0 <= l <= r)
+     * @param r 区間の右端 (l <= r <= N)
+     * @return S 区間 [l, r) の和
+     */
     S sum(i32 l, i32 r) const {
         assert(0 <= l && l <= r && r <= N);
         return Abel::op(Abel::inv(sum(l)), sum(r));
@@ -80,6 +109,10 @@ template <abel Abel> struct FenwickTree {
         return max_right_internal(Abel::inv(sum(l)), std::forward<F>(f));
     }
 
+    /**
+     * @brief 現在の配列要素を std::vector で返す
+     * @return std::vector<S> 現在の配列
+     */
     std::vector<S> to_vec() const {
         std::vector<S> res(N, Abel::e());
         for (i32 i = 1; i <= N; ++i) res[i - 1] = data[i];
@@ -90,6 +123,10 @@ template <abel Abel> struct FenwickTree {
         return res;
     }
 
+    /**
+     * @brief デバッグ用の文字列表現を返す
+     * @return std::string 木の状態の文字列表現
+     */
     std::string dump() const {
         return std::format("FenwickTree{{\n  N = {},\n  data = {},\n  data(restored) = {},\n}}", N,
                            internal::format_range(data), internal::format_range(to_vec()));

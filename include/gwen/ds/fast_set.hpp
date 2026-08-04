@@ -2,6 +2,9 @@
 
 #include <vector>
 #include <bit>
+#include <string>
+#include <format>
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -115,6 +118,18 @@ class FastSet {
             x = static_cast<i32>(idx) - 1;
         }
         return -1;
+    }
+
+    /**
+     * @brief デバッグ用の文字列表現を返す
+     * @return std::string データ構造の内部状態の文字列表現
+     */
+    std::string dump() const {
+        std::vector<i32> elements;
+        for (i32 x = next(0); x < n; x = next(x + 1)) {
+            elements.push_back(x);
+        }
+        return std::format("FastSet{{\n  n = {},\n  elements = {}\n}}", n, internal::format_range(elements));
     }
 
   private:
