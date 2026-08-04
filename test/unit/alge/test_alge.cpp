@@ -65,3 +65,20 @@ TEST(AlgeTest, AbelInv) {
     EXPECT_EQ(xor_abel<int>::inv(5), 5);
     EXPECT_EQ(xor_abel<int>::op(5, xor_abel<int>::inv(5)), xor_abel<int>::e());
 }
+
+TEST(AlgeTest, DoubleTypes) {
+    // max_monoid<double>
+    EXPECT_EQ(max_monoid<double>::e(), std::numeric_limits<double>::lowest());
+    EXPECT_LT(max_monoid<double>::e(), 0.0);
+    EXPECT_EQ(max_monoid<double>::op(-3.14, -5.5), -3.14);
+
+    // minmax_monoid<double>
+    auto minmax_e = minmax_monoid<double>::e();
+    EXPECT_EQ(minmax_e.min, std::numeric_limits<double>::max());
+    EXPECT_EQ(minmax_e.max, std::numeric_limits<double>::lowest());
+
+    auto minmax_res = minmax_monoid<double>::op({3.5, 10.1}, {5.0, 8.8});
+    EXPECT_EQ(minmax_res.min, 3.5);
+    EXPECT_EQ(minmax_res.max, 10.1);
+}
+

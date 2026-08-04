@@ -73,7 +73,7 @@ template <typename T> struct min_monoid {
 template <typename T> struct max_monoid {
     using S = T;
     static constexpr S op(S a, S b) { return std::max(a, b); }
-    static constexpr S e() { return std::numeric_limits<S>::min(); }
+    static constexpr S e() { return std::numeric_limits<S>::lowest(); }
 };
 
 /**
@@ -82,10 +82,10 @@ template <typename T> struct max_monoid {
  */
 template <typename T> struct minmax_monoid {
     struct S {
-        i32 min, max;
+        T min, max;
     };
     static constexpr S op(S a, S b) { return {std::min(a.min, b.min), std::max(a.max, b.max)}; }
-    static constexpr S e() { return {std::numeric_limits<T>::max(), std::numeric_limits<T>::min()}; }
+    static constexpr S e() { return {std::numeric_limits<T>::max(), std::numeric_limits<T>::lowest()}; }
 };
 
 /**
