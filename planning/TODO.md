@@ -12,9 +12,9 @@
   - [x] dumpサイズ（出力サイズや要素数）の制限機能の実装
 
 ## 2. 新規機能の追加 (Pending)
+- [x] 幾何モジュール (Point, Convex Polygon) の追加
 ※ アイデア一覧は `planning/feature_ideas.md` を参照。実装に着手するものが決まり次第、ここにタスクとして追加してください。
 
-- [x] FastSet (64分木) の新規実装
 
 ## 3. リファクタリング・改善
 - [x] 動的セグ木 (`dynamic_segment_tree`, `lazy_dynamic_segment_tree`) のドキュメントコメント改善 (現在コメントが不足しているため、Doxygen形式等で詳細化)

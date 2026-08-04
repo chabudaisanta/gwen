@@ -94,6 +94,10 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [Mo's Algorithm (mo.hpp)](include/gwen/query/mo.hpp)
 - [SWAG (swag.hpp)](include/gwen/query/swag.hpp)
 
+### 幾何 (Geometry)
+- [幾何モジュール (Point) (point.hpp)](doc/geo/point.md)
+- [凸包 (convex_polygon.hpp)](doc/geo/convex_polygon.md)
+
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)

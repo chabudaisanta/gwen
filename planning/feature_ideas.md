@@ -13,7 +13,6 @@
 *   **Double-ended Priority Queue**: 最大値と最小値の両方を高速に取り出せる優先度付きキュー。
 *   **Binary Trie**: 数のXOR演算等と相性の良いTrie木（`ds/trie.hpp` の整数バイナリ特化としての充実）。
 *   **Splay Tree**: 均らして $O(\log N)$ で動作し、列の分割・結合が柔軟な平衡二分探索木。Link-Cut Tree の基盤。
-*   **FastSet (64分木 / vEB木)**: 整数集合に対する検索や値の追加・削除をビット演算を用いて非常に高速（$O(\log_{64} N)$ 等）に行うデータ構造。
 *   **区間を set で管理するテク**: 連続する区間を `std::set` などで管理し、区間の追加・削除・結合をならし $O(\log N)$ で行う手法のクラス化。
 *   `container/associative_treap.hpp`: 連想配列のように振る舞う Treap。
 *   `container/sq_div.hpp`: 平方分割 (Square Root Decomposition) の一般的なデータ構造ベース。
