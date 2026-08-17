@@ -102,6 +102,9 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [幾何モジュール (Point) (point.hpp)](doc/geo/point.md)
 - [凸包 (convex_polygon.hpp)](doc/geo/convex_polygon.md)
 
+### オートマトン (Automaton)
+- [オートマトン (automaton.hpp)](doc/automaton.md)
+
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)
 - [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)

@@ -13,6 +13,7 @@
 
 ## 2. 新規機能の追加 (Pending)
 - [x] 幾何モジュール (Point, Convex Polygon) の追加
+- [x] オートマトンモジュール (Automaton) の追加
 ※ アイデア一覧は `planning/feature_ideas.md` を参照。実装に着手するものが決まり次第、ここにタスクとして追加してください。
 
 
