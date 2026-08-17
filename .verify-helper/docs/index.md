@@ -99,11 +99,11 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [SWAG (swag.hpp)](include/gwen/query/swag.hpp)
 
 ### 幾何 (Geometry)
-- [幾何モジュール (Point) (point.hpp)](doc/geo/point.md)
-- [凸包 (convex_polygon.hpp)](doc/geo/convex_polygon.md)
+- [幾何モジュール (Point) (point.hpp)](doc/geo/point.hpp)
+- [凸包 (convex_polygon.hpp)](doc/geo/convex_polygon.hpp)
 
 ### オートマトン (Automaton)
-- [オートマトン (automaton.hpp)](doc/automaton.md)
+- [オートマトン (automaton.hpp)](doc/automaton.hpp)
 
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)

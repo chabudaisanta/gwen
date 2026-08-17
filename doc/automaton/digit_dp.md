@@ -22,7 +22,8 @@ template <ring T, i32 base>
 T run_digit_dp(const std::vector<i32>& N, const Automaton<T, base>& a)
 ```
 
-- **時間計算量**: $O(|N| \times \text{n\_states} \times \text{base})$
+- **時間計算量**
+  - $O(|N| \times \text{n\_states} \times \text{base})$
   - $|N|$ は配列 `N` の要素数（桁数）
   - `n_states` はオートマトンの状態数
 
