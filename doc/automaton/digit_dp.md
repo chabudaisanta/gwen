@@ -22,14 +22,14 @@ template <ring T, i32 base>
 T run_digit_dp(const std::vector<i32>& N, const Automaton<T, base>& a)
 ```
 
-- **時間計算量**
-  - $ O(|N| \times \text{n\_states} \times \text{base}) $
-  - $ |N| $ は配列 `N` の要素数（桁数）
-  - `n_states` はオートマトンの状態数
+**計算量**
+- $ O(|N| \times \text{n\_states} \times \text{base}) $
+- $ |N| $ は配列 `N` の要素数（桁数）
+- `n_states` はオートマトンの状態数
 
-#### 引数
+**引数**
 - `N`: 上限の値を表す配列。最上位の桁から順に格納されています（例: `N = {1, 2, 3}` は 10進数であれば $123$ を表します）。
 - `a`: 条件を表すオートマトン。
 
-#### 戻り値
+**戻り値**
 - 上限 $N$ 以下の値で、オートマトン `a` の初期状態から受理状態に到達するすべての経路の遷移コストの積の総和（`T` 型）。
