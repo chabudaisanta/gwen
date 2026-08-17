@@ -92,4 +92,12 @@ struct automaton_monoid {
     }
 };
 
+/**
+ * @brief 2つのオートマトンの直積を計算する (* 演算子でのシンタックスシュガー)
+ */
+template <ring T, i32 base>
+Automaton<T, base> operator*(const Automaton<T, base>& a, const Automaton<T, base>& b) {
+    return automaton_monoid<T, base>::op(a, b);
+}
+
 } // namespace gwen
