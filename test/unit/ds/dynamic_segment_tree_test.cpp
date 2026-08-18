@@ -4,9 +4,10 @@
 
 #include <gtest/gtest.h>
 
-#include "gwen/alge/monoid.hpp"
-#include <random>
 #include <map>
+#include <random>
+
+#include "gwen/alge/monoid.hpp"
 
 using namespace gwen;
 
@@ -39,7 +40,7 @@ TEST(DynamicSegmentTreeTest, RandomTest) {
     i64 n = 1000000000000LL;
     DynamicSegmentTree<sum_monoid<i64>> st(n);
     std::map<i64, i64> ref;
-    
+
     for (int q = 0; q < 1000; ++q) {
         int type = rng() % 2;
         if (type == 0) {
@@ -47,7 +48,8 @@ TEST(DynamicSegmentTreeTest, RandomTest) {
             i64 x = rng() % 1000;
             ref[p] = x;
             st.set(p, x);
-        } else {
+        }
+        else {
             i64 l = rng() % n;
             i64 r = rng() % (n + 1);
             if (l > r) std::swap(l, r);
@@ -61,4 +63,3 @@ TEST(DynamicSegmentTreeTest, RandomTest) {
         }
     }
 }
-

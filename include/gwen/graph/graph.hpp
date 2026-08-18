@@ -1,16 +1,16 @@
 #pragma once
 
-#include <string>
-#include <format>
 #include <cassert>
 #include <concepts>
+#include <format>
 #include <ranges>
 #include <span>
+#include <string>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/graph/csr.hpp"
 #include "gwen/graph/edge.hpp"
-#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -119,13 +119,16 @@ public:
     auto operator[](i32 u) const { return adjacent(u); }
 
     std::string dump() const {
-        if (!built_) return std::format("GraphBase{{\n  N = {},\n  built = false,\n  edges = {}\n}}", n_, internal::format_range(edge_buf_));
+        if (!built_)
+            return std::format("GraphBase{{\n  N = {},\n  built = false,\n  edges = {}\n}}", n_,
+                               internal::format_range(edge_buf_));
         std::vector<std::vector<EdgeType>> adj(n_);
         for (i32 i = 0; i < n_; ++i) {
             auto edges_span = edges(i);
             adj[i].assign(edges_span.begin(), edges_span.end());
         }
-        return std::format("GraphBase{{\n  N = {},\n  built = true,\n  adjacency_list = {}\n}}", n_, internal::format_range(adj));
+        return std::format("GraphBase{{\n  N = {},\n  built = true,\n  adjacency_list = {}\n}}", n_,
+                           internal::format_range(adj));
     }
 };
 

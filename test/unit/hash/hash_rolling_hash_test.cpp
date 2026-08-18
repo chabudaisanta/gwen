@@ -3,12 +3,13 @@
 // clang-format on
 
 #include <gtest/gtest.h>
-#include "testlib.h"
-#include "utils/random_seed.hpp"
-#include "gwen/types.hpp"
 
 #include <string>
 #include <vector>
+
+#include "gwen/types.hpp"
+#include "testlib.h"
+#include "utils/random_seed.hpp"
 
 using namespace gwen;
 
@@ -108,17 +109,16 @@ TEST(RollingHashTest, BuildSegmentTree) {
     EXPECT_EQ(vec1, vec2);
 }
 
-
 TEST(RollingHashTest, EqualRandomTest) {
     test::setup_random_seed();
     i32 Q = 100;
-    while(Q--) {
+    while (Q--) {
         std::string S = rnd.next("[a-z]{20, 200}");
         const i32 N = S.size();
         auto rh = RollingHash(S);
-        
+
         i32 subquery = 100;
-        while(subquery--) {
+        while (subquery--) {
             i32 l0 = rnd.next(N), l1 = rnd.next(N);
             i32 d = rnd.next(0, N - std::max(l0, l1));
             bool a = rh.equal(l0, l0 + d, l1, l1 + d);

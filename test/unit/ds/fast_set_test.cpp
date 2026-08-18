@@ -1,7 +1,9 @@
 #include "gwen/ds/fast_set.hpp"
+
 #include <gtest/gtest.h>
-#include <set>
+
 #include <random>
+#include <set>
 
 using namespace gwen;
 
@@ -11,7 +13,7 @@ TEST(FastSetTest, Basic) {
     st.insert(10);
     EXPECT_TRUE(st.contains(10));
     EXPECT_FALSE(st.contains(11));
-    
+
     st.insert(20);
     EXPECT_EQ(st.next(0), 10);
     EXPECT_EQ(st.next(10), 10);
@@ -90,18 +92,21 @@ TEST(FastSetTest, RandomSetComparison) {
         i32 op = dist_op(mt);
         i32 x = dist_val(mt);
 
-        if (op == 0) { // insert
+        if (op == 0) {  // insert
             st.insert(x);
             ref.insert(x);
-        } else if (op == 1) { // erase
+        }
+        else if (op == 1) {  // erase
             st.erase(x);
             ref.erase(x);
-        } else if (op == 2) { // next
+        }
+        else if (op == 2) {  // next
             i32 act = st.next(x);
             auto it = ref.lower_bound(x);
             i32 exp = (it == ref.end()) ? n : *it;
             EXPECT_EQ(act, exp);
-        } else { // prev
+        }
+        else {  // prev
             i32 act = st.prev(x);
             auto it = ref.upper_bound(x);
             i32 exp = -1;
@@ -111,7 +116,7 @@ TEST(FastSetTest, RandomSetComparison) {
             }
             EXPECT_EQ(act, exp);
         }
-        
+
         EXPECT_EQ(st.contains(x), ref.count(x) > 0);
     }
 }

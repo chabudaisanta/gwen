@@ -1,53 +1,42 @@
 #pragma once
 
 #include <span>
-#include <vector>
 #include <utility>
+#include <vector>
 
-#include "gwen/types.hpp"
-#include "gwen/alge/ring.hpp"
 #include "gwen/automaton/automaton.hpp"
+#include "gwen/types.hpp"
 
 namespace gwen::automaton {
 
 /**
  * @brief 各位の数字の和がちょうど M になるオートマトンを生成する
- * @tparam T 遷移コストを表す型 (ring)
  * @tparam base N の進数
  * @param M 目標となる和
- * @return Automaton<T, base>
+ * @return Automaton<base>
  */
-template <ring T, i32 base = 10>
-Automaton<T, base> digit_sum_exact(i32 M) {
-    i32 n_states = M + 1;
-    std::vector<std::pair<i32, T>> edges(n_states * base);
+template <i32 base = 10> Automaton<base> digit_sum_exact(i32 M) {
+    Automaton<base> a(M + 1);
+    a.init = {0};
+    a.accept = {M};
     for (i32 u = 0; u <= M; ++u) {
         for (i32 c = 0; c < base; ++c) {
             if (u + c <= M) {
-                edges[u * base + c] = {u + c, T(1)};
-            } else {
-                edges[u * base + c] = {0, T(0)}; // Trap state represented as cost T(0)
+                a.set_edge(u, c, u + c);
             }
         }
     }
-    return Automaton<T, base>{
-        .n_states = n_states,
-        .init = {0},
-        .accept = {M},
-        .edges = edges
-    };
+    return a;
 }
 
 /**
  * @brief 各位の数字の和が M 以下になるオートマトンを生成する
- * @tparam T 遷移コストを表す型 (ring)
  * @tparam base N の進数
  * @param M 和の上限
- * @return Automaton<T, base>
+ * @return Automaton<base>
  */
-template <ring T, i32 base = 10>
-Automaton<T, base> digit_sum_leq(i32 M) {
-    auto a = digit_sum_exact<T, base>(M);
+template <i32 base = 10> Automaton<base> digit_sum_leq(i32 M) {
+    auto a = digit_sum_exact<base>(M);
     a.accept.clear();
     for (i32 u = 0; u <= M; ++u) {
         a.accept.push_back(u);
@@ -57,117 +46,92 @@ Automaton<T, base> digit_sum_leq(i32 M) {
 
 /**
  * @brief 各位の数字の和を M で割った余りが K になるオートマトンを生成する
- * @tparam T 遷移コストを表す型 (ring)
  * @tparam base N の進数
  * @param M 法
  * @param K 余り
- * @return Automaton<T, base>
+ * @return Automaton<base>
  */
-template <ring T, i32 base = 10>
-Automaton<T, base> digit_sum_mod(i32 M, i32 K) {
-    i32 n_states = M;
-    std::vector<std::pair<i32, T>> edges(n_states * base);
+template <i32 base = 10> Automaton<base> digit_sum_mod(i32 M, i32 K) {
+    Automaton<base> a(M);
+    a.init = {0};
+    a.accept = {K};
     for (i32 u = 0; u < M; ++u) {
         for (i32 c = 0; c < base; ++c) {
-            edges[u * base + c] = {(u + c) % M, T(1)};
+            a.set_edge(u, c, (u + c) % M);
         }
     }
-    return Automaton<T, base>{
-        .n_states = n_states,
-        .init = {0},
-        .accept = {K},
-        .edges = edges
-    };
+    return a;
 }
 
 /**
  * @brief 指定した文字を含まないオートマトンを生成する
- * @tparam T 遷移コストを表す型 (ring)
  * @tparam base N の進数
  * @param S 含まれてはならない文字のリスト
- * @return Automaton<T, base>
+ * @return Automaton<base>
  */
-template <ring T, i32 base = 10>
-Automaton<T, base> exclude_digits(std::span<const i32> S) {
-    i32 n_states = 1;
-    std::vector<std::pair<i32, T>> edges(base, {0, T(1)});
+template <i32 base = 10> Automaton<base> exclude_digits(std::span<const i32> S) {
+    Automaton<base> a(1);
+    a.init = {0};
+    a.accept = {0};
+    for (i32 c = 0; c < base; ++c) {
+        a.set_edge(0, c, 0);
+    }
     for (i32 c : S) {
         if (0 <= c && c < base) {
-            edges[c] = {0, T(0)}; // Transition cost 0 effectively drops the path
+            a.set_edge(0, c, -1);
         }
     }
-    return Automaton<T, base>{
-        .n_states = n_states,
-        .init = {0},
-        .accept = {0},
-        .edges = edges
-    };
+    return a;
 }
 
 /**
  * @brief 数値そのものを M で割った余りが K になるオートマトンを生成する
- * @tparam T 遷移コストを表す型 (ring)
  * @tparam base N の進数
  * @param M 法
  * @param K 余り
- * @return Automaton<T, base>
+ * @return Automaton<base>
  */
-template <ring T, i32 base = 10>
-Automaton<T, base> value_mod(i32 M, i32 K) {
-    i32 n_states = M;
-    std::vector<std::pair<i32, T>> edges(n_states * base);
+template <i32 base = 10> Automaton<base> value_mod(i32 M, i32 K) {
+    Automaton<base> a(M);
+    a.init = {0};
+    a.accept = {K};
     for (i32 u = 0; u < M; ++u) {
         for (i32 c = 0; c < base; ++c) {
-            edges[u * base + c] = {(u * base + c) % M, T(1)};
+            a.set_edge(u, c, (u * base + c) % M);
         }
     }
-    return Automaton<T, base>{
-        .n_states = n_states,
-        .init = {0},
-        .accept = {K},
-        .edges = edges
-    };
+    return a;
 }
 
 /**
  * @brief 0 以外の数字がちょうど M 個現れるオートマトンを生成する
- * @tparam T 遷移コストを表す型 (ring)
  * @tparam base N の進数
  * @param M 0以外の数字の目標個数
- * @return Automaton<T, base>
+ * @return Automaton<base>
  */
-template <ring T, i32 base = 10>
-Automaton<T, base> non_zero_count_exact(i32 M) {
-    i32 n_states = M + 1;
-    std::vector<std::pair<i32, T>> edges(n_states * base);
+template <i32 base = 10> Automaton<base> non_zero_count_exact(i32 M) {
+    Automaton<base> a(M + 1);
+    a.init = {0};
+    a.accept = {M};
     for (i32 u = 0; u <= M; ++u) {
         for (i32 c = 0; c < base; ++c) {
             i32 next_u = u + (c == 0 ? 0 : 1);
             if (next_u <= M) {
-                edges[u * base + c] = {next_u, T(1)};
-            } else {
-                edges[u * base + c] = {0, T(0)};
+                a.set_edge(u, c, next_u);
             }
         }
     }
-    return Automaton<T, base>{
-        .n_states = n_states,
-        .init = {0},
-        .accept = {M},
-        .edges = edges
-    };
+    return a;
 }
 
 /**
  * @brief 0 以外の数字が M 個以下現れるオートマトンを生成する
- * @tparam T 遷移コストを表す型 (ring)
  * @tparam base N の進数
  * @param M 0以外の数字の個数の上限
- * @return Automaton<T, base>
+ * @return Automaton<base>
  */
-template <ring T, i32 base = 10>
-Automaton<T, base> non_zero_count_leq(i32 M) {
-    auto a = non_zero_count_exact<T, base>(M);
+template <i32 base = 10> Automaton<base> non_zero_count_leq(i32 M) {
+    auto a = non_zero_count_exact<base>(M);
     a.accept.clear();
     for (i32 u = 0; u <= M; ++u) {
         a.accept.push_back(u);
@@ -175,4 +139,4 @@ Automaton<T, base> non_zero_count_leq(i32 M) {
     return a;
 }
 
-} // namespace gwen::automaton
+}  // namespace gwen::automaton

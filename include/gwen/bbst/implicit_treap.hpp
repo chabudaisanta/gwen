@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cassert>
-#include <string>
 #include <format>
+#include <string>
 #include <utility>
 #include <vector>
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cassert>
-#include <string>
 #include <format>
+#include <string>
 
 #include "gwen/alge/monoid.hpp"
 #include "gwen/dump.hpp"

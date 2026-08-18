@@ -4,8 +4,9 @@
 
 #include <gtest/gtest.h>
 
-#include "gwen/alge/monoid.hpp"
 #include <random>
+
+#include "gwen/alge/monoid.hpp"
 
 using namespace gwen;
 
@@ -73,12 +74,12 @@ TEST(SegmentTreeTest, RandomTest) {
     int n = 100;
     std::vector<int> v(n);
     SegmentTree<sum_monoid<int>> st(n);
-    
+
     for (int i = 0; i < n; ++i) {
         v[i] = rng() % 1000;
         st.set(i, v[i]);
     }
-    
+
     for (int q = 0; q < 1000; ++q) {
         int type = rng() % 2;
         if (type == 0) {
@@ -86,7 +87,8 @@ TEST(SegmentTreeTest, RandomTest) {
             int x = rng() % 1000;
             v[p] = x;
             st.set(p, x);
-        } else {
+        }
+        else {
             int l = rng() % n;
             int r = rng() % (n + 1);
             if (l > r) std::swap(l, r);
@@ -96,4 +98,3 @@ TEST(SegmentTreeTest, RandomTest) {
         }
     }
 }
-

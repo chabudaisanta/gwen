@@ -13,12 +13,14 @@ int main() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(NULL);
 
-    i32 N, Q; cin >> N >> Q;
+    i32 N, Q;
+    cin >> N >> Q;
 
     SegmentTree<min_monoid<i32>> Seg(N);
-    while(Q--) {
-        i32 t, a, b; cin >> t >> a >> b;
-        if(t == 0) {
+    while (Q--) {
+        i32 t, a, b;
+        cin >> t >> a >> b;
+        if (t == 0) {
             Seg.set(a, b);
         }
         else {

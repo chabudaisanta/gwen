@@ -2,8 +2,9 @@
 
 #include <iostream>
 #include <vector>
-#include "gwen/geo/point.hpp"
+
 #include "gwen/geo/convex_polygon.hpp"
+#include "gwen/geo/point.hpp"
 
 using namespace std;
 using namespace gwen::geo;

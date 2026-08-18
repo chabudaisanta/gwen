@@ -164,8 +164,7 @@ public:
  * @details 内部で Montgomery 乗算を用いることで高速化されている。
  *          法 Mod は 2^62 未満の奇数である必要がある。
  */
-template <u64 Mod>
-struct StaticModInt64 {
+template <u64 Mod> struct StaticModInt64 {
 private:
     using m64 = StaticModInt64;
     static_assert(Mod < (1ull << 62), "Mod must be less than 2^62");
@@ -216,7 +215,8 @@ public:
         static_assert(sizeof(T) <= sizeof(u64), "T must be 64-bit or smaller");
         if (x < 0) {
             sub(m64{static_cast<u64>(-static_cast<i64>(x))});
-        } else {
+        }
+        else {
             tr = reduce_mul(static_cast<u64>(x), r2);
         }
     }

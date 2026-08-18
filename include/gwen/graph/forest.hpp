@@ -1,12 +1,12 @@
 #pragma once
 
-#include <string>
-#include <format>
 #include <algorithm>
+#include <format>
+#include <string>
 #include <vector>
 
-#include "gwen/graph/graph.hpp"
 #include "gwen/dump.hpp"
+#include "gwen/graph/graph.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -150,8 +150,8 @@ public:
     std::string dump() const {
         std::vector<i32> p(n_);
         for (i32 i = 0; i < n_; ++i) p[i] = parent_[i * lg_];
-        return std::format("Forest{{\n  V = {},\n  root = {},\n  parents = {},\n  depths = {}\n}}",
-                           n_, internal::format_range(root_), internal::format_range(p), internal::format_range(depth_));
+        return std::format("Forest{{\n  V = {},\n  root = {},\n  parents = {},\n  depths = {}\n}}", n_,
+                           internal::format_range(root_), internal::format_range(p), internal::format_range(depth_));
     }
 };
 

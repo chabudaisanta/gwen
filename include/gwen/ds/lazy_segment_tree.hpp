@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <bit>
 #include <cassert>
-#include <vector>
-#include <string>
 #include <format>
+#include <string>
+#include <vector>
 
 #include "gwen/alge/acted_monoid.hpp"
 #include "gwen/dump.hpp"

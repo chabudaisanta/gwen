@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+
 #include "gwen/ds/fast_set.hpp"
 #include "gwen/types.hpp"
 
@@ -29,15 +30,19 @@ int main() {
         std::cin >> c >> k;
         if (c == 0) {
             st.insert(k);
-        } else if (c == 1) {
+        }
+        else if (c == 1) {
             st.erase(k);
-        } else if (c == 2) {
+        }
+        else if (c == 2) {
             std::cout << (st.contains(k) ? 1 : 0) << "\n";
-        } else if (c == 3) {
+        }
+        else if (c == 3) {
             i32 res = st.next(k);
             if (res == n) res = -1;
             std::cout << res << "\n";
-        } else if (c == 4) {
+        }
+        else if (c == 4) {
             i32 res = st.prev(k);
             std::cout << res << "\n";
         }

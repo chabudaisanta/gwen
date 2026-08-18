@@ -4,6 +4,7 @@
 #include "gwen/automaton/automaton.hpp"
 // clang-format on
 #include <iostream>
+
 #include "gwen/types.hpp"
 
 using namespace gwen;
@@ -14,12 +15,12 @@ int main() {
 
     int A, B;
     if (!(std::cin >> A >> B)) return 0;
-    
+
     // オートマトンモジュールが正常にコンパイルされることを確認
-    using M = automaton_monoid<i32, 2>;
+    using M = automaton_monoid<2>;
     auto e = M::e();
     auto prod = M::op(e, e);
-    
+
     std::cout << A + B << '\n';
     return 0;
 }

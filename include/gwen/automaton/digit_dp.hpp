@@ -1,12 +1,12 @@
 #pragma once
 
-#include <vector>
-#include <utility>
 #include <algorithm>
+#include <utility>
+#include <vector>
 
-#include "gwen/types.hpp"
 #include "gwen/alge/ring.hpp"
 #include "gwen/automaton/automaton.hpp"
+#include "gwen/types.hpp"
 
 namespace gwen {
 
@@ -18,12 +18,11 @@ namespace gwen {
  * @param a 条件を表すオートマトン
  * @return T 条件を満たす N 以下の値の総和 (オートマトンの遷移コストの積の和)
  */
-template <ring T, i32 base>
-T run_digit_dp(const std::vector<i32>& N, const Automaton<T, base>& a) {
-    std::vector<T> dp_tight(a.n_states, T(0));
-    std::vector<T> dp_loose(a.n_states, T(0));
-    std::vector<T> next_tight(a.n_states, T(0));
-    std::vector<T> next_loose(a.n_states, T(0));
+template <ring T, i32 base> T run_digit_dp(const std::vector<i32>& N, const Automaton<base>& a) {
+    std::vector<T> dp_tight(a.n, T(0));
+    std::vector<T> dp_loose(a.n, T(0));
+    std::vector<T> next_tight(a.n, T(0));
+    std::vector<T> next_loose(a.n, T(0));
 
     for (i32 s : a.init) {
         dp_tight[s] += T(1);
@@ -33,7 +32,7 @@ T run_digit_dp(const std::vector<i32>& N, const Automaton<T, base>& a) {
         std::fill(next_tight.begin(), next_tight.end(), T(0));
         std::fill(next_loose.begin(), next_loose.end(), T(0));
 
-        for (i32 u = 0; u < a.n_states; ++u) {
+        for (i32 u = 0; u < a.n; ++u) {
             const T loose_val = dp_loose[u];
             const T tight_val = dp_tight[u];
 
@@ -41,23 +40,21 @@ T run_digit_dp(const std::vector<i32>& N, const Automaton<T, base>& a) {
                 continue;
             }
 
-            const auto* edges_u = &a.edges[u * base];
-
             if (loose_val != T(0)) {
                 for (i32 c = 0; c < base; ++c) {
-                    const auto& [v, cost] = edges_u[c];
-                    next_loose[v] += loose_val * cost;
+                    i32 v = a.edge(u, c);
+                    if (v != -1) next_loose[v] += loose_val;
                 }
             }
 
             if (tight_val != T(0)) {
                 for (i32 c = 0; c < x; ++c) {
-                    const auto& [v, cost] = edges_u[c];
-                    next_loose[v] += tight_val * cost;
+                    i32 v = a.edge(u, c);
+                    if (v != -1) next_loose[v] += tight_val;
                 }
                 if (x < base) {
-                    const auto& [v, cost] = edges_u[x];
-                    next_tight[v] += tight_val * cost;
+                    i32 v = a.edge(u, x);
+                    if (v != -1) next_tight[v] += tight_val;
                 }
             }
         }
@@ -74,4 +71,4 @@ T run_digit_dp(const std::vector<i32>& N, const Automaton<T, base>& a) {
     return ans;
 }
 
-} // namespace gwen
+}  // namespace gwen

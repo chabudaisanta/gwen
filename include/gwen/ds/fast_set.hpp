@@ -1,9 +1,10 @@
 #pragma once
 
-#include <vector>
 #include <bit>
-#include <string>
 #include <format>
+#include <string>
+#include <vector>
+
 #include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
@@ -14,7 +15,7 @@ namespace gwen {
  * @details 非負整数の集合を管理する。要素の追加・削除・検索・前後の要素探索をビット演算で高速に行う。
  */
 class FastSet {
-  public:
+public:
     /**
      * @brief [0, n) の範囲を管理する空の集合を構築する。
      * @param n_ 管理する要素の最大値の境界
@@ -84,7 +85,7 @@ class FastSet {
             u64 mask = a[i][idx] >> bit;
             if (mask != 0) {
                 usize pos = idx * 64 + bit + static_cast<usize>(std::countr_zero(mask));
-                for (usize j = i; j-- > 0; ) {
+                for (usize j = i; j-- > 0;) {
                     pos = pos * 64 + static_cast<usize>(std::countr_zero(a[j][pos]));
                 }
                 return static_cast<i32>(pos);
@@ -109,7 +110,7 @@ class FastSet {
             u64 mask = a[i][idx] << (63 - bit);
             if (mask != 0) {
                 usize pos = idx * 64 + bit - static_cast<usize>(std::countl_zero(mask));
-                for (usize j = i; j-- > 0; ) {
+                for (usize j = i; j-- > 0;) {
                     pos = pos * 64 + 63 - static_cast<usize>(std::countl_zero(a[j][pos]));
                 }
                 return static_cast<i32>(pos);
@@ -132,7 +133,7 @@ class FastSet {
         return std::format("FastSet{{\n  n = {},\n  elements = {}\n}}", n, internal::format_range(elements));
     }
 
-  private:
+private:
     i32 n;
     std::vector<std::vector<u64>> a;
 };

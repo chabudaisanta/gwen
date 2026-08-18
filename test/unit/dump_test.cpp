@@ -1,14 +1,15 @@
 #include <gtest/gtest.h>
+
 #include <iostream>
 #include <sstream>
 #include <vector>
 
 // DUMP_SIZE_LIMIT を定義してから dump.hpp を include
 #define DUMP_SIZE_LIMIT 3
-#define LOCAL // DUMP マクロを有効化
-#include "gwen/dump.hpp"
-#include "gwen/ds/fenwick_tree.hpp"
+#define LOCAL  // DUMP マクロを有効化
 #include "gwen/alge/abel.hpp"
+#include "gwen/ds/fenwick_tree.hpp"
+#include "gwen/dump.hpp"
 
 using namespace gwen;
 
@@ -38,7 +39,7 @@ TEST(DumpTest, FenwickTreeDump) {
     ft.add(0, 10);
     ft.add(2, 20);
     ft.add(4, 30);
-    
+
     std::string ds = ft.dump();
     // ft の復元配列は [10, 0, 20, 0, 30]
     // limit 3 なので [10, 0, 20, ... , 30] が含まれるはず

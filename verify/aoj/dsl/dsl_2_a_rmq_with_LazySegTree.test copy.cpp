@@ -1,9 +1,9 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/DSL_2_A"
 
-#include <iostream>
-#include <string>
 #include <algorithm>
+#include <iostream>
 #include <limits>
+#include <string>
 
 #include "gwen/ds/lazy_segment_tree.hpp"
 #include "gwen/types.hpp"
@@ -25,12 +25,14 @@ int main() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(NULL);
 
-    i32 N, Q; cin >> N >> Q;
-    
+    i32 N, Q;
+    cin >> N >> Q;
+
     LazySegmentTree<Monoid> Seg(N);
-    while(Q--) {
-        i32 t, a, b; cin >> t >> a >> b;
-        if(t == 0) {
+    while (Q--) {
+        i32 t, a, b;
+        cin >> t >> a >> b;
+        if (t == 0) {
             Seg.set(a, b);
         }
         else {

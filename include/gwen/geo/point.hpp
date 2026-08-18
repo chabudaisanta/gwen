@@ -1,8 +1,9 @@
 #pragma once
 
-#include "gwen/types.hpp"
-#include <concepts>
 #include <cmath>
+#include <concepts>
+
+#include "gwen/types.hpp"
 
 namespace gwen {
 namespace geo {
@@ -155,10 +156,7 @@ struct CompareX {
      * @param b 比較する点b
      * @return true aのx座標がbより小さい場合
      */
-    template <typename T>
-    bool operator()(const Point<T>& a, const Point<T>& b) const {
-        return a.x < b.x;
-    }
+    template <typename T> bool operator()(const Point<T>& a, const Point<T>& b) const { return a.x < b.x; }
 };
 
 /**
@@ -172,10 +170,7 @@ struct CompareY {
      * @param b 比較する点b
      * @return true aのy座標がbより小さい場合
      */
-    template <typename T>
-    bool operator()(const Point<T>& a, const Point<T>& b) const {
-        return a.y < b.y;
-    }
+    template <typename T> bool operator()(const Point<T>& a, const Point<T>& b) const { return a.y < b.y; }
 };
 
 /**
@@ -189,8 +184,7 @@ struct CompareXy {
      * @param b 比較する点b
      * @return true aが辞書式順でbより小さい場合
      */
-    template <typename T>
-    bool operator()(const Point<T>& a, const Point<T>& b) const {
+    template <typename T> bool operator()(const Point<T>& a, const Point<T>& b) const {
         if (a.x != b.x) return a.x < b.x;
         return a.y < b.y;
     }
@@ -203,15 +197,14 @@ namespace internal {
  * @param p 対象の点
  * @return int 象限番号。原点は-1
  */
-template <typename T>
-i32 quadrant(const Point<T>& p) {
+template <typename T> i32 quadrant(const Point<T>& p) {
     if (p.y < 0) return 3;
     if (p.y > 0) return 1;
     if (p.x < 0) return 2;
     if (p.x > 0) return 0;
-    return -1; // origin
+    return -1;  // origin
 }
-} // namespace internal
+}  // namespace internal
 
 /**
  * @brief 偏角を基準に比較するファンクタ
@@ -224,8 +217,7 @@ struct CompareArg {
      * @param b 比較する点b
      * @return true aの偏角がbの偏角より小さい場合
      */
-    template <typename T>
-    bool operator()(const Point<T>& a, const Point<T>& b) const {
+    template <typename T> bool operator()(const Point<T>& a, const Point<T>& b) const {
         i32 qa = internal::quadrant(a);
         i32 qb = internal::quadrant(b);
         if (qa != qb) return qa < qb;
@@ -245,8 +237,7 @@ struct CompareArgNorm {
      * @param b 比較する点b
      * @return true 偏角・距離でaがbより小さい場合
      */
-    template <typename T>
-    bool operator()(const Point<T>& a, const Point<T>& b) const {
+    template <typename T> bool operator()(const Point<T>& a, const Point<T>& b) const {
         i32 qa = internal::quadrant(a);
         i32 qb = internal::quadrant(b);
         if (qa != qb) return qa < qb;
@@ -264,8 +255,7 @@ struct CompareArgNorm {
  * @param c 点c
  * @return int 1: 反時計回り, -1: 時計回り, 2: c-a-b 直線, -2: a-b-c 直線, 0: a-c-b 直線
  */
-template <typename T>
-i32 ccw(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
+template <typename T> i32 ccw(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
     Point<T> ab = b - a;
     Point<T> ac = c - a;
     T cr = ab.cross(ac);
@@ -276,5 +266,5 @@ i32 ccw(const Point<T>& a, const Point<T>& b, const Point<T>& c) {
     return 0;
 }
 
-} // namespace geo
-} // namespace gwen
+}  // namespace geo
+}  // namespace gwen

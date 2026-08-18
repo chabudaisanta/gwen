@@ -1,8 +1,9 @@
 #pragma once
-#include <vector>
 #include <array>
 #include <cassert>
 #include <utility>
+#include <vector>
+
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -19,8 +20,7 @@ struct AxisView {
  * @brief O(1) で行・列の交換、転置、回転を行える 2 次元配列のビューアー
  * @tparam T 要素の型
  */
-template <typename T>
-class TransformableMatrix {
+template <typename T> class TransformableMatrix {
 private:
     std::vector<T> data_;
     std::array<i32, 2> size_;
@@ -39,7 +39,7 @@ public:
         for (i32 i = 0; i < h; ++i) {
             assert(static_cast<i32>(a[i].size()) == w);
         }
-        
+
         original_size_ = {h, w};
         size_ = {h, w};
         data_.reserve(h * w);
@@ -63,9 +63,7 @@ public:
      * @param axis 軸 (0: 行, 1: 列)
      * @return 軸の長さ
      */
-    inline i32 axis_len(i32 axis) const {
-        return original_size_[view_[axis].base_axis];
-    }
+    inline i32 axis_len(i32 axis) const { return original_size_[view_[axis].base_axis]; }
 
     /**
      * @brief 現在の見た目における行数を取得する
@@ -155,9 +153,7 @@ public:
     /**
      * @brief 転置する
      */
-    inline void transpose() {
-        std::swap(view_[0], view_[1]);
-    }
+    inline void transpose() { std::swap(view_[0], view_[1]); }
 
     /**
      * @brief 時計回りに 90 度ずつ回転する
@@ -191,4 +187,4 @@ public:
     }
 };
 
-} // namespace gwen
+}  // namespace gwen

@@ -14,15 +14,14 @@ namespace gwen {
 
 /**
  * @brief リングバッファベースの高速な両端キュー
- * 
+ *
  * 内部容量を常に2の冪乗サイズに保ち、ビット演算を用いた高速なインデックス計算を行う。
  * `std::deque` よりもメモリ確保のオーバーヘッドが小さく、連続したメモリに近い特性を持つ。
- * 
+ *
  * @tparam T 要素の型
  * @tparam Allocator 要素のメモリ割り当てを行うアロケータ
  */
-template <class T, class Allocator = std::allocator<T>>
-class Deque {
+template <class T, class Allocator = std::allocator<T>> class Deque {
 public:
     using value_type = T;
     using allocator_type = Allocator;
@@ -39,8 +38,7 @@ public:
      * @brief ランダムアクセス可能なイテレータ
      * @tparam IsConst 定数イテレータかどうか
      */
-    template <bool IsConst>
-    class DequeIterator {
+    template <bool IsConst> class DequeIterator {
         using DequePtr = std::conditional_t<IsConst, const Deque*, Deque*>;
         DequePtr deque_;
         usize idx_;
@@ -56,8 +54,7 @@ public:
         DequeIterator(DequePtr deque, usize idx) : deque_(deque), idx_(idx) {}
 
         template <bool C = IsConst, std::enable_if_t<C, int> = 0>
-        DequeIterator(const DequeIterator<false>& other)
-            : deque_(other.deque_), idx_(other.idx_) {}
+        DequeIterator(const DequeIterator<false>& other) : deque_(other.deque_), idx_(other.idx_) {}
 
         reference operator*() const { return (*deque_)[idx_]; }
         pointer operator->() const { return &(*deque_)[idx_]; }
@@ -85,23 +82,15 @@ public:
             idx_ += n;
             return *this;
         }
-        DequeIterator operator+(difference_type n) const {
-            return DequeIterator(deque_, idx_ + n);
-        }
-        friend DequeIterator operator+(difference_type n, const DequeIterator& it) {
-            return it + n;
-        }
+        DequeIterator operator+(difference_type n) const { return DequeIterator(deque_, idx_ + n); }
+        friend DequeIterator operator+(difference_type n, const DequeIterator& it) { return it + n; }
         DequeIterator& operator-=(difference_type n) {
             idx_ -= n;
             return *this;
         }
-        DequeIterator operator-(difference_type n) const {
-            return DequeIterator(deque_, idx_ - n);
-        }
+        DequeIterator operator-(difference_type n) const { return DequeIterator(deque_, idx_ - n); }
 
-        difference_type operator-(const DequeIterator& other) const {
-            return idx_ - other.idx_;
-        }
+        difference_type operator-(const DequeIterator& other) const { return idx_ - other.idx_; }
         reference operator[](difference_type n) const { return (*deque_)[idx_ + n]; }
 
 #if __cplusplus >= 202002L
@@ -151,7 +140,8 @@ private:
         if (cap == 0) {
             data_ = nullptr;
             cap_ = 0;
-        } else {
+        }
+        else {
             data_ = traits::allocate(alloc_, cap);
             cap_ = cap;
         }
@@ -201,8 +191,7 @@ public:
      * @brief アロケータを指定して初期化
      * @param alloc アロケータ
      */
-    explicit Deque(const Allocator& alloc) noexcept
-        : alloc_(alloc), data_(nullptr), cap_(0), head_(0), size_(0) {}
+    explicit Deque(const Allocator& alloc) noexcept : alloc_(alloc), data_(nullptr), cap_(0), head_(0), size_(0) {}
 
     /**
      * @brief 指定した要素数と初期値で初期化
@@ -292,9 +281,8 @@ public:
      * @param other ムーブ元
      * @return 自身の参照
      */
-    Deque& operator=(Deque&& other) noexcept(
-        traits::propagate_on_container_move_assignment::value ||
-        traits::is_always_equal::value) {
+    Deque& operator=(Deque&& other) noexcept(traits::propagate_on_container_move_assignment::value ||
+                                             traits::is_always_equal::value) {
         if (this != &other) {
             clear();
             deallocate_buffer();
@@ -328,7 +316,7 @@ public:
      */
     allocator_type get_allocator() const noexcept { return alloc_; }
 
-    /** 
+    /**
      * @brief 要素へのアクセス
      * @param idx インデックス (0 <= idx < size())
      * @return reference 要素への参照
@@ -338,7 +326,7 @@ public:
         return data_[(head_ + idx) & mask()];
     }
 
-    /** 
+    /**
      * @brief 要素への定数アクセス
      * @param idx インデックス (0 <= idx < size())
      * @return const_reference 要素への定数参照
@@ -348,7 +336,7 @@ public:
         return data_[(head_ + idx) & mask()];
     }
 
-    /** 
+    /**
      * @brief 最初の要素を取得
      * @return reference 先頭要素への参照
      */
@@ -357,7 +345,7 @@ public:
         return data_[head_];
     }
 
-    /** 
+    /**
      * @brief 最初の要素を定数で取得
      * @return const_reference 先頭要素への定数参照
      */
@@ -366,7 +354,7 @@ public:
         return data_[head_];
     }
 
-    /** 
+    /**
      * @brief 最後の要素を取得
      * @return reference 末尾要素への参照
      */
@@ -375,7 +363,7 @@ public:
         return data_[(head_ + size_ - 1) & mask()];
     }
 
-    /** 
+    /**
      * @brief 最後の要素を定数で取得
      * @return const_reference 末尾要素への定数参照
      */
@@ -384,7 +372,7 @@ public:
         return data_[(head_ + size_ - 1) & mask()];
     }
 
-    /** 
+    /**
      * @brief 先頭を指すイテレータ取得
      * @return iterator 先頭を指すイテレータ
      */
@@ -392,7 +380,7 @@ public:
     const_iterator begin() const { return const_iterator(this, 0); }
     const_iterator cbegin() const { return const_iterator(this, 0); }
 
-    /** 
+    /**
      * @brief 末尾を指すイテレータ取得
      * @return iterator 末尾の次を指すイテレータ
      */
@@ -400,7 +388,7 @@ public:
     const_iterator end() const { return const_iterator(this, size_); }
     const_iterator cend() const { return const_iterator(this, size_); }
 
-    /** 
+    /**
      * @brief 末尾から逆向きに走査するリバースイテレータ取得
      * @return reverse_iterator 末尾の要素を指すリバースイテレータ
      */
@@ -408,7 +396,7 @@ public:
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
     const_reverse_iterator crbegin() const { return const_reverse_iterator(end()); }
 
-    /** 
+    /**
      * @brief 先頭から逆向きに走査するリバースイテレータの終端取得
      * @return reverse_iterator 先頭の要素の次を指すリバースイテレータ
      */
@@ -416,20 +404,20 @@ public:
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
     const_reverse_iterator crend() const { return const_reverse_iterator(begin()); }
 
-    /** 
+    /**
      * @brief 空かどうか
      * @return true 空の場合
      * @return false 要素がある場合
      */
     [[nodiscard]] bool empty() const noexcept { return size_ == 0; }
 
-    /** 
+    /**
      * @brief 要素数を取得
      * @return usize 現在の要素数
      */
     usize size() const noexcept { return size_; }
 
-    /** 
+    /**
      * @brief 現在確保されている容量を取得
      * @return usize 確保済みの最大要素数
      */
@@ -479,8 +467,7 @@ public:
      * @tparam Args 構築用引数の型
      * @param args 構築用引数
      */
-    template <class... Args>
-    void emplace_back(Args&&... args) {
+    template <class... Args> void emplace_back(Args&&... args) {
         expand_if_needed();
         traits::construct(alloc_, &data_[(head_ + size_) & mask()], std::forward<Args>(args)...);
         ++size_;
@@ -513,8 +500,7 @@ public:
      * @tparam Args 構築用引数の型
      * @param args 構築用引数
      */
-    template <class... Args>
-    void emplace_front(Args&&... args) {
+    template <class... Args> void emplace_front(Args&&... args) {
         expand_if_needed();
         head_ = (head_ - 1) & mask();
         traits::construct(alloc_, &data_[head_], std::forward<Args>(args)...);

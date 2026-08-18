@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cassert>
-#include <string>
 #include <format>
+#include <string>
 #include <vector>
 
 #include "gwen/alge/abel.hpp"
@@ -29,13 +29,13 @@ template <abel Abel> struct FenwickTree {
      * @brief デフォルトコンストラクタ。空の木を生成する。
      */
     FenwickTree() : N(0) {}
-    
+
     /**
      * @brief 長さ N_ の配列で初期化する
      * @param N_ 配列の長さ
      */
     explicit FenwickTree(i32 N_) : N(N_), data(N_ + 1, Abel::e()) {}
-    
+
     /**
      * @brief 与えられた配列で初期化する
      * @param vec 初期値の配列

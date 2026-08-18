@@ -10,20 +10,20 @@ documentation_of: //include/gwen/automaton/factory.hpp
 
 ## 関数一覧
 
-すべてのファクトリ関数は `template <ring T, i32 base = 10>` を受け取ります。
+すべてのファクトリ関数は `template <i32 base = 10>` を受け取ります。
 
 ### digit_sum_exact
 
 ```cpp
-Automaton<T, base> digit_sum_exact(i32 M);
+Automaton<base> digit_sum_exact(i32 M);
 ```
 各位の数字の和がちょうど `M` になる制約を表すオートマトンを生成します。
-- 状態数: $M + 1$ (和が $M$ を超えた場合は遷移コスト `T(0)` で枝刈りされます)
+- 状態数: $M + 1$ (和が $M$ を超えた場合は遷移が無効になります)
 
 ### digit_sum_leq
 
 ```cpp
-Automaton<T, base> digit_sum_leq(i32 M);
+Automaton<base> digit_sum_leq(i32 M);
 ```
 各位の数字の和が `M` 以下になる制約を表すオートマトンを生成します。
 - 状態数: $M + 1$
@@ -31,7 +31,7 @@ Automaton<T, base> digit_sum_leq(i32 M);
 ### digit_sum_mod
 
 ```cpp
-Automaton<T, base> digit_sum_mod(i32 M, i32 K);
+Automaton<base> digit_sum_mod(i32 M, i32 K);
 ```
 各位の数字の和を `M` で割った余りが `K` になる制約を表すオートマトンを生成します。
 - 状態数: $M$
@@ -39,16 +39,16 @@ Automaton<T, base> digit_sum_mod(i32 M, i32 K);
 ### exclude_digits
 
 ```cpp
-Automaton<T, base> exclude_digits(std::span<const i32> S);
+Automaton<base> exclude_digits(std::span<const i32> S);
 ```
 配列 `S` に含まれる数字を一切使用しない制約を表すオートマトンを生成します。
 - 状態数: $1$
-- 備考: 禁止文字を踏んだ場合の遷移コストを `T(0)` にすることで経路を無効化しています。そのため、他のオートマトンと `op` で結合しても状態数が増加しません。
+- 備考: 禁止文字を踏んだ場合の遷移を無効（`-1`）にすることで経路を枝刈りしています。そのため、他のオートマトンと `op` で結合しても状態数が増加しません。
 
 ### value_mod
 
 ```cpp
-Automaton<T, base> value_mod(i32 M, i32 K);
+Automaton<base> value_mod(i32 M, i32 K);
 ```
 作られる数値そのものを `M` で割った余りが `K` になる制約を表すオートマトンを生成します (`base` 進数)。
 - 状態数: $M$
@@ -56,15 +56,15 @@ Automaton<T, base> value_mod(i32 M, i32 K);
 ### non_zero_count_exact
 
 ```cpp
-Automaton<T, base> non_zero_count_exact(i32 M);
+Automaton<base> non_zero_count_exact(i32 M);
 ```
 `0` 以外の数字がちょうど `M` 個現れる制約を表すオートマトンを生成します。
-- 状態数: $M + 1$ (カウントが $M$ を超えた場合は遷移コスト `T(0)` で枝刈りされます)
+- 状態数: $M + 1$ (カウントが $M$ を超えた場合は遷移が無効になります)
 
 ### non_zero_count_leq
 
 ```cpp
-Automaton<T, base> non_zero_count_leq(i32 M);
+Automaton<base> non_zero_count_leq(i32 M);
 ```
 `0` 以外の数字が `M` 個以下現れる制約を表すオートマトンを生成します。
 - 状態数: $M + 1$

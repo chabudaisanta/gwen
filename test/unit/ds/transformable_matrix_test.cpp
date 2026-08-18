@@ -1,14 +1,13 @@
-#include <gtest/gtest.h>
 #include "gwen/ds/transformable_matrix.hpp"
+
+#include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace gwen;
 
 TEST(TransformableMatrixTest, BasicAccess) {
-    std::vector<std::vector<i32>> a = {
-        {1, 2, 3},
-        {4, 5, 6}
-    };
+    std::vector<std::vector<i32>> a = {{1, 2, 3}, {4, 5, 6}};
     TransformableMatrix<i32> mat(a);
 
     EXPECT_EQ(mat.h(), 2);
@@ -25,10 +24,7 @@ TEST(TransformableMatrixTest, BasicAccess) {
 }
 
 TEST(TransformableMatrixTest, SwapRowsAndColumns) {
-    std::vector<std::vector<i32>> a = {
-        {1, 2, 3},
-        {4, 5, 6}
-    };
+    std::vector<std::vector<i32>> a = {{1, 2, 3}, {4, 5, 6}};
     TransformableMatrix<i32> mat(a);
 
     mat.swap_rows(0, 1);
@@ -51,10 +47,7 @@ TEST(TransformableMatrixTest, SwapRowsAndColumns) {
 }
 
 TEST(TransformableMatrixTest, Transpose) {
-    std::vector<std::vector<i32>> a = {
-        {1, 2, 3},
-        {4, 5, 6}
-    };
+    std::vector<std::vector<i32>> a = {{1, 2, 3}, {4, 5, 6}};
     TransformableMatrix<i32> mat(a);
 
     mat.transpose();
@@ -67,7 +60,7 @@ TEST(TransformableMatrixTest, Transpose) {
     EXPECT_EQ(mat(1, 1), 5);
     EXPECT_EQ(mat(2, 0), 3);
     EXPECT_EQ(mat(2, 1), 6);
-    
+
     // modification should still point to correct data
     mat(1, 1) = 100;
     mat.transpose();
@@ -75,10 +68,7 @@ TEST(TransformableMatrixTest, Transpose) {
 }
 
 TEST(TransformableMatrixTest, Rotate) {
-    std::vector<std::vector<i32>> a = {
-        {1, 2, 3},
-        {4, 5, 6}
-    };
+    std::vector<std::vector<i32>> a = {{1, 2, 3}, {4, 5, 6}};
     TransformableMatrix<i32> mat(a);
 
     // Rotate 90 degrees clockwise
@@ -111,7 +101,7 @@ TEST(TransformableMatrixTest, Rotate) {
     EXPECT_EQ(mat(0, 0), 1);
     EXPECT_EQ(mat(0, 1), 2);
     EXPECT_EQ(mat(0, 2), 3);
-    
+
     // Negative rotation (counter-clockwise)
     mat.rotate(-1);
     EXPECT_EQ(mat.h(), 3);
@@ -125,10 +115,7 @@ TEST(TransformableMatrixTest, Rotate) {
 }
 
 TEST(TransformableMatrixTest, ToVec) {
-    std::vector<std::vector<i32>> a = {
-        {1, 2},
-        {3, 4}
-    };
+    std::vector<std::vector<i32>> a = {{1, 2}, {3, 4}};
     TransformableMatrix<i32> mat(a);
     mat.rotate(1);
     auto vec = mat.to_vec();

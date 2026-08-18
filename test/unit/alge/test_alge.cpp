@@ -81,4 +81,3 @@ TEST(AlgeTest, DoubleTypes) {
     EXPECT_EQ(minmax_res.min, 3.5);
     EXPECT_EQ(minmax_res.max, 10.1);
 }
-

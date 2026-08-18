@@ -52,10 +52,10 @@ public:
     class iterator {
     public:
         using iterator_category = std::bidirectional_iterator_tag;
-        using value_type        = K;
-        using difference_type   = isize;
-        using pointer           = const K*;
-        using reference         = const K&;
+        using value_type = K;
+        using difference_type = isize;
+        using pointer = const K*;
+        using reference = const K&;
 
     private:
         tree id;
@@ -75,7 +75,8 @@ public:
             if (d[id].right != NIL) {
                 id = d[id].right;
                 while (d[id].left != NIL) id = d[id].left;
-            } else {
+            }
+            else {
                 tree p = d[id].parent;
                 while (p != NIL && d[p].right == id) {
                     id = p;
@@ -86,7 +87,11 @@ public:
             return *this;
         }
 
-        iterator operator++(int) { iterator tmp = *this; ++(*this); return tmp; }
+        iterator operator++(int) {
+            iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
 
         iterator& operator--() {
             if (id == NIL) {
@@ -99,7 +104,8 @@ public:
             if (d[id].left != NIL) {
                 id = d[id].left;
                 while (d[id].right != NIL) id = d[id].right;
-            } else {
+            }
+            else {
                 tree p = d[id].parent;
                 while (p != NIL && d[p].left == id) {
                     id = p;
@@ -110,7 +116,11 @@ public:
             return *this;
         }
 
-        iterator operator--(int) { iterator tmp = *this; --(*this); return tmp; }
+        iterator operator--(int) {
+            iterator tmp = *this;
+            --(*this);
+            return tmp;
+        }
 
         bool operator==(const iterator& other) const { return id == other.id; }
         bool operator!=(const iterator& other) const { return id != other.id; }
@@ -225,7 +235,8 @@ public:
             if (!cmp(d[curr].key, x)) {
                 res = curr;
                 curr = d[curr].left;
-            } else {
+            }
+            else {
                 curr = d[curr].right;
             }
         }
@@ -242,7 +253,8 @@ public:
             if (cmp(x, d[curr].key)) {
                 res = curr;
                 curr = d[curr].left;
-            } else {
+            }
+            else {
                 curr = d[curr].right;
             }
         }

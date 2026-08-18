@@ -10,21 +10,21 @@ documentation_of: //include/gwen/automaton/automaton.hpp
 ## Automaton
 
 ```cpp
-template <gwen::ring T, gwen::i32 base>
+template <gwen::i32 base>
 struct gwen::Automaton
 ```
 
 オートマトンの状態と遷移を管理する構造体です。
 
-- `n_states`: オートマトンの状態数
+- `n`: オートマトンの状態数
 - `init`: 初期状態のリスト
 - `accept`: 受理状態のリスト
-- `edges`: 遷移とコストのリスト。状態 $i$ から文字 $x$ ($0 \le x < \mathrm{base}$) による遷移は `edges[i * base + x]` に格納され、`{遷移先の状態, コスト}` を表します。コストの型 `T` は環 (`gwen::ring`) である必要があります。
+- `edges`: 遷移リスト。状態 $i$ から文字 $x$ ($0 \le x < \mathrm{base}$) による遷移は `edges[i * base + x]` に格納され、遷移先の状態を表します。無効な遷移（遷移不可）の場合は `-1` となります。
 
 ## automaton_monoid
 
 ```cpp
-template <gwen::ring T, gwen::i32 base>
+template <gwen::i32 base>
 struct gwen::automaton_monoid
 ```
 
@@ -33,30 +33,30 @@ struct gwen::automaton_monoid
 ### op
 
 ```cpp
-static Automaton<T, base> op(const Automaton<T, base>& a, const Automaton<T, base>& b)
+static Automaton<base> op(const Automaton<base>& a, const Automaton<base>& b)
 ```
 
 2つのオートマトン `a` と `b` の直積オートマトンを計算します。
-直積オートマトンの状態 $(i, j)$ は `i * b.n_states + j` にマッピングされます。遷移コストは乗算 ($p \times q$) されます。
+直積オートマトンの状態 $(i, j)$ は `i * b.n + j` にマッピングされます。いずれか一方のオートマトンで遷移が無効（`-1`）である場合、直積オートマトンの遷移も無効（`-1`）となります。
 
 **制約**
 
-- `a.edges.size() == a.n_states * base`
-- `b.edges.size() == b.n_states * base`
+- `a.edges.size() == a.n * base`
+- `b.edges.size() == b.n * base`
 - `base >= 1`
 
 **計算量**
 
-- $O(\mathrm{base} \times a.\mathrm{n\_states} \times b.\mathrm{n\_states})$
+- $O(\mathrm{base} \times a.\mathrm{n} \times b.\mathrm{n})$
 
 ### e
 
 ```cpp
-static Automaton<T, base> e()
+static Automaton<base> e()
 ```
 
 直積の単位元となるオートマトンを返します。
-状態数が1で、すべての文字に対する遷移先がその状態自身となり、コストは乗法単位元 `T(1)` となります。
+状態数が1で、すべての文字に対する遷移先がその状態自身（状態 `0`）となります。
 
 **制約**
 
@@ -71,8 +71,8 @@ static Automaton<T, base> e()
 ### operator*
 
 ```cpp
-template <gwen::ring T, gwen::i32 base>
-Automaton<T, base> operator*(const Automaton<T, base>& a, const Automaton<T, base>& b)
+template <gwen::i32 base>
+Automaton<base> operator*(const Automaton<base>& a, const Automaton<base>& b)
 ```
 
 2つのオートマトンの直積を計算するためのシンタックスシュガーです。

@@ -1,5 +1,7 @@
-#include <gtest/gtest.h>
 #include "gwen/ds/deque.hpp"
+
+#include <gtest/gtest.h>
+
 #include <string>
 
 using namespace gwen;
@@ -41,11 +43,11 @@ TEST(DequeTest, PushPopAndAccess) {
     EXPECT_EQ(d[2], 1);
     EXPECT_EQ(d[3], 2);
 
-    d.pop_back(); // -1, 0, 1
+    d.pop_back();  // -1, 0, 1
     EXPECT_EQ(d.size(), 3);
     EXPECT_EQ(d.back(), 1);
 
-    d.pop_front(); // 0, 1
+    d.pop_front();  // 0, 1
     EXPECT_EQ(d.size(), 2);
     EXPECT_EQ(d.front(), 0);
 }
@@ -67,7 +69,7 @@ TEST(DequeTest, ExpandAndRingBuffer) {
     d.clear();
     for (int i = 0; i < 10; ++i) d.push_back(i);
     for (int i = 0; i < 5; ++i) d.pop_front();
-    for (int i = 10; i < 20; ++i) d.push_back(i); // capacity is 16, size is 15. Wraps around.
+    for (int i = 10; i < 20; ++i) d.push_back(i);  // capacity is 16, size is 15. Wraps around.
 
     EXPECT_EQ(d.size(), 15);
     for (int i = 0; i < 15; ++i) {
@@ -86,14 +88,14 @@ TEST(DequeTest, Iterator) {
         EXPECT_EQ(*it, i * 10);
         ++i;
     }
-    
+
     // Iterator arithmetic
     auto it = d.begin();
     EXPECT_EQ(*(it + 3), 30);
     it += 4;
     EXPECT_EQ(*it, 40);
     EXPECT_EQ(*(it - 2), 20);
-    
+
     // Reverse iterator
     int val = 40;
     for (auto rit = d.rbegin(); rit != d.rend(); ++rit) {
@@ -119,20 +121,20 @@ TEST(DequeTest, Iterator) {
 TEST(DequeTest, ReserveAndCapacity) {
     Deque<int> d;
     EXPECT_EQ(d.capacity(), 0);
-    
+
     d.reserve(20);
-    EXPECT_GE(d.capacity(), 32); // Since it's power of 2, bit_ceil(20) is 32
+    EXPECT_GE(d.capacity(), 32);  // Since it's power of 2, bit_ceil(20) is 32
 
     for (int i = 0; i < 15; ++i) {
         d.push_back(i);
     }
     // Should not reallocate, capacity should remain same
     EXPECT_GE(d.capacity(), 32);
-    
-    d.reserve(10); // should do nothing
+
+    d.reserve(10);  // should do nothing
     EXPECT_GE(d.capacity(), 32);
 
-    d.reserve(40); // should reallocate
+    d.reserve(40);  // should reallocate
     EXPECT_GE(d.capacity(), 64);
     EXPECT_EQ(d.size(), 15);
     for (int i = 0; i < 15; ++i) {
@@ -181,7 +183,7 @@ int Tracker::construct_cnt = 0;
 int Tracker::copy_cnt = 0;
 int Tracker::move_cnt = 0;
 int Tracker::destroy_cnt = 0;
-} // namespace
+}  // namespace
 
 TEST(DequeTest, MemoryManagementAndLifetimes) {
     Tracker::reset();
@@ -213,16 +215,16 @@ TEST(DequeTest, MemoryManagementAndLifetimes) {
     {
         Deque<Tracker> d1;
         for (int i = 0; i < 20; ++i) d1.emplace_back(i);
-        Deque<Tracker> d2(d1); // copy construction
+        Deque<Tracker> d2(d1);  // copy construction
         EXPECT_EQ(d2.size(), 20);
-        Deque<Tracker> d3(std::move(d1)); // move construction
+        Deque<Tracker> d3(std::move(d1));  // move construction
         EXPECT_EQ(d3.size(), 20);
-        EXPECT_EQ(d1.size(), 0); // moved from
-        
-        d1 = d2; // copy assignment
+        EXPECT_EQ(d1.size(), 0);  // moved from
+
+        d1 = d2;  // copy assignment
         EXPECT_EQ(d1.size(), 20);
-        
-        d1 = std::move(d3); // move assignment
+
+        d1 = std::move(d3);  // move assignment
         EXPECT_EQ(d1.size(), 20);
     }
     EXPECT_EQ(Tracker::construct_cnt + Tracker::copy_cnt + Tracker::move_cnt, Tracker::destroy_cnt);

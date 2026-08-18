@@ -2,9 +2,9 @@
 
 #include <bit>
 #include <cassert>
-#include <vector>
-#include <string>
 #include <format>
+#include <string>
+#include <vector>
 
 #include "gwen/alge/monoid.hpp"
 #include "gwen/dump.hpp"
@@ -33,13 +33,13 @@ public:
      * @brief デフォルトコンストラクタ。空の木を生成する。
      */
     SegmentTree() : SegmentTree(0) {}
-    
+
     /**
      * @brief 長さ n_ の配列で初期化する
      * @param n_ 配列の長さ
      */
     explicit SegmentTree(i32 n_) : SegmentTree(std::vector<S>(n_, M::e())) {}
-    
+
     /**
      * @brief 与えられた配列で初期化する
      * @param v 初期値の配列

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "gwen/types.hpp"
-#include "gwen/geo/point.hpp"
-#include <vector>
 #include <algorithm>
+#include <vector>
+
+#include "gwen/geo/point.hpp"
+#include "gwen/types.hpp"
 
 namespace gwen {
 namespace geo {
@@ -14,8 +15,7 @@ namespace geo {
  * @param pts 点の集合
  * @return std::vector<Point<T>> 凸多角形を構成する点の列 (反時計回り)
  */
-template <typename T>
-std::vector<Point<T>> convex_polygon(std::vector<Point<T>> pts) {
+template <typename T> std::vector<Point<T>> convex_polygon(std::vector<Point<T>> pts) {
     if (pts.size() <= 2) {
         std::sort(pts.begin(), pts.end(), CompareXy{});
         pts.erase(std::unique(pts.begin(), pts.end()), pts.end());
@@ -35,7 +35,8 @@ std::vector<Point<T>> convex_polygon(std::vector<Point<T>> pts) {
             Point<T> back = res.back();
             if ((back - pre).cross(p - pre) <= 0) {
                 res.pop_back();
-            } else {
+            }
+            else {
                 break;
             }
         }
@@ -51,7 +52,8 @@ std::vector<Point<T>> convex_polygon(std::vector<Point<T>> pts) {
             Point<T> back = res.back();
             if ((back - pre).cross(p - pre) <= 0) {
                 res.pop_back();
-            } else {
+            }
+            else {
                 break;
             }
         }
@@ -61,5 +63,5 @@ std::vector<Point<T>> convex_polygon(std::vector<Point<T>> pts) {
     return res;
 }
 
-} // namespace geo
-} // namespace gwen
+}  // namespace geo
+}  // namespace gwen

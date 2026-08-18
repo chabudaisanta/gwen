@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <format>
 #include <algorithm>
 #include <cassert>
+#include <format>
+#include <string>
 #include <vector>
 
 #include "gwen/alge/abel.hpp"
