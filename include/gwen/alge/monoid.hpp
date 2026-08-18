@@ -111,4 +111,18 @@ template <typename T> struct affine_monoid {
     static constexpr S e() { return {1, 0}; }
 };
 
+template<typename T>
+struct mul_monoid {
+    using S = T;
+    static constexpr S op(S a, S b) { return a * b; }
+    static constexpr S e() { return S(1); }
+};
+
+template<typename T>
+struct and_monoid {
+    using S = T;
+    static constexpr S op(S a, S b) { return a & b; }
+    static constexpr S e() { return S(0); }
+};
+
 }  // namespace gwen
