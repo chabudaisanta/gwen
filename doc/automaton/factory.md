@@ -68,3 +68,13 @@ Automaton<base> non_zero_count_leq(i32 M);
 ```
 `0` 以外の数字が `M` 個以下現れる制約を表すオートマトンを生成します。
 - 状態数: $M + 1$
+
+
+### include_all_digits
+
+```cpp
+Automaton<base> include_all_digits(std::span<const i32> S);
+```
+配列 `S` に含まれる数字をすべて少なくとも1回以上使用する制約を表すオートマトンを生成します。
+- 状態数: $2^{K}$ ($K$ は `S` の中に含まれるユニークで有効な文字の数)
+- 備考: 内部で `S` に含まれる $0 \le c < \mathrm{base}$ を満たすユニークな文字を抽出し、それらをすべて踏んだ状態を受理状態とします。

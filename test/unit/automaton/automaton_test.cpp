@@ -93,3 +93,40 @@ TEST(AutomatonTest, Product) {
     //   on 1: a->0, b->0 => next 0*2+0=0
     EXPECT_EQ(ab.edges[1 * 2 + 1], 0);
 }
+
+TEST(AutomatonTest, Trim) {
+    using M = automaton_monoid<2>;
+
+    M::S a(5);
+    // 0 -> 1 -> 2 -> 3
+    // 4 is unreachable from init
+    a.init = {0};
+    a.accept = {3, 4};
+    a.set_edge(0, 0, 1);
+    a.set_edge(0, 1, 0); // loop
+    a.set_edge(1, 0, 2);
+    a.set_edge(2, 1, 3);
+    a.set_edge(4, 0, 3); // transition from unreachable state
+
+    a.trim();
+
+    EXPECT_EQ(a.n, 4);
+    EXPECT_EQ(a.init, std::vector<i32>{0});
+    
+    // original accept states were 3 and 4. 4 is removed.
+    // 0: original 0
+    // 1: original 1
+    // 2: original 2
+    // 3: original 3
+    // so new accept should be {3}
+    EXPECT_EQ(a.accept, std::vector<i32>{3});
+
+    EXPECT_EQ(a.edge(0, 0), 1);
+    EXPECT_EQ(a.edge(0, 1), 0);
+    EXPECT_EQ(a.edge(1, 0), 2);
+    EXPECT_EQ(a.edge(1, 1), -1);
+    EXPECT_EQ(a.edge(2, 0), -1);
+    EXPECT_EQ(a.edge(2, 1), 3);
+    EXPECT_EQ(a.edge(3, 0), -1);
+    EXPECT_EQ(a.edge(3, 1), -1);
+}

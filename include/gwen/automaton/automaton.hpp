@@ -39,6 +39,56 @@ struct Automaton {
     i32 edge(i32 from, i32 label) const {
         return edges[from * base + label];
     }
+
+    /**
+     * @brief 初期状態から到達可能な状態のみを残し、オートマトンを縮約する
+     */
+    void trim() {
+        std::vector<i32> q;
+        std::vector<i32> id(n, -1);
+        for (i32 u : init) {
+            if (id[u] == -1) {
+                id[u] = q.size();
+                q.push_back(u);
+            }
+        }
+        for (i32 head = 0; head < static_cast<i32>(q.size()); ++head) {
+            i32 u = q[head];
+            for (i32 x = 0; x < base; ++x) {
+                i32 v = edges[u * base + x];
+                if (v != -1 && id[v] == -1) {
+                    id[v] = q.size();
+                    q.push_back(v);
+                }
+            }
+        }
+
+        i32 new_n = q.size();
+        std::vector<i32> new_edges(new_n * base, -1);
+        for (i32 i = 0; i < new_n; ++i) {
+            i32 u = q[i];
+            for (i32 x = 0; x < base; ++x) {
+                i32 v = edges[u * base + x];
+                if (v != -1) {
+                    new_edges[i * base + x] = id[v];
+                }
+            }
+        }
+
+        std::vector<i32> new_init;
+        for (i32 u : init) {
+            if (id[u] != -1) new_init.push_back(id[u]);
+        }
+        std::vector<i32> new_accept;
+        for (i32 u : accept) {
+            if (id[u] != -1) new_accept.push_back(id[u]);
+        }
+
+        n = new_n;
+        edges = std::move(new_edges);
+        init = std::move(new_init);
+        accept = std::move(new_accept);
+    }
 };
 
 /**

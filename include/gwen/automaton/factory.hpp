@@ -3,6 +3,7 @@
 #include <span>
 #include <utility>
 #include <vector>
+#include <iterator>
 
 #include "gwen/automaton/automaton.hpp"
 #include "gwen/types.hpp"
@@ -79,6 +80,34 @@ template <i32 base = 10> Automaton<base> exclude_digits(std::span<const i32> S) 
     for (i32 c : S) {
         if (0 <= c && c < base) {
             a.set_edge(0, c, -1);
+        }
+    }
+    return a;
+}
+
+/**
+ * @brief 指定した文字をすべて含むオートマトンを生成する
+ * @tparam base N の進数
+ * @param S 含まれなければならない文字のリスト
+ * @return Automaton<base>
+ */
+template <i32 base = 10> Automaton<base> include_all_digits(std::span<const i32> S) {
+    std::vector<i32> id(base, -1);
+    i32 num_req = 0;
+    for(i32 s : S) {
+        if (0 <= s && s < base && id[s] == -1) {
+            id[s] = num_req++;
+        }
+    }
+
+    Automaton<base> a(1 << num_req);
+    a.init = {0};
+    a.accept = {(1 << num_req) - 1};
+
+    for(i32 u = 0; u < a.n; ++u) {
+        for(i32 c = 0; c < base; ++c) {
+            if(id[c] >= 0) a.set_edge(u, c, u | (1 << id[c]));
+            else a.set_edge(u, c, u);
         }
     }
     return a;

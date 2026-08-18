@@ -145,3 +145,26 @@ TEST(AutomatonFactoryTest, NonZeroCountLeq) {
     }
     EXPECT_EQ(ans.val, expected);
 }
+
+
+
+TEST(AutomatonFactoryTest, IncludeAllDigits) {
+    std::vector<i32> S = {1, 3, 3}; // 3 is duplicated
+    auto a = include_all_digits<10>(S);
+    std::vector<i32> N = {3, 0, 0};  // 300
+    auto ans = run_digit_dp<TestRing, 10>(N, a);
+
+    i64 expected = 0;
+    for (i32 i = 0; i <= 300; ++i) {
+        std::string s = std::to_string(i);
+        while (s.length() < 3) s = "0" + s;
+        bool has_1 = false;
+        bool has_3 = false;
+        for (char c : s) {
+            if (c == '1') has_1 = true;
+            if (c == '3') has_3 = true;
+        }
+        if (has_1 && has_3) expected++;
+    }
+    EXPECT_EQ(ans.val, expected);
+}

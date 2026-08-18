@@ -104,6 +104,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 
 ### オートマトン (Automaton)
 - [オートマトン (automaton.hpp)](doc/automaton.hpp)
+- [重み付きオートマトン (weighted_automaton.hpp)](doc/automaton/weighted_automaton.md)
 
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)
