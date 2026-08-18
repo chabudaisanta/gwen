@@ -19,10 +19,20 @@ namespace gwen::automaton {
  */
 template <i32 base, monoid WeightMonoid>
 WeightedAutomaton<base, WeightMonoid> used_digits_count_exact(i32 k) {
-    WeightedAutomaton<base, WeightMonoid> a(1 << base, 1);
-    a.add_init(0, WeightMonoid::e());
+    i32 lz_state = 1 << base;
+    WeightedAutomaton<base, WeightMonoid> a(lz_state + 1, 1);
+    a.add_init(lz_state, WeightMonoid::e());
+    
+    if (k == 0) {
+        a.set_condition(lz_state, 1ULL);
+    }
+    a.set_edge(lz_state, 0, lz_state, WeightMonoid::e());
+    for (i32 c = 1; c < base; ++c) {
+        a.set_edge(lz_state, c, 1 << c, WeightMonoid::e());
+    }
+
     for (i32 u = 0; u < (1 << base); ++u) {
-        if (std::popcount(static_cast<u32>(u)) == static_cast<u32>(k)) {
+        if (std::popcount(static_cast<u32>(u)) == k) {
             a.set_condition(u, 1ULL);
         }
         for (i32 c = 0; c < base; ++c) {
@@ -41,10 +51,20 @@ WeightedAutomaton<base, WeightMonoid> used_digits_count_exact(i32 k) {
  */
 template <i32 base, monoid WeightMonoid>
 WeightedAutomaton<base, WeightMonoid> used_digits_count_leq(i32 k) {
-    WeightedAutomaton<base, WeightMonoid> a(1 << base, 1);
-    a.add_init(0, WeightMonoid::e());
+    i32 lz_state = 1 << base;
+    WeightedAutomaton<base, WeightMonoid> a(lz_state + 1, 1);
+    a.add_init(lz_state, WeightMonoid::e());
+    
+    if (k >= 0) {
+        a.set_condition(lz_state, 1ULL);
+    }
+    a.set_edge(lz_state, 0, lz_state, WeightMonoid::e());
+    for (i32 c = 1; c < base; ++c) {
+        a.set_edge(lz_state, c, 1 << c, WeightMonoid::e());
+    }
+
     for (i32 u = 0; u < (1 << base); ++u) {
-        if (std::popcount(static_cast<u32>(u)) <= static_cast<u32>(k)) {
+        if (std::popcount(static_cast<u32>(u)) <= k) {
             a.set_condition(u, 1ULL);
         }
         for (i32 c = 0; c < base; ++c) {

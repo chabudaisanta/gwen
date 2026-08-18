@@ -32,8 +32,6 @@ T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
                         const WeightedAutomaton<base, WeightMonoid>& a, 
                         F f, 
                         OpAct op_act = OpAct{}) {
-    using Weight = typename WeightMonoid::S;
-    
     std::vector<T> dp_tight(a.n, T(0));
     std::vector<T> dp_loose(a.n, T(0));
     std::vector<T> next_tight(a.n, T(0));

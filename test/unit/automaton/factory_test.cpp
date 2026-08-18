@@ -168,3 +168,58 @@ TEST(AutomatonFactoryTest, IncludeAllDigits) {
     }
     EXPECT_EQ(ans.val, expected);
 }
+
+std::vector<i32> to_vec(const std::string& s) {
+    std::vector<i32> res(s.size());
+    for(size_t i = 0; i < s.size(); ++i) res[i] = s[i] - '0';
+    return res;
+}
+
+TEST(FactoryTest, UsedDigitsCount) {
+    auto a_exact = used_digits_count_exact<10>(2);
+    auto a_leq = used_digits_count_leq<10>(2);
+
+    // Using exact 2 digits: N = 200
+    auto ans_exact = run_digit_dp<TestRing, 10>(to_vec("200"), a_exact);
+    // Number of such elements <= 200:
+    // Digits used: for any integer formatted to 3 digits.
+    i64 expected_exact = 0;
+    i64 expected_leq = 0;
+    for(i32 i = 0; i <= 200; ++i) {
+        std::string s = std::to_string(i);
+        while(s.length() < 3) s = "0" + s;
+        // Count distinct ignoring leading zeros!
+        // Actually, the digit DP counts leading zeros as LZ state!
+        // If it's a 3 digit DP, "012" has LZ for the first digit. The digits used are 1, 2. (2 kinds)
+        // "000" has 0 kinds.
+        i32 mask = 0;
+        bool leading = true;
+        for(char c : s) {
+            if (leading && c == '0') continue;
+            leading = false;
+            mask |= (1 << (c - '0'));
+        }
+        if(std::popcount(static_cast<u32>(mask)) == 2) expected_exact++;
+        if(std::popcount(static_cast<u32>(mask)) <= 2) expected_leq++;
+    }
+    
+    EXPECT_EQ(ans_exact.val, expected_exact);
+    auto ans_leq = run_digit_dp<TestRing, 10>(to_vec("200"), a_leq);
+    EXPECT_EQ(ans_leq.val, expected_leq);
+}
+
+TEST(FactoryTest, ContainsPattern) {
+    std::vector<i32> pattern = {1, 2, 3};
+    auto a = contains_pattern<10>(pattern);
+    
+    auto ans = run_digit_dp<TestRing, 10>(to_vec("1500"), a);
+    i64 expected = 0;
+    for(i32 i = 0; i <= 1500; ++i) {
+        std::string s = std::to_string(i);
+        while(s.length() < 4) s = "0" + s;
+        if(s.find("123") != std::string::npos) {
+            expected++;
+        }
+    }
+    EXPECT_EQ(ans.val, expected);
+}

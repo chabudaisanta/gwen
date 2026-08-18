@@ -168,4 +168,100 @@ template <i32 base = 10> Automaton<base> non_zero_count_leq(i32 M) {
     return a;
 }
 
+/**
+ * @brief ちょうど k 種類の数字が使われるオートマトンを生成する
+ * @tparam base N の進数
+ * @param k 使用される数字の種類の目標数
+ * @return Automaton<base>
+ */
+template <i32 base = 10> Automaton<base> used_digits_count_exact(i32 k) {
+    i32 lz_state = 1 << base;
+    Automaton<base> a(lz_state + 1);
+    a.init = {lz_state};
+    
+    if (k == 0) {
+        a.accept.push_back(lz_state);
+    }
+    a.set_edge(lz_state, 0, lz_state);
+    for (i32 c = 1; c < base; ++c) {
+        a.set_edge(lz_state, c, 1 << c);
+    }
+
+    for (i32 u = 0; u < (1 << base); ++u) {
+        if (std::popcount(static_cast<u32>(u)) == k) {
+            a.accept.push_back(u);
+        }
+        for (i32 c = 0; c < base; ++c) {
+            a.set_edge(u, c, u | (1 << c));
+        }
+    }
+    return a;
+}
+
+/**
+ * @brief k 種類以下の数字が使われるオートマトンを生成する
+ * @tparam base N の進数
+ * @param k 使用される数字の種類の目標数
+ * @return Automaton<base>
+ */
+template <i32 base = 10> Automaton<base> used_digits_count_leq(i32 k) {
+    i32 lz_state = 1 << base;
+    Automaton<base> a(lz_state + 1);
+    a.init = {lz_state};
+    
+    if (k >= 0) {
+        a.accept.push_back(lz_state);
+    }
+    a.set_edge(lz_state, 0, lz_state);
+    for (i32 c = 1; c < base; ++c) {
+        a.set_edge(lz_state, c, 1 << c);
+    }
+
+    for (i32 u = 0; u < (1 << base); ++u) {
+        if (std::popcount(static_cast<u32>(u)) <= k) {
+            a.accept.push_back(u);
+        }
+        for (i32 c = 0; c < base; ++c) {
+            a.set_edge(u, c, u | (1 << c));
+        }
+    }
+    return a;
+}
+
+/**
+ * @brief 指定した文字列(数字列)を含むオートマトンを生成する
+ * @tparam base N の進数
+ * @param pattern 含まれるべき文字列(数字列)のリスト
+ * @return Automaton<base>
+ */
+template <i32 base = 10> Automaton<base> contains_pattern(std::span<const i32> pattern) {
+    i32 m = pattern.size();
+    Automaton<base> a(m + 1);
+    a.init = {0};
+    
+    if (m > 0) {
+        for (i32 c = 0; c < base; ++c) {
+            a.set_edge(0, c, (pattern[0] == c) ? 1 : 0);
+        }
+        i32 x = 0;
+        for (i32 u = 1; u < m; ++u) {
+            for (i32 c = 0; c < base; ++c) {
+                if (pattern[u] == c) {
+                    a.set_edge(u, c, u + 1);
+                } else {
+                    a.set_edge(u, c, a.edge(x, c));
+                }
+            }
+            x = a.edge(x, pattern[u]);
+        }
+    }
+    
+    for (i32 c = 0; c < base; ++c) {
+        a.set_edge(m, c, m);
+    }
+    
+    a.accept = {m};
+    return a;
+}
+
 }  // namespace gwen::automaton
