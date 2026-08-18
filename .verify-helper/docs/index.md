@@ -9,7 +9,6 @@ title: gwen Library Documentation
 [![chaby9](https://img.shields.io/endpoint?url=https%3A%2F%2Fatcoder-badges.now.sh%2Fapi%2Fcodeforces%2Fjson%2Fchaby9)](https://codeforces.com/profile/chaby9)
 
 Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラリのドキュメントサイトです。
-AtCoder(https://atcoder.jp/users/chaby)
 
 ## ドキュメント一覧
 
@@ -103,10 +102,12 @@ AtCoder(https://atcoder.jp/users/chaby)
 - [凸包 (convex_polygon.hpp)](doc/geo/convex_polygon.hpp)
 
 ### オートマトン (Automaton)
-- [オートマトン (automaton.hpp)](doc/automaton.hpp)
-- [重み付きオートマトン (weighted_automaton.hpp)](doc/automaton/weighted_automaton.md)
-- [重み付きオートマトンファクトリ (weighted_automaton_factory.hpp)](doc/automaton/weighted_automaton_factory.md)
-- [重み付き桁DP (weighted_digit_dp.hpp)](doc/automaton/weighted_digit_dp.md)
+- [オートマトン (automaton.hpp)](doc/automaton/automaton.hpp)
+- [オートマトンファクトリ (factory.hpp)](doc/automaton/factory.hpp)
+- [桁dp (digit_dp.hpp)](doc/automaton/digit_dp.hpp)
+- [重み付きオートマトン (weighted_automaton.hpp)](doc/automaton/weighted_automaton.hpp)
+- [重み付きオートマトンファクトリ (weighted_automaton_factory.hpp)](doc/automaton/weighted_automaton_factory.hpp)
+- [重み付き桁DP (weighted_digit_dp.hpp)](doc/automaton/weighted_digit_dp.hpp)
 
 ### 開発用資料
 - [リポジトリ全体README(README.md)](README.md)
