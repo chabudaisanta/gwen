@@ -55,3 +55,77 @@ gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::contains_pattern(st
 
 **計算量**
 - $O(|pattern| \times \mathrm{base})$
+
+## digit_sum_exact
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::digit_sum_exact(i32 M)
+```
+
+各位の数字の和がちょうど `M` になるオートマトンを生成します。
+`condition` は `M` に到達した状態に対してのみ `1` が設定されます。
+
+## digit_sum_leq
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::digit_sum_leq(i32 M)
+```
+
+各位の数字の和が `M` 以下になるオートマトンを生成します。
+
+## digit_sum_mod
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::digit_sum_mod(i32 M, i32 K)
+```
+
+各位の数字の和を `M` で割った余りが `K` になるオートマトンを生成します。
+
+## exclude_digits
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::exclude_digits(std::span<const i32> S)
+```
+
+指定した文字を含まないオートマトンを生成します。
+
+## include_all_digits
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::include_all_digits(std::span<const i32> S)
+```
+
+指定した文字をすべて含むオートマトンを生成します。
+
+## value_mod
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::value_mod(i32 M, i32 K)
+```
+
+数値そのものを `M` で割った余りが `K` になるオートマトンを生成します。
+
+## non_zero_count_exact
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::non_zero_count_exact(i32 M)
+```
+
+0 以外の数字がちょうど `M` 個現れるオートマトンを生成します。
+
+## non_zero_count_leq
+
+```cpp
+template <gwen::i32 base, gwen::monoid WeightMonoid>
+gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::non_zero_count_leq(i32 M)
+```
+
+0 以外の数字が `M` 個以下現れるオートマトンを生成します。
+
