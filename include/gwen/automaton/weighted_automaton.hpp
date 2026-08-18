@@ -54,7 +54,8 @@ struct WeightedAutomaton {
      * @param i 状態
      * @param mask 達成状況の bitmask
      */
-    void set_condition(i32 i, u64 mask) {
+    void set_condition(i32 i, u64 mask = 1) {
+        if(condition_count < 64) assert((mask >> condition_count) == 0);
         condition[i] = mask;
     }
 

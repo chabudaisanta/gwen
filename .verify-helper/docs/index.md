@@ -105,6 +105,7 @@ AtCoder(https://atcoder.jp/users/chaby)
 ### オートマトン (Automaton)
 - [オートマトン (automaton.hpp)](doc/automaton.hpp)
 - [重み付きオートマトン (weighted_automaton.hpp)](doc/automaton/weighted_automaton.md)
+- [重み付きオートマトンファクトリ (weighted_automaton_factory.hpp)](doc/automaton/weighted_automaton_factory.md)
 - [重み付き桁DP (weighted_digit_dp.hpp)](doc/automaton/weighted_digit_dp.md)
 
 ### 開発用資料
