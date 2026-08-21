@@ -119,6 +119,15 @@ void fw.add(int p, T x)
 \`\`\`
 ```
 
+### 公開ドキュメントの配置と目次
+
+- 利用者向けの入口は GitHub Pages とし、`.verify-helper/docs/index.md` を唯一のモジュール目次とします。
+- `include/gwen/<category>/<module>.hpp` の仕様書は、`doc/<category>/<module>.md` に配置します。`include/gwen/<module>.hpp` の仕様書は、`doc/<module>.md` に配置します。
+- 仕様書の frontmatter に `documentation_of: //include/gwen/...` を設定し、対応するヘッダーパスを明示します。
+- 目次からモジュールへは必ず `include/gwen/.../*.hpp` をリンクします。`doc/.../*.hpp` のように存在しないパスや、Markdown ファイルへの直接リンクは使用しません。公開時は `competitive-verifier` がヘッダーと仕様書を関連付けます。
+- `include/gwen/` 配下の公開ヘッダーはすべて、仕様書と目次の項目を 1 つずつ持たなければなりません。
+- 変更後は `python3 scripts/check_docs.py` を実行し、目次リンク、ヘッダーの掲載漏れ、`documentation_of` の対応を検査します。
+
 ## 3. 単体テストコード (`test/unit/**/*.cpp`) の規約
 単体テストのファイルでは、隠れた依存関係のミス（include忘れ）を検知し、ヘッダーの自己完結性を保証するために、**必ずテスト対象のヘッダーファイルをファイルの先頭でインクルード**します。
 

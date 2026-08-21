@@ -1,5 +1,6 @@
 ---
 title: LazyImplicitTreap
+documentation_of: //include/gwen/bbst/lazy_implicit_treap.hpp
 ---
 
 # LazyImplicitTreap

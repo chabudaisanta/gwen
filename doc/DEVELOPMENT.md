@@ -11,9 +11,10 @@ title: 開発手順書
 - C++23 の仕様に準拠し、汎用的な制約が必要な場合は `include/gwen/alge/` や `include/gwen/graph/` 等の適切なディレクトリに `concept` の定義を追加・利用します。
 
 ## 2. ドキュメントの作成
-- `doc/` ディレクトリ以下に、モジュールの仕様や使い方をまとめた Markdown ファイルを作成します（例: `doc/io.md`）。
+- ヘッダーと同じ相対パスで、`doc/` ディレクトリ以下に仕様や使い方をまとめた Markdown ファイルを作成します（例: `include/gwen/io/vector.hpp` に対して `doc/io/vector.md`）。
 - 簡単なサンプルコード（`#include "gwen/...` から始まるもの）を含めると後で使いやすくなります。
 - 作成後は、必ず **`.verify-helper/docs/index.md`** の目次リンクを追加し、GitHub Pages 上からアクセスできるようにしてください。
+- 作業完了前に `python3 scripts/check_docs.py` を実行し、公開目次と `documentation_of` の整合性を確認してください。
 
 ## 3. 単体テスト (Google Test) の作成と登録
 1. `test/unit/` ディレクトリ以下にテストファイルを作成します（例: `test/unit/io_test.cpp`）。

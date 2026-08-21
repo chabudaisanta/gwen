@@ -1,6 +1,7 @@
 a.out
 .build/
 .vscode/
+.codex/
 
 .env/
 .venv/

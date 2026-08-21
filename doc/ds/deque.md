@@ -1,3 +1,8 @@
+---
+title: Deque
+documentation_of: //include/gwen/ds/deque.hpp
+---
+
 # Deque
 
 リングバッファベースの高速な両端キューです。
