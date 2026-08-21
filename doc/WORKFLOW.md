@@ -25,7 +25,7 @@ git status --short
 1. リポジトリ直下の `AGENTS.md` があれば読む。
 2. 直下にない場合は、現在のルールファイルである `.agents/AGENTS.md` を読む。
 3. 詳細な規約は [RULES.md](RULES.md) を読む。
-4. 新規モジュールや大きな変更では、[DEVELOPMENT.md](DEVELOPMENT.md) と `planning/TODO.md` を読む。
+4. 新規モジュールや大きな変更では、[DEVELOPMENT.md](DEVELOPMENT.md) と本書の「今後の候補」を読む。
 
 特に、ヘッダー・単体テスト・オンラインジャッジ検証・仕様書・公開ドキュメント目次の対応関係を確認してください。
 
@@ -42,7 +42,6 @@ git status --short
 | `doc/` | 公開 API の仕様書、開発資料 |
 | `.verify-helper/docs/index.md` | GitHub Pages のモジュール目次 |
 | `scripts/` | ビルド、テスト、検査の補助スクリプト |
-| `planning/` | TODO と設計・作業メモ |
 
 対象のヘッダー、既存テスト、仕様書、verify を先に検索します。
 
@@ -63,12 +62,11 @@ rg -n "対象となる型名または関数名" include test verify doc
 
 新規モジュールの実装や移植は、`.agents/AGENTS.md` に定められた次の手順を必ず守ります。
 
-1. `planning/` に仕様と検証計画を作成し、`code_reviewer` の事前レビューを受ける。
+1. 依頼内容、変更対象、検証計画を作業記録にまとめ、`code_reviewer` の事前レビューを受ける。
 2. 事前レビューの指摘を解消し、実装前にユーザーの承認を得る。
 3. 承認後に実装、単体テスト、verify、仕様書、公開目次を更新する。
 4. 検証後に `code_reviewer` の事後レビューを受け、指摘を解消する。
-5. `planning/TODO.md` を更新して作業内容を報告し、確認後に Conventional Commits 形式でコミットする。
-6. 作業用の計画書を `planning/old/` へ移動する。
+5. 作業内容と検証結果を報告し、確認後に Conventional Commits 形式でコミットする。
 
 上記の事前レビューとユーザー承認が終わるまで、次の実装工程へ進んではいけません。
 
@@ -113,8 +111,21 @@ git diff
 - 意図しない生成物やローカル設定を含めていない。
 - 実行した検証と結果を説明できる。
 - 追加・変更した公開ヘッダーが、仕様書と公開目次に反映されている。
-- `planning/TODO.md` に該当する進捗があれば更新している。
 
 ## 7. 報告する
 
 報告には、少なくとも「変更内容」「変更した主なファイル」「実行した検証と結果」「残る注意点」を含めます。検証できなかった項目がある場合は、成功したように扱わず、理由を明記します。
+
+## 8. 今後の候補
+
+優先度を固定しない改善候補です。実装に着手するときは、この一覧ではなく当該変更の作業記録で設計と検証計画を明確にします。
+
+- 検証基盤: 既存モジュールの competitive-verifier 向け verify とランダム化単体テストの拡充。
+- dump: 各データ構造の dump 対応を進める。
+- ハッシュ: `hash/zobrist.hpp` の設計改善・実装。
+- 幾何: 凸包、偏角ソート、線分交差、多角形操作。
+- データ構造: 永続データ構造、Static RMQ、SegTree Beats、両端優先度付きキュー、Binary Trie、Splay Tree、区間 set、連想 Treap、平方分割。
+- グラフ・木: 木の基本アルゴリズム、Rerooting、SCC と DAG 縮約、Range Edge Graph。
+- 文字列: Suffix Array、LCP、Z-algorithm、Manacher、Aho-Corasick。
+- 数学: NTT/FFT、形式的冪級数、Stern-Brocot Tree、Barrett reduction、任意法の二項係数。
+- ユーティリティ: 高速ハッシュマップ、Zobrist Hash、型ハッシュ、FastIO、多次元配列、特殊クエリ。

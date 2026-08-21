@@ -53,8 +53,9 @@ title: スクリプト使用方法
 ```
 
 ### 処理内容
-1. `CPLUSINCLUDEPATH` 環境変数に `include` ディレクトリへの絶対パスを設定し、ヘッダーファイルが見つかるようにします。
-2. `competitive-verifier verify` を実行し、`verify/` ディレクトリ配下に存在する検証用コードをコンパイル・実行・判定します。
+1. `competitive-verifier oj-resolve` で対象と依存関係を解決し、`competitive-verifier verify` で `verify/` ディレクトリ配下の検証コードをコンパイル・実行・判定します。
+2. 実行時には全テストへ既定で 10.0 秒の TLE を設定し、実行エラーも検査します。
+3. ANSI エスケープシーケンスを除去したログを `verify/verify.log` に保存し、`result.json` を集計して成否の要約を表示します。
 
 ---
 

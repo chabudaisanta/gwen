@@ -25,7 +25,6 @@ title: README
 - `verify/`: `competitive-verifier` を用いたオンラインジャッジでの検証用コード
 - `doc/`: ドキュメント
 - `scripts/`: ビルド・テスト等のターミナル実行用ユーティリティスクリプト
-- `planning/`: `TODO.md` などの計画や設計ドキュメント
 - `references/`: 参考実装等
 
 ## ビルドとテスト (Google Test)

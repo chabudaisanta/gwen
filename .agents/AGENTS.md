@@ -31,11 +31,11 @@
 <RULE>
 ## AIエージェントの作業ワークフロー
 新規モジュールの実装や移植を行う場合は、以下の5ステップを必ず守ってください。
-1. **Plan & Pre-Review**: `planning/` に仕様（設計、パス、Concept）をまとめ、`code_reviewer` サブエージェントを呼んで事前レビューを受ける。
+1. **Plan & Pre-Review**: 作業記録に仕様（設計、パス、Concept）をまとめ、`code_reviewer` サブエージェントを呼んで事前レビューを受ける。
 2. **User Approval**: サブエージェントの承認後、ユーザーに承認をもらう。
 3. **Execute**: 実装、Google Test、Verifyコード、ドキュメント作成を行い、テストを自力でパスさせる。
 4. **Post-Review & Finalize**: 再度 `code_reviewer` サブエージェントを呼んで事後レビューを受け、完了後にユーザーへ報告してコミットする。
-5. **Cleanup**: 作業完了後、`planning/` に置いた作業ファイルを `planning/old/` へ移動する。
+5. **Cleanup**: 作業用の一時ファイルや生成物をリポジトリに残さない。
 </RULE>
 
 <RULE>

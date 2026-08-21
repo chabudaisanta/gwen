@@ -62,18 +62,6 @@ GitHub にソースコードを Push すると、GitHub Actions によって以�
 
 ---
 
-## 6. ローカルテスト (`verify.sh`) の独自拡張
+## 6. ローカルでの verify
 
-手元で効率よく検証コードを実行できるよう、`scripts/verify.sh` にいくつかの便利な拡張機能を入れています。
-
-### 制限時間 (TLE) のデフォルト設定
-`verify.sh` 経由で実行した場合、**自動的に全テストに 10.0 秒の TLE (制限時間) が適用** されます。各テストの先頭に `// competitive-verifier: TLE 10.0` のような特別なアノテーションを記述しなくても、無限ループなどを確実に検知・遮断できます。
-
-### MLE / RE の検知
-`competitive-verifier` は実行時に裏で `online-judge-tools` を呼び出しており、以下のエラーを自動検知します。
-- **RE (Runtime Error)**: セグメンテーションフォールトやアサーションエラーなど、プロセスが 0 以外で終了した場合に自動的に RE となります。
-- **MLE (Memory Limit Exceeded)**: テスト先（Yosupo等）の既定メモリ制限（通常 1024MB など）を超過すると MLE と判定されます。
-
-### テスト結果のサマリー出力
-テストが完了すると、`verify/verify.log` にクリーンなログ（ANSIエスケープシーケンス除去済み）が出力されるほか、生成された `result.json` を `scripts/summary.py` が自動解析します。
-結果として、**何個のテストがパスし (AC)、何個のテストが落ちたか (Failed)、および落ちたテストのパス** がコンソールにわかりやすくサマリー表示されます。
+`verify.sh` の使い方、既定の TLE、ログ、結果サマリーは [scripts/README.md](../scripts/README.md) を参照してください。
