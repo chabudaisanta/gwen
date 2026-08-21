@@ -119,6 +119,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [testlib.hの使用方法(test/third_party/README.md)](test/third_party/README.md)
 - [テスト用ユーティリティの使用方法(test/utils/README.md)](test/utils/README.md)
 - [スクリプト使用方法(scripts/README.md)](scripts/README.md)
+- [モジュールへのdump適用ルール(DUMP_RULES.md)](doc/DUMP_RULES.md)
 
 ---
 *GitHubリポジトリ: [chabudaisanta/gwen](https://github.com/chabudaisanta/gwen)*
