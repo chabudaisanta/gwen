@@ -107,9 +107,13 @@ public:
         return res;
     }
 
-    S all_prod() {
+    /**
+     * @brief 全ての要素の積を取得します。
+     * @details 計算量は O(1) です。
+     * @return 全要素の積
+     */
+    S all_prod() const {
         if (empty()) return M::e();
-        push(root);
         return d[root].prod;
     }
 
@@ -128,12 +132,30 @@ public:
         root = merge(merge(l, m), rr);
     }
 
+    /**
+     * @brief 別のTreapを末尾に連結します。
+     * @details 連結後、other は空になります。計算量は期待 O(log N) です。
+     * @param other 連結するTreap
+     * @pre `this != &other`
+     */
     void concat(ProdImplicitTreap& other) {
+        assert(this != &other);
+        if (this == &other) return;
         root = merge(root, other.root);
         other.root = NIL;
     }
 
+    /**
+     * @brief 2つのTreapを連結した新しいTreapを返します。
+     * @details 連結後、t0 と t1 は空になります。計算量は期待 O(log N) です。
+     * @param t0 前半のTreap
+     * @param t1 後半のTreap
+     * @return t0 の後ろに t1 を連結したTreap
+     * @pre `&t0 != &t1`
+     */
     static ProdImplicitTreap concat(ProdImplicitTreap& t0, ProdImplicitTreap& t1) {
+        assert(&t0 != &t1);
+        if (&t0 == &t1) return {};
         ProdImplicitTreap r;
         r.root = merge(t0.root, t1.root);
         t0.root = t1.root = NIL;

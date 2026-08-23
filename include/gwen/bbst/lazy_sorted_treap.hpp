@@ -168,10 +168,16 @@ public:
         if (root != NIL) d[root].parent = NIL;
     }
 
+    /**
+     * @brief 指定したキーに一致する要素を全て削除します。
+     * @details 削除したノードはノードプールへ返却されます。削除数を K とした計算量は期待 O(log N + K) です。
+     * @param key 削除するキー
+     */
     void erase_all(const K& key) {
         auto [l, r] = split_lt(root, key);
         auto [m, rr] = split_le(r, key);
         root = merge(l, rr);
+        free_tree(m);
         if (root != NIL) d[root].parent = NIL;
     }
 
@@ -201,7 +207,12 @@ public:
         return res;
     }
 
-    S all_prod() { return prod_(root); }
+    /**
+     * @brief 全ての要素の積を取得します。
+     * @details 計算量は O(1) です。
+     * @return 全要素の積
+     */
+    S all_prod() const { return prod_(root); }
 
     /**
      * @brief 指定したキー x が含まれているか判定します。
@@ -212,17 +223,13 @@ public:
         return key_eq(*it, x);
     }
 
-    i32 count(const K& x) {
-        auto [l, r] = split_lt(root, x);
-        if (r == NIL) {
-            root = l;
-            return 0;
-        }
-        auto [mid, r2] = split_le(r, x);
-        i32 res = size_(mid);
-        root = merge(merge(l, mid), r2);
-        return res;
-    }
+    /**
+     * @brief 指定したキーと等価な要素数を返します。
+     * @details Compare によって等価と判定される要素を数えます。計算量は期待 O(log N) です。
+     * @param x 数えるキー
+     * @return x と等価な要素数
+     */
+    i32 count(const K& x) const { return count_le_(root, x) - count_lt_(root, x); }
 
     /**
      * @brief 指定したキー x 以上の最初の要素を指すイテレータを返します。
@@ -262,10 +269,47 @@ public:
     }
 
 private:
+    static void free_tree(tree t) {
+        if (t == NIL) return;
+        tree left = d[t].left;
+        tree right = d[t].right;
+        free_tree(left);
+        free_tree(right);
+        d.free_node(t);
+    }
+
     static bool key_eq(const K& a, const K& b) { return !cmp(a, b) && !cmp(b, a); }
 
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
     static S prod_(tree t) { return t == NIL ? M::e() : d[t].prod; }
+
+    static i32 count_lt_(tree t, const K& key) {
+        i32 result = 0;
+        while (t != NIL) {
+            if (cmp(d[t].key, key)) {
+                result += size_(d[t].left) + 1;
+                t = d[t].right;
+            }
+            else {
+                t = d[t].left;
+            }
+        }
+        return result;
+    }
+
+    static i32 count_le_(tree t, const K& key) {
+        i32 result = 0;
+        while (t != NIL) {
+            if (!cmp(key, d[t].key)) {
+                result += size_(d[t].left) + 1;
+                t = d[t].right;
+            }
+            else {
+                t = d[t].left;
+            }
+        }
+        return result;
+    }
 
     static void push(tree t) {
         if (t == NIL) return;

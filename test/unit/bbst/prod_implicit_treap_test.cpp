@@ -23,4 +23,25 @@ TEST(ProdImplicitTreapTest, SumMonoid) {
     // [1, 4, 3, 2]
     EXPECT_EQ(t.prod(1, 3), 7);  // 4 + 3
     EXPECT_EQ(t.get(1), 4);
+
+    const auto& const_t = t;
+    EXPECT_EQ(const_t.all_prod(), 10);
 }
+
+#ifndef NDEBUG
+TEST(ProdImplicitTreapTest, RejectsSelfConcat) {
+    ProdImplicitTreap<sum_monoid<int>> t({1, 2, 3});
+    EXPECT_DEATH(t.concat(t), "");
+    EXPECT_DEATH(ProdImplicitTreap<sum_monoid<int>>::concat(t, t), "");
+}
+#else
+TEST(ProdImplicitTreapTest, SelfConcatIsSafeWithoutAssertions) {
+    ProdImplicitTreap<sum_monoid<int>> t({1, 2, 3});
+    t.concat(t);
+    EXPECT_EQ(t.to_vec(), (std::vector<int>{1, 2, 3}));
+
+    auto result = ProdImplicitTreap<sum_monoid<int>>::concat(t, t);
+    EXPECT_TRUE(result.empty());
+    EXPECT_EQ(t.to_vec(), (std::vector<int>{1, 2, 3}));
+}
+#endif

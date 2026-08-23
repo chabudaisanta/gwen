@@ -27,6 +27,7 @@ ProdSortedTreap<K, M, Compare>();
 
 ### size, empty, contains, count
 - `SortedTreap` と同様です。
+- `count` は `const` メソッドです。
 
 ### insert
 ```cpp
@@ -47,14 +48,15 @@ void erase(const K& key);
 void erase_all(const K& key);
 ```
 - 指定したキーに一致する要素を全て削除します。
-- **計算量**: $O(\log N)$
+- 削除したノードはノードプールへ返却されます。
+- **計算量**: 削除する要素数を $K$ として $O(\log N + K)$
 
 ### set
 ```cpp
 void set(const K& key, const S& val);
 ```
 - 指定したキーに一致する要素を全て削除し、新しいキーと値のペアを1つ挿入します（Map的な挙動）。
-- **計算量**: $O(\log N)$
+- **計算量**: 既存の同一キー要素数を $K$ として $O(\log N + K)$
 
 ### prod
 ```cpp

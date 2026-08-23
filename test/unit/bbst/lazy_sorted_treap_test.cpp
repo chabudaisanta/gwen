@@ -55,4 +55,21 @@ TEST(LazySortedTreapTest, BasicOperations) {
     auto it_end = t.end();
     --it_end;
     EXPECT_EQ(*it_end, 20);
+
+    const auto& const_t = t;
+    EXPECT_EQ(const_t.all_prod().val.val(), 30);
+    EXPECT_EQ(const_t.count(10), 1);
+}
+
+TEST(LazySortedTreapTest, EraseAllReleasesNodes) {
+    mint::set_mod(998244353);
+    using Treap = LazySortedTreap<int, Monoid>;
+    const i32 initial_pool_size = Treap::d.size();
+    Treap t;
+    for (int i = 0; i < 100; ++i) t.insert(10, {mint(i), 1});
+
+    t.erase_all(10);
+
+    EXPECT_TRUE(t.empty());
+    EXPECT_EQ(Treap::d.size(), initial_pool_size);
 }

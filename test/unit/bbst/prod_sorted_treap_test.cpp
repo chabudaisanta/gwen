@@ -28,6 +28,8 @@ TEST(ProdSortedTreapTest, BasicOperations) {
 
     t.insert(10, 100);  // multiple keys
     EXPECT_EQ(t.count(10), 2);
+    const auto& const_t = t;
+    EXPECT_EQ(const_t.count(10), 2);
     EXPECT_EQ(t.prod(10, 11), 200);
 
     t.erase(10);  // erase one
@@ -55,4 +57,16 @@ TEST(ProdSortedTreapTest, BasicOperations) {
     auto it_end = t.end();
     --it_end;
     EXPECT_EQ(*it_end, 20);
+}
+
+TEST(ProdSortedTreapTest, EraseAllReleasesNodes) {
+    using Treap = ProdSortedTreap<int, sum_monoid<int>>;
+    const i32 initial_pool_size = Treap::d.size();
+    Treap t;
+    for (int i = 0; i < 100; ++i) t.insert(10, i);
+
+    t.erase_all(10);
+
+    EXPECT_TRUE(t.empty());
+    EXPECT_EQ(Treap::d.size(), initial_pool_size);
 }

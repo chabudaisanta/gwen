@@ -73,3 +73,21 @@ TEST(ImplicitTreapTest, Concat) {
     EXPECT_EQ(vec[0], 1);
     EXPECT_EQ(vec[3], 4);
 }
+
+#ifndef NDEBUG
+TEST(ImplicitTreapTest, RejectsSelfConcat) {
+    ImplicitTreap<int> t({1, 2, 3});
+    EXPECT_DEATH(t.concat(t), "");
+    EXPECT_DEATH(ImplicitTreap<int>::concat(t, t), "");
+}
+#else
+TEST(ImplicitTreapTest, SelfConcatIsSafeWithoutAssertions) {
+    ImplicitTreap<int> t({1, 2, 3});
+    t.concat(t);
+    EXPECT_EQ(t.to_vec(), (std::vector<int>{1, 2, 3}));
+
+    auto result = ImplicitTreap<int>::concat(t, t);
+    EXPECT_TRUE(result.empty());
+    EXPECT_EQ(t.to_vec(), (std::vector<int>{1, 2, 3}));
+}
+#endif

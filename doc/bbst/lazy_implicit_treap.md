@@ -108,7 +108,7 @@ S prod(i32 l, i32 r);
 ### all_prod
 
 ```cpp
-S all_prod();
+S all_prod() const;
 ```
 - 全要素の積を取得します。
 - **制約**: なし
@@ -139,7 +139,7 @@ void concat(LazyImplicitTreap& other);
 static LazyImplicitTreap concat(LazyImplicitTreap& t0, LazyImplicitTreap& t1);
 ```
 - 別のTreapを連結します。
-- **制約**: なし
+- **制約**: 連結する2つのTreapは同一オブジェクトでないこと。
 - **計算量**: $O(\log N)$
 
 ### push_back

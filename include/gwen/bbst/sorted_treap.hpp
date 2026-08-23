@@ -4,7 +4,6 @@
 #include <format>
 #include <functional>
 #include <string>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -170,15 +169,29 @@ public:
 
     /**
      * @brief 0-indexed で k 番目に小さいキーを返します。
+     * @details 計算量は期待 O(log N) です。
+     * @param k 取得するキーの順位
+     * @return k 番目に小さいキー
+     * @pre `0 <= k && k < size()`
      */
-    K kth(i32 k) {
+    K kth(i32 k) const {
         assert(0 <= k && k < size());
-        tree l, mid, r;
-        std::tie(l, mid) = split_idx(root, k);
-        std::tie(mid, r) = split_idx(mid, 1);
-        K res = d[mid].key;
-        root = merge(merge(l, mid), r);
-        return res;
+        tree t = root;
+        while (t != NIL) {
+            i32 left_size = size_(d[t].left);
+            if (k < left_size) {
+                t = d[t].left;
+            }
+            else if (k == left_size) {
+                return d[t].key;
+            }
+            else {
+                k -= left_size + 1;
+                t = d[t].right;
+            }
+        }
+        assert(false);
+        return K{};
     }
 
     /**
@@ -192,36 +205,30 @@ public:
 
     /**
      * @brief key 未満の要素数を返します。
+     * @details 計算量は期待 O(log N) です。
+     * @param key 上限となるキー
+     * @return key 未満の要素数
      */
-    i32 count_lower(const K& key) {
-        auto [l, r] = split_lt(root, key);
-        i32 res = size_(l);
-        root = merge(l, r);
-        return res;
-    }
+    i32 count_lower(const K& key) const { return count_lt_(root, key); }
 
-    i32 count(const K& x) {
-        auto [l, r] = split_lt(root, x);
-        if (r == NIL) {
-            root = l;
-            return 0;
-        }
-        auto [mid, r2] = split_le(r, x);
-        i32 res = size_(mid);
-        root = merge(merge(l, mid), r2);
-        return res;
-    }
+    /**
+     * @brief 指定したキーと等価な要素数を返します。
+     * @details Compare によって等価と判定される要素を数えます。計算量は期待 O(log N) です。
+     * @param x 数えるキー
+     * @return x と等価な要素数
+     */
+    i32 count(const K& x) const { return count_le_(root, x) - count_lt_(root, x); }
 
-    i32 count(const K& lower, const K& upper) {
-        auto [l, r1] = split_lt(root, lower);
-        if (r1 == NIL) {
-            root = l;
-            return 0;
-        }
-        auto [mid, r2] = split_lt(r1, upper);
-        i32 res = size_(mid);
-        root = merge(merge(l, mid), r2);
-        return res;
+    /**
+     * @brief キー区間 [lower, upper) に含まれる要素数を返します。
+     * @details `lower < upper` でない場合は 0 を返します。計算量は期待 O(log N) です。
+     * @param lower 区間の下限
+     * @param upper 区間の上限
+     * @return 区間内の要素数
+     */
+    i32 count(const K& lower, const K& upper) const {
+        if (!cmp(lower, upper)) return 0;
+        return count_lt_(root, upper) - count_lt_(root, lower);
     }
 
     /**
@@ -281,6 +288,34 @@ private:
     static bool key_eq(const K& a, const K& b) { return !cmp(a, b) && !cmp(b, a); }
 
     static i32 size_(tree t) { return t == NIL ? 0 : d[t].size; }
+
+    static i32 count_lt_(tree t, const K& key) {
+        i32 result = 0;
+        while (t != NIL) {
+            if (cmp(d[t].key, key)) {
+                result += size_(d[t].left) + 1;
+                t = d[t].right;
+            }
+            else {
+                t = d[t].left;
+            }
+        }
+        return result;
+    }
+
+    static i32 count_le_(tree t, const K& key) {
+        i32 result = 0;
+        while (t != NIL) {
+            if (!cmp(key, d[t].key)) {
+                result += size_(d[t].left) + 1;
+                t = d[t].right;
+            }
+            else {
+                t = d[t].left;
+            }
+        }
+        return result;
+    }
 
     static void to_vec_(tree t, std::vector<K>& out) {
         if (t == NIL) return;

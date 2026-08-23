@@ -27,6 +27,8 @@ LazySortedTreap<K, M, Compare>();
 
 ### size, empty, contains, count, insert, erase, erase_all, set, prod, all_prod
 - `ProdSortedTreap` と同様の操作を提供します。
+- `erase_all` と `set` の計算量は、削除する同一キー要素数を $K$ として $O(\log N + K)$ です。
+- `count` と `all_prod` は `const` メソッドです。
 
 ### apply
 ```cpp

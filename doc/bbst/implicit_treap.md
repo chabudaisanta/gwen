@@ -79,6 +79,7 @@ void concat(ImplicitTreap& other);
 static ImplicitTreap concat(ImplicitTreap& t0, ImplicitTreap& t1);
 ```
 - 2つのTreapを結合します。結合元のTreapは空になります。
+- **制約**: 連結する2つのTreapは同一オブジェクトでないこと。
 - **計算量**: $O(\log N)$
 
 ### to_vec

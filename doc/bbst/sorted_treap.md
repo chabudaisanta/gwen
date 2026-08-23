@@ -50,22 +50,22 @@ bool contains(const K& x);
 
 ### count
 ```cpp
-i32 count(const K& x);
-i32 count(const K& lower, const K& upper);
+i32 count(const K& x) const;
+i32 count(const K& lower, const K& upper) const;
 ```
 - 指定したキー `x` と一致する要素の数、または区間 `[lower, upper)` に含まれるキーの数を返します。
 - **計算量**: $O(\log N)$
 
 ### count_lower
 ```cpp
-i32 count_lower(const K& key);
+i32 count_lower(const K& key) const;
 ```
 - 指定したキーより真に小さい要素の数を返します。
 - **計算量**: $O(\log N)$
 
 ### kth
 ```cpp
-K kth(i32 k);
+K kth(i32 k) const;
 ```
 - 0-indexedで昇順 $k$ 番目のキーを返します。
 - **制約**: $0 \le k < \text{size}()$

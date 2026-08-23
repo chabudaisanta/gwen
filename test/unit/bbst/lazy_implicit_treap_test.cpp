@@ -64,4 +64,29 @@ TEST(LazyImplicitTreapTest, BasicOperations) {
     for (size_t i = 0; i < vec.size(); ++i) {
         EXPECT_EQ(vec[i].val.val(), expected_vals[i]);
     }
+
+    const auto& const_t = t;
+    EXPECT_EQ(const_t.all_prod().val.val(), 103);
 }
+
+#ifndef NDEBUG
+TEST(LazyImplicitTreapTest, RejectsSelfConcat) {
+    mint::set_mod(998244353);
+    LazyImplicitTreap<Monoid> t({{mint(1), 1}, {mint(2), 1}});
+    EXPECT_DEATH(t.concat(t), "");
+    EXPECT_DEATH(LazyImplicitTreap<Monoid>::concat(t, t), "");
+}
+#else
+TEST(LazyImplicitTreapTest, SelfConcatIsSafeWithoutAssertions) {
+    mint::set_mod(998244353);
+    LazyImplicitTreap<Monoid> t({{mint(1), 1}, {mint(2), 1}});
+    t.concat(t);
+    EXPECT_EQ(t.size(), 2);
+    EXPECT_EQ(t.all_prod().val.val(), 3);
+
+    auto result = LazyImplicitTreap<Monoid>::concat(t, t);
+    EXPECT_TRUE(result.empty());
+    EXPECT_EQ(t.size(), 2);
+    EXPECT_EQ(t.all_prod().val.val(), 3);
+}
+#endif
