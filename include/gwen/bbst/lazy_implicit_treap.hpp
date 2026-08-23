@@ -14,8 +14,9 @@ namespace gwen {
 
 /**
  * @brief 遅延評価付きインデックスベース動的配列（Treap）
- * @details 区間作用、区間反転、区間積取得をサポートします。
+ * @details 区間作用、区間反転、区間積取得をサポートする。
  * @tparam M 作用付きモノイド（acted_monoid）
+ * @tparam Commutative モノイド演算が可換ならtrue
  */
 template <acted_monoid M, bool Commutative = false> class LazyImplicitTreap {
 public:
@@ -23,6 +24,7 @@ public:
     using F = typename M::F;
     using tree = i32;
 
+    /** @brief Treapの内部ノード。 */
     struct node {
         tree left = 0, right = 0;
         S val = M::e(), prod = M::e(), rev_prod = M::e();
@@ -32,7 +34,13 @@ public:
         bool rev = false;
         bool has_lazy = false;
 
+        /** @brief 空ノードを構築する。 */
         node() = default;
+
+        /**
+         * @brief 値を持つ単一ノードを構築する。
+         * @param v 保持する値
+         */
         explicit node(const S& v) : val(v), prod(v), rev_prod(v), lz(M::id()), size(1), prio(rand32()) {}
     };
 
@@ -43,10 +51,12 @@ private:
     tree root = NIL;
 
 public:
+    /** @brief 空のTreapを構築する。 */
     LazyImplicitTreap() = default;
 
     /**
-     * @brief 配列からTreapを構築します。
+     * @brief 配列からTreapを構築する。
+     * @details 計算量は期待 O(N)。
      * @param vec 初期要素の配列
      */
     explicit LazyImplicitTreap(const std::vector<S>& vec) {
@@ -76,19 +86,22 @@ public:
     }
 
     /**
-     * @brief 要素数を取得します。
+     * @brief 要素数を返す。
+     * @return 要素数
      */
     i32 size() const { return size_(root); }
 
     /**
-     * @brief 空かどうかを判定します。
+     * @brief Treapが空かどうかを返す。
+     * @return 空ならtrue
      */
     bool empty() const { return root == NIL; }
 
     /**
-     * @brief 指定した位置に要素を挿入します。
+     * @brief 指定位置に要素を挿入する。
      * @param pos 挿入位置
      * @param x 挿入する要素
+     * @pre `0 <= pos && pos <= size()`
      */
     void insert(i32 pos, const S& x) {
         assert(0 <= pos && pos <= size());
@@ -97,8 +110,9 @@ public:
     }
 
     /**
-     * @brief 指定した位置の要素を削除します。
+     * @brief 指定位置の要素を削除する。
      * @param pos 削除する位置
+     * @pre `0 <= pos && pos < size()`
      */
     void erase(i32 pos) {
         assert(0 <= pos && pos < size());
@@ -109,9 +123,10 @@ public:
     }
 
     /**
-     * @brief 区間 [l, r) の要素を反転させます。
+     * @brief 区間 [l, r) の要素順を反転する。
      * @param l 区間の開始位置
      * @param r 区間の終了位置
+     * @pre `0 <= l && l <= r && r <= size()`
      */
     void reverse(i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size());
@@ -126,10 +141,11 @@ public:
     }
 
     /**
-     * @brief 区間 [l, r) の要素に作用素 f を適用します。
+     * @brief 区間 [l, r) の要素に作用素 f を適用する。
      * @param l 区間の開始位置
      * @param r 区間の終了位置
      * @param f 適用する作用素
+     * @pre `0 <= l && l <= r && r <= size()`
      */
     void apply(i32 l, i32 r, const F& f) {
         assert(0 <= l && l <= r && r <= size());
@@ -147,7 +163,7 @@ public:
     }
 
     /**
-     * @brief 全ての要素に作用素 f を適用します。
+     * @brief 全要素に作用素 f を適用する。
      * @param f 適用する作用素
      */
     void all_apply(const F& f) {
@@ -161,10 +177,11 @@ public:
     }
 
     /**
-     * @brief 区間 [l, r) の要素の積を取得します。
+     * @brief 区間 [l, r) の積を返す。
      * @param l 区間の開始位置
      * @param r 区間の終了位置
      * @return 区間の積
+     * @pre `0 <= l && l <= r && r <= size()`
      */
     S prod(i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size());
@@ -178,8 +195,8 @@ public:
     }
 
     /**
-     * @brief 全ての要素の積を取得します。
-     * @details 計算量は O(1) です。
+     * @brief 全要素の積を返す。
+     * @details 計算量は O(1)。
      * @return 全要素の積
      */
     S all_prod() const {
@@ -188,9 +205,10 @@ public:
     }
 
     /**
-     * @brief 指定した位置の要素を取得します。
+     * @brief 指定位置の要素を返す。
      * @param pos 取得する位置
      * @return 要素の値
+     * @pre `0 <= pos && pos < size()`
      */
     S get(i32 pos) {
         assert(0 <= pos && pos < size());
@@ -198,9 +216,10 @@ public:
     }
 
     /**
-     * @brief 指定した位置の要素を書き換えます。
+     * @brief 指定位置の要素を更新する。
      * @param pos 書き換える位置
      * @param x 新しい値
+     * @pre `0 <= pos && pos < size()`
      */
     void set(i32 pos, const S& x) {
         assert(0 <= pos && pos < size());
@@ -213,8 +232,8 @@ public:
     }
 
     /**
-     * @brief 別のTreapを末尾に連結します。
-     * @details 連結後、other は空になります。計算量は期待 O(log N) です。
+     * @brief 別のTreapを末尾に連結する。
+     * @details 連結後、other は空になる。計算量は期待 O(log N)。
      * @param other 連結するTreap
      * @pre `this != &other`
      */
@@ -226,8 +245,8 @@ public:
     }
 
     /**
-     * @brief 2つのTreapを連結した新しいTreapを返します。
-     * @details 連結後、t0 と t1 は空になります。計算量は期待 O(log N) です。
+     * @brief 2つのTreapを連結した新しいTreapを返す。
+     * @details 連結後、t0 と t1 は空になる。計算量は期待 O(log N)。
      * @param t0 前半のTreap
      * @param t1 後半のTreap
      * @return t0 の後ろに t1 を連結したTreap
@@ -243,19 +262,20 @@ public:
     }
 
     /**
-     * @brief 末尾に要素を追加します。
+     * @brief 末尾に要素を追加する。
      * @param x 追加する要素
      */
     void push_back(const S& x) { insert(size(), x); }
 
     /**
-     * @brief 先頭に要素を追加します。
+     * @brief 先頭に要素を追加する。
      * @param x 追加する要素
      */
     void push_front(const S& x) { insert(0, x); }
 
     /**
-     * @brief 現在のTreapの要素をstd::vectorとして返します。
+     * @brief 全要素を格納した配列を返す。
+     * @return 要素を順番に格納した配列
      */
     std::vector<S> to_vec() {
         std::vector<S> res;

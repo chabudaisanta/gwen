@@ -13,13 +13,16 @@ namespace gwen {
 
 /**
  * @brief 区間積取得が可能なインデックスベースの動的配列（Treap）
- * @details 反転操作（非可換モノイド対応）と区間積取得をサポートします。
+ * @details 反転操作（非可換モノイド対応）と区間積取得をサポートする。
+ * @tparam M モノイド
+ * @tparam Commutative モノイド演算が可換ならtrue
  */
 template <monoid M, bool Commutative = false> class ProdImplicitTreap {
 public:
     using S = typename M::S;
     using tree = i32;
 
+    /** @brief Treapの内部ノード。 */
     struct node {
         tree left = 0, right = 0;
         S val = M::e(), prod = M::e(), rev_prod = M::e();
@@ -27,7 +30,13 @@ public:
         u32 prio = 0;
         bool rev = false;
 
+        /** @brief 空ノードを構築する。 */
         node() = default;
+
+        /**
+         * @brief 値を持つ単一ノードを構築する。
+         * @param v 保持する値
+         */
         explicit node(const S& v) : val(v), prod(v), rev_prod(v), size(1), prio(rand32()) {}
     };
 
@@ -38,8 +47,14 @@ private:
     tree root = NIL;
 
 public:
+    /** @brief 空のTreapを構築する。 */
     ProdImplicitTreap() = default;
 
+    /**
+     * @brief 配列からTreapを構築する。
+     * @details 計算量は期待 O(N)。
+     * @param vec 初期要素の配列
+     */
     explicit ProdImplicitTreap(const std::vector<S>& vec) {
         if (vec.empty()) return;
         std::vector<tree> nodes;
@@ -66,15 +81,35 @@ public:
         update_all(root);
     }
 
+    /**
+     * @brief 要素数を返す。
+     * @return 要素数
+     */
     i32 size() const { return size_(root); }
+
+    /**
+     * @brief Treapが空かどうかを返す。
+     * @return 空ならtrue
+     */
     bool empty() const { return root == NIL; }
 
+    /**
+     * @brief 指定位置に要素を挿入する。
+     * @param pos 挿入位置
+     * @param x 挿入する要素
+     * @pre `0 <= pos && pos <= size()`
+     */
     void insert(i32 pos, const S& x) {
         assert(0 <= pos && pos <= size());
         auto [l, r] = split(root, pos);
         root = merge(merge(l, d.new_node(node(x))), r);
     }
 
+    /**
+     * @brief 指定位置の要素を削除する。
+     * @param pos 削除位置
+     * @pre `0 <= pos && pos < size()`
+     */
     void erase(i32 pos) {
         assert(0 <= pos && pos < size());
         auto [l, r] = split(root, pos);
@@ -83,6 +118,12 @@ public:
         d.free_node(m);
     }
 
+    /**
+     * @brief 区間 [l, r) の要素順を反転する。
+     * @param l 区間の左端
+     * @param r 区間の右端
+     * @pre `0 <= l && l <= r && r <= size()`
+     */
     void reverse(i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size());
         if (l >= r) return;
@@ -95,6 +136,13 @@ public:
         root = merge(merge(left, mid), right);
     }
 
+    /**
+     * @brief 区間 [l, r) の積を返す。
+     * @param l 区間の左端
+     * @param r 区間の右端
+     * @return 区間積
+     * @pre `0 <= l && l <= r && r <= size()`
+     */
     S prod(i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= size());
         if (l >= r) return M::e();
@@ -108,8 +156,8 @@ public:
     }
 
     /**
-     * @brief 全ての要素の積を取得します。
-     * @details 計算量は O(1) です。
+     * @brief 全要素の積を返す。
+     * @details 計算量は O(1)。
      * @return 全要素の積
      */
     S all_prod() const {
@@ -117,11 +165,23 @@ public:
         return d[root].prod;
     }
 
+    /**
+     * @brief 指定位置の要素を返す。
+     * @param pos 取得位置
+     * @return 指定位置の要素
+     * @pre `0 <= pos && pos < size()`
+     */
     S get(i32 pos) {
         assert(0 <= pos && pos < size());
         return prod(pos, pos + 1);
     }
 
+    /**
+     * @brief 指定位置の要素を更新する。
+     * @param pos 更新位置
+     * @param x 新しい要素
+     * @pre `0 <= pos && pos < size()`
+     */
     void set(i32 pos, const S& x) {
         assert(0 <= pos && pos < size());
         auto [l, r] = split(root, pos);
@@ -133,8 +193,8 @@ public:
     }
 
     /**
-     * @brief 別のTreapを末尾に連結します。
-     * @details 連結後、other は空になります。計算量は期待 O(log N) です。
+     * @brief 別のTreapを末尾に連結する。
+     * @details 連結後、other は空になる。計算量は期待 O(log N)。
      * @param other 連結するTreap
      * @pre `this != &other`
      */
@@ -146,8 +206,8 @@ public:
     }
 
     /**
-     * @brief 2つのTreapを連結した新しいTreapを返します。
-     * @details 連結後、t0 と t1 は空になります。計算量は期待 O(log N) です。
+     * @brief 2つのTreapを連結した新しいTreapを返す。
+     * @details 連結後、t0 と t1 は空になる。計算量は期待 O(log N)。
      * @param t0 前半のTreap
      * @param t1 後半のTreap
      * @return t0 の後ろに t1 を連結したTreap
@@ -162,9 +222,22 @@ public:
         return r;
     }
 
+    /**
+     * @brief 末尾に要素を追加する。
+     * @param x 追加する要素
+     */
     void push_back(const S& x) { insert(size(), x); }
+
+    /**
+     * @brief 先頭に要素を追加する。
+     * @param x 追加する要素
+     */
     void push_front(const S& x) { insert(0, x); }
 
+    /**
+     * @brief 全要素を格納した配列を返す。
+     * @return 要素を順番に格納した配列
+     */
     std::vector<S> to_vec() {
         std::vector<S> res;
         res.reserve(size());

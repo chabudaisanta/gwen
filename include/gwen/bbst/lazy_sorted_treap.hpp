@@ -15,7 +15,10 @@ namespace gwen {
 
 /**
  * @brief キーベースで区間作用・区間積が取得可能な順序付き多重集合・辞書（Treap）
- * @details 各キーに値を結びつけ、キーの範囲に対する区間積と遅延評価による区間作用をサポートします。
+ * @details 各キーに値を結びつけ、キー範囲の区間積と遅延評価による区間作用をサポートする。
+ * @tparam K キー型
+ * @tparam M 作用付きモノイド
+ * @tparam Compare キー比較型
  */
 template <typename K, acted_monoid M, typename Compare = std::less<K>> class LazySortedTreap {
 public:
@@ -23,6 +26,7 @@ public:
     using F = typename M::F;
     using tree = i32;
 
+    /** @brief Treapの内部ノード。 */
     struct node {
         tree left = 0, right = 0, parent = 0;
         K key{};
@@ -32,7 +36,14 @@ public:
         u32 prio = 0;
         bool has_lazy = false;
 
+        /** @brief 空ノードを構築する。 */
         node() = default;
+
+        /**
+         * @brief キーと値を持つ単一ノードを構築する。
+         * @param k 保持するキー
+         * @param v 保持する値
+         */
         explicit node(const K& k, const S& v) : key(k), val(v), prod(v), lz(M::id()), size(1), prio(rand32()) {}
     };
 
@@ -44,6 +55,7 @@ private:
     tree root = NIL;
 
 public:
+    /** @brief 空のTreapを構築する。 */
     LazySortedTreap() = default;
 
     /**
@@ -65,11 +77,25 @@ public:
         iterator(tree id, const LazySortedTreap* tr) : id(id), tr(tr) {}
 
     public:
+        /** @brief 終端を指すデフォルトイテレータを構築する。 */
         iterator() : id(NIL), tr(nullptr) {}
 
+        /**
+         * @brief 指しているキーへの参照を返す。
+         * @return キーへの参照
+         */
         reference operator*() const { return d[id].key; }
+
+        /**
+         * @brief 指しているキーへのポインタを返す。
+         * @return キーへのポインタ
+         */
         pointer operator->() const { return &d[id].key; }
 
+        /**
+         * @brief 次の要素へ進める。
+         * @return 更新後のイテレータへの参照
+         */
         iterator& operator++() {
             if (id == NIL) return *this;
             if (d[id].right != NIL) {
@@ -87,12 +113,20 @@ public:
             return *this;
         }
 
+        /**
+         * @brief 現在位置を保持したイテレータを返し、次の要素へ進める。
+         * @return 更新前のイテレータ
+         */
         iterator operator++(int) {
             iterator tmp = *this;
             ++(*this);
             return tmp;
         }
 
+        /**
+         * @brief 前の要素へ戻す。終端では最大要素へ移動する。
+         * @return 更新後のイテレータへの参照
+         */
         iterator& operator--() {
             if (id == NIL) {
                 if (tr && tr->root != NIL) {
@@ -116,18 +150,34 @@ public:
             return *this;
         }
 
+        /**
+         * @brief 現在位置を保持したイテレータを返し、前の要素へ戻す。
+         * @return 更新前のイテレータ
+         */
         iterator operator--(int) {
             iterator tmp = *this;
             --(*this);
             return tmp;
         }
 
+        /**
+         * @brief 2つのイテレータが同じノードを指すか判定する。
+         * @param other 比較対象
+         * @return 同じノードを指せばtrue
+         */
         bool operator==(const iterator& other) const { return id == other.id; }
+
+        /**
+         * @brief 2つのイテレータが異なるノードを指すか判定する。
+         * @param other 比較対象
+         * @return 異なるノードを指せばtrue
+         */
         bool operator!=(const iterator& other) const { return id != other.id; }
     };
 
     /**
-     * @brief 最小要素を指すイテレータを取得します。
+     * @brief 最小要素を指すイテレータを返す。
+     * @return 最小要素を指すイテレータ。空ならend()
      */
     iterator begin() const {
         tree curr = root;
@@ -137,19 +187,38 @@ public:
     }
 
     /**
-     * @brief 番兵（終端）イテレータを取得します。
+     * @brief 終端イテレータを返す。
+     * @return 終端イテレータ
      */
     iterator end() const { return iterator(NIL, this); }
 
+    /**
+     * @brief 要素数を返す。
+     * @return 要素数
+     */
     i32 size() const { return size_(root); }
+
+    /**
+     * @brief Treapが空かどうかを返す。
+     * @return 空ならtrue
+     */
     bool empty() const { return root == NIL; }
 
+    /**
+     * @brief キーと値の組を挿入する。キーの重複を許容する。
+     * @param key 挿入するキー
+     * @param val 挿入する値
+     */
     void insert(const K& key, const S& val = M::e()) {
         auto [l, r] = split_lt(root, key);
         root = merge(merge(l, d.new_node(node(key, val))), r);
         if (root != NIL) d[root].parent = NIL;
     }
 
+    /**
+     * @brief 指定キーと等価な要素を1つ削除する。存在しなければ何もしない。
+     * @param key 削除するキー
+     */
     void erase(const K& key) {
         auto [l, r] = split_lt(root, key);
         if (r == NIL) {
@@ -169,8 +238,8 @@ public:
     }
 
     /**
-     * @brief 指定したキーに一致する要素を全て削除します。
-     * @details 削除したノードはノードプールへ返却されます。削除数を K とした計算量は期待 O(log N + K) です。
+     * @brief 指定キーと等価な要素を全て削除する。
+     * @details 削除したノードをノードプールへ返却する。削除数をKとした計算量は期待O(log N + K)。
      * @param key 削除するキー
      */
     void erase_all(const K& key) {
@@ -181,11 +250,22 @@ public:
         if (root != NIL) d[root].parent = NIL;
     }
 
+    /**
+     * @brief 指定キーの既存要素を全て削除し、新しい値を1つ設定する。
+     * @param key 設定するキー
+     * @param val 設定する値
+     */
     void set(const K& key, const S& val) {
         erase_all(key);
         insert(key, val);
     }
 
+    /**
+     * @brief キー区間 [lower, upper) の要素に作用素を適用する。
+     * @param lower キー区間の下限
+     * @param upper キー区間の上限
+     * @param f 適用する作用素
+     */
     void apply(const K& lower, const K& upper, const F& f) {
         auto [l, r1] = split_lt(root, lower);
         auto [mid, r2] = split_lt(r1, upper);
@@ -199,6 +279,12 @@ public:
         if (root != NIL) d[root].parent = NIL;
     }
 
+    /**
+     * @brief キー区間 [lower, upper) の要素の積を返す。
+     * @param lower キー区間の下限
+     * @param upper キー区間の上限
+     * @return キー区間の要素の積
+     */
     S prod(const K& lower, const K& upper) {
         auto [l, r1] = split_lt(root, lower);
         auto [mid, r2] = split_lt(r1, upper);
@@ -208,14 +294,16 @@ public:
     }
 
     /**
-     * @brief 全ての要素の積を取得します。
-     * @details 計算量は O(1) です。
+     * @brief 全要素の積を返す。
+     * @details 計算量はO(1)。
      * @return 全要素の積
      */
     S all_prod() const { return prod_(root); }
 
     /**
-     * @brief 指定したキー x が含まれているか判定します。
+     * @brief 指定キーと等価な要素が存在するか判定する。
+     * @param x 検索するキー
+     * @return 存在すればtrue
      */
     bool contains(const K& x) const {
         auto it = lower_bound(x);
@@ -224,16 +312,18 @@ public:
     }
 
     /**
-     * @brief 指定したキーと等価な要素数を返します。
-     * @details Compare によって等価と判定される要素を数えます。計算量は期待 O(log N) です。
+     * @brief 指定キーと等価な要素数を返す。
+     * @details Compareによって等価と判定される要素を数える。計算量は期待O(log N)。
      * @param x 数えるキー
      * @return x と等価な要素数
      */
     i32 count(const K& x) const { return count_le_(root, x) - count_lt_(root, x); }
 
     /**
-     * @brief 指定したキー x 以上の最初の要素を指すイテレータを返します。
-     * @details 検索時は木の構造や遅延評価 (lazy) の値が影響しないため、単なる二分探索を行います。
+     * @brief x以上の最初の要素を指すイテレータを返す。
+     * @details キーは遅延作用の影響を受けないため、二分探索のみを行う。
+     * @param x 検索するキー
+     * @return 条件を満たす最初の要素。存在しなければend()
      */
     iterator lower_bound(const K& x) const {
         tree curr = root;
@@ -251,7 +341,9 @@ public:
     }
 
     /**
-     * @brief 指定したキー x より真に大きい最初の要素を指すイテレータを返します。
+     * @brief xより大きい最初の要素を指すイテレータを返す。
+     * @param x 検索するキー
+     * @return 条件を満たす最初の要素。存在しなければend()
      */
     iterator upper_bound(const K& x) const {
         tree curr = root;
