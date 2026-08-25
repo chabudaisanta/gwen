@@ -103,16 +103,16 @@ TEST(AutomatonTest, Trim) {
     a.init = {0};
     a.accept = {3, 4};
     a.set_edge(0, 0, 1);
-    a.set_edge(0, 1, 0); // loop
+    a.set_edge(0, 1, 0);  // loop
     a.set_edge(1, 0, 2);
     a.set_edge(2, 1, 3);
-    a.set_edge(4, 0, 3); // transition from unreachable state
+    a.set_edge(4, 0, 3);  // transition from unreachable state
 
     a.trim();
 
     EXPECT_EQ(a.n, 4);
     EXPECT_EQ(a.init, std::vector<i32>{0});
-    
+
     // original accept states were 3 and 4. 4 is removed.
     // 0: original 0
     // 1: original 1
@@ -129,4 +129,34 @@ TEST(AutomatonTest, Trim) {
     EXPECT_EQ(a.edge(2, 1), 3);
     EXPECT_EQ(a.edge(3, 0), -1);
     EXPECT_EQ(a.edge(3, 1), -1);
+}
+
+TEST(AutomatonTest, ValidAllowsDuplicateInitialAndAcceptStates) {
+    Automaton<2> a(1);
+    a.init = {0, 0};
+    a.accept = {0, 0};
+    a.set_edge(0, 0, 0);
+    a.set_edge(0, 1, 0);
+
+    EXPECT_TRUE(a.valid());
+}
+
+TEST(AutomatonTest, ValidRejectsBrokenRepresentation) {
+    Automaton<2> a(1);
+    a.edges.pop_back();
+
+    EXPECT_FALSE(a.valid());
+}
+
+TEST(AutomatonTest, ProductDoesNotTrimUnreachableStates) {
+    Automaton<2> a(2);
+    a.init = {0};
+    a.accept = {0};
+    a.set_edge(0, 0, 0);
+    a.set_edge(0, 1, 0);
+
+    auto product = a * a;
+
+    EXPECT_EQ(product.n, 4);
+    EXPECT_TRUE(product.valid());
 }

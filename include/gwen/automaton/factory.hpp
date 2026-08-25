@@ -1,9 +1,10 @@
 #pragma once
 
+#include <bit>
+#include <cassert>
+#include <limits>
 #include <span>
-#include <utility>
 #include <vector>
-#include <iterator>
 
 #include "gwen/automaton/automaton.hpp"
 #include "gwen/types.hpp"
@@ -17,13 +18,15 @@ namespace gwen::automaton {
  * @return Automaton<base>
  */
 template <i32 base = 10> Automaton<base> digit_sum_exact(i32 M) {
+    assert(0 <= M && M < std::numeric_limits<i32>::max());
     Automaton<base> a(M + 1);
     a.init = {0};
     a.accept = {M};
     for (i32 u = 0; u <= M; ++u) {
         for (i32 c = 0; c < base; ++c) {
-            if (u + c <= M) {
-                a.set_edge(u, c, u + c);
+            const i64 next = static_cast<i64>(u) + c;
+            if (next <= M) {
+                a.set_edge(u, c, static_cast<i32>(next));
             }
         }
     }
@@ -53,12 +56,15 @@ template <i32 base = 10> Automaton<base> digit_sum_leq(i32 M) {
  * @return Automaton<base>
  */
 template <i32 base = 10> Automaton<base> digit_sum_mod(i32 M, i32 K) {
+    assert(M > 0);
+    assert(0 <= K && K < M);
     Automaton<base> a(M);
     a.init = {0};
     a.accept = {K};
     for (i32 u = 0; u < M; ++u) {
         for (i32 c = 0; c < base; ++c) {
-            a.set_edge(u, c, (u + c) % M);
+            const i64 sum = static_cast<i64>(u) + c;
+            a.set_edge(u, c, static_cast<i32>(sum % M));
         }
     }
     return a;
@@ -94,20 +100,27 @@ template <i32 base = 10> Automaton<base> exclude_digits(std::span<const i32> S) 
 template <i32 base = 10> Automaton<base> include_all_digits(std::span<const i32> S) {
     std::vector<i32> id(base, -1);
     i32 num_req = 0;
-    for(i32 s : S) {
+    for (i32 s : S) {
         if (0 <= s && s < base && id[s] == -1) {
             id[s] = num_req++;
         }
     }
 
-    Automaton<base> a(1 << num_req);
+    if (num_req >= std::numeric_limits<i32>::digits) {
+        assert(false && "too many required digits");
+        return Automaton<base>();
+    }
+    const i32 state_count = static_cast<i32>(u32{1} << num_req);
+    Automaton<base> a(state_count);
     a.init = {0};
-    a.accept = {(1 << num_req) - 1};
+    a.accept = {state_count - 1};
 
-    for(i32 u = 0; u < a.n; ++u) {
-        for(i32 c = 0; c < base; ++c) {
-            if(id[c] >= 0) a.set_edge(u, c, u | (1 << id[c]));
-            else a.set_edge(u, c, u);
+    for (i32 u = 0; u < a.n; ++u) {
+        for (i32 c = 0; c < base; ++c) {
+            if (id[c] >= 0)
+                a.set_edge(u, c, u | static_cast<i32>(u32{1} << id[c]));
+            else
+                a.set_edge(u, c, u);
         }
     }
     return a;
@@ -121,12 +134,15 @@ template <i32 base = 10> Automaton<base> include_all_digits(std::span<const i32>
  * @return Automaton<base>
  */
 template <i32 base = 10> Automaton<base> value_mod(i32 M, i32 K) {
+    assert(M > 0);
+    assert(0 <= K && K < M);
     Automaton<base> a(M);
     a.init = {0};
     a.accept = {K};
     for (i32 u = 0; u < M; ++u) {
         for (i32 c = 0; c < base; ++c) {
-            a.set_edge(u, c, (u * base + c) % M);
+            const i64 value = static_cast<i64>(u) * base + c;
+            a.set_edge(u, c, static_cast<i32>(value % M));
         }
     }
     return a;
@@ -139,6 +155,7 @@ template <i32 base = 10> Automaton<base> value_mod(i32 M, i32 K) {
  * @return Automaton<base>
  */
 template <i32 base = 10> Automaton<base> non_zero_count_exact(i32 M) {
+    assert(0 <= M && M < std::numeric_limits<i32>::max());
     Automaton<base> a(M + 1);
     a.init = {0};
     a.accept = {M};
@@ -175,24 +192,25 @@ template <i32 base = 10> Automaton<base> non_zero_count_leq(i32 M) {
  * @return Automaton<base>
  */
 template <i32 base = 10> Automaton<base> used_digits_count_exact(i32 k) {
-    i32 lz_state = 1 << base;
+    static_assert(base < std::numeric_limits<i32>::digits, "used_digits_count_exact requires base < 31");
+    const i32 lz_state = static_cast<i32>(u32{1} << base);
     Automaton<base> a(lz_state + 1);
     a.init = {lz_state};
-    
+
     if (k == 0) {
         a.accept.push_back(lz_state);
     }
     a.set_edge(lz_state, 0, lz_state);
     for (i32 c = 1; c < base; ++c) {
-        a.set_edge(lz_state, c, 1 << c);
+        a.set_edge(lz_state, c, static_cast<i32>(u32{1} << c));
     }
 
-    for (i32 u = 0; u < (1 << base); ++u) {
+    for (i32 u = 0; u < lz_state; ++u) {
         if (std::popcount(static_cast<u32>(u)) == k) {
             a.accept.push_back(u);
         }
         for (i32 c = 0; c < base; ++c) {
-            a.set_edge(u, c, u | (1 << c));
+            a.set_edge(u, c, u | static_cast<i32>(u32{1} << c));
         }
     }
     return a;
@@ -205,24 +223,25 @@ template <i32 base = 10> Automaton<base> used_digits_count_exact(i32 k) {
  * @return Automaton<base>
  */
 template <i32 base = 10> Automaton<base> used_digits_count_leq(i32 k) {
-    i32 lz_state = 1 << base;
+    static_assert(base < std::numeric_limits<i32>::digits, "used_digits_count_leq requires base < 31");
+    const i32 lz_state = static_cast<i32>(u32{1} << base);
     Automaton<base> a(lz_state + 1);
     a.init = {lz_state};
-    
+
     if (k >= 0) {
         a.accept.push_back(lz_state);
     }
     a.set_edge(lz_state, 0, lz_state);
     for (i32 c = 1; c < base; ++c) {
-        a.set_edge(lz_state, c, 1 << c);
+        a.set_edge(lz_state, c, static_cast<i32>(u32{1} << c));
     }
 
-    for (i32 u = 0; u < (1 << base); ++u) {
+    for (i32 u = 0; u < lz_state; ++u) {
         if (std::popcount(static_cast<u32>(u)) <= k) {
             a.accept.push_back(u);
         }
         for (i32 c = 0; c < base; ++c) {
-            a.set_edge(u, c, u | (1 << c));
+            a.set_edge(u, c, u | static_cast<i32>(u32{1} << c));
         }
     }
     return a;
@@ -235,10 +254,14 @@ template <i32 base = 10> Automaton<base> used_digits_count_leq(i32 k) {
  * @return Automaton<base>
  */
 template <i32 base = 10> Automaton<base> contains_pattern(std::span<const i32> pattern) {
-    i32 m = pattern.size();
+    assert(pattern.size() <= static_cast<usize>(std::numeric_limits<i32>::max() - 1));
+    for (i32 digit : pattern) {
+        assert(0 <= digit && digit < base);
+    }
+    const i32 m = static_cast<i32>(pattern.size());
     Automaton<base> a(m + 1);
     a.init = {0};
-    
+
     if (m > 0) {
         for (i32 c = 0; c < base; ++c) {
             a.set_edge(0, c, (pattern[0] == c) ? 1 : 0);
@@ -248,18 +271,19 @@ template <i32 base = 10> Automaton<base> contains_pattern(std::span<const i32> p
             for (i32 c = 0; c < base; ++c) {
                 if (pattern[u] == c) {
                     a.set_edge(u, c, u + 1);
-                } else {
+                }
+                else {
                     a.set_edge(u, c, a.edge(x, c));
                 }
             }
             x = a.edge(x, pattern[u]);
         }
     }
-    
+
     for (i32 c = 0; c < base; ++c) {
         a.set_edge(m, c, m);
     }
-    
+
     a.accept = {m};
     return a;
 }

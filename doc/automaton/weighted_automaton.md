@@ -23,6 +23,8 @@ struct gwen::WeightedAutomaton
 - `edges`: 遷移リスト
 - `edge_weights`: 遷移の重みリスト
 
+`init` の重複は許可され、各初期重みが別々に桁 DP へ寄与します。
+
 ### コンストラクタ
 
 ```cpp
@@ -87,6 +89,31 @@ std::pair<i32, Weight> edge(i32 from, i32 label) const
 
 - $O(1)$
 
+### edge_to / edge_weight
+
+```cpp
+i32 edge_to(i32 from, i32 label) const
+const Weight& edge_weight(i32 from, i32 label) const
+```
+
+遷移先と遷移重みを個別に取得します。`edge_weight` は重みをコピーせず参照を返します。
+
+**計算量**
+
+- $O(1)$
+
+### valid
+
+```cpp
+bool valid() const
+```
+
+状態、条件マスク、遷移、重み配列が内部表現の制約を満たすか判定します。
+
+**計算量**
+
+- $O(N \times \mathrm{base} + |\mathrm{init}|)$
+
 ### trim
 
 ```cpp
@@ -121,10 +148,13 @@ static WeightedAutomaton<base, WeightMonoid> op(
 直積オートマトンの状態 $(i, j)$ は `i * b.n + j` にマッピングされます。
 `condition` の合成は `(b.condition[j] << a.condition_count) | a.condition[i]` のように行われ、下位ビットに `a` の条件、上位ビットに `b` の条件が割り当てられます。
 遷移の重みは `WeightMonoid::op` によって合成されます。
+到達可能性にかかわらず $a.n \times b.n$ 個の状態を構築し、`trim()` は自動実行しません。
 
 **制約**
 
 - `a.condition_count + b.condition_count <= 64`
+- `a.valid()`および`b.valid()`が`true`
+- `a.n * b.n <= INT32_MAX`
 
 **計算量**
 

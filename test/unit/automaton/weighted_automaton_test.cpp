@@ -1,9 +1,22 @@
 #include "gwen/automaton/weighted_automaton.hpp"
+
 #include <gtest/gtest.h>
+
+#include <string>
+
 #include "gwen/alge/monoid.hpp"
 #include "gwen/types.hpp"
 
 using namespace gwen;
+
+using WeightedI32Automaton = WeightedAutomaton<2, sum_monoid<i32>>;
+static_assert(std::same_as<decltype(std::declval<const WeightedI32Automaton&>().edge_weight(0, 0)), const i32&>);
+
+struct concat_monoid {
+    using S = std::string;
+    static S op(const S& lhs, const S& rhs) { return lhs + rhs; }
+    static S e() { return {}; }
+};
 
 TEST(WeightedAutomatonTest, Basic) {
     using M = sum_monoid<i32>;
@@ -11,7 +24,7 @@ TEST(WeightedAutomatonTest, Basic) {
     a.add_init(0, 0);
     a.set_condition(1, 1ULL);
     a.set_edge(0, 0, 1, 5);
-    
+
     EXPECT_EQ(a.n, 2);
     EXPECT_EQ(a.condition_count, 1);
     EXPECT_EQ(a.init.size(), 1);
@@ -27,21 +40,21 @@ TEST(WeightedAutomatonTest, ZeroCondition) {
     WeightedAutomaton<2, M> a(1, 0);
     a.add_init(0, 0);
     a.set_condition(0, 0ULL);
-    
+
     EXPECT_EQ(a.n, 1);
     EXPECT_EQ(a.condition_count, 0);
 }
 
 TEST(WeightedAutomatonTest, ProductShift) {
     using M = sum_monoid<i32>;
-    WeightedAutomaton<2, M> a(1, 2); // condition_count = 2
+    WeightedAutomaton<2, M> a(1, 2);  // condition_count = 2
     a.add_init(0, 0);
-    a.set_condition(0, 0b11ULL); // 2 bits
+    a.set_condition(0, 0b11ULL);  // 2 bits
     a.set_edge(0, 0, 0, 10);
-    
-    WeightedAutomaton<2, M> b(1, 3); // condition_count = 3
+
+    WeightedAutomaton<2, M> b(1, 3);  // condition_count = 3
     b.add_init(0, 0);
-    b.set_condition(0, 0b101ULL); // 3 bits
+    b.set_condition(0, 0b101ULL);  // 3 bits
     b.set_edge(0, 0, 0, 20);
 
     auto ab = a * b;
@@ -52,7 +65,7 @@ TEST(WeightedAutomatonTest, ProductShift) {
     // a is at the bottom -> 0b11
     // result -> 0b10111 = 23
     EXPECT_EQ(ab.condition[0], 23ULL);
-    EXPECT_EQ(ab.edge(0, 0).second, 30); // 10 + 20
+    EXPECT_EQ(ab.edge(0, 0).second, 30);  // 10 + 20
 }
 
 TEST(WeightedAutomatonTest, ProductAssociativity) {
@@ -61,7 +74,7 @@ TEST(WeightedAutomatonTest, ProductAssociativity) {
     a.add_init(0, 1);
     a.set_condition(0, 0b10ULL);
     a.set_edge(0, 0, 0, 1);
-    
+
     WeightedAutomaton<2, M> b(1, 1);
     b.add_init(0, 2);
     b.set_condition(0, 0b1ULL);
@@ -80,7 +93,7 @@ TEST(WeightedAutomatonTest, ProductAssociativity) {
     EXPECT_EQ(ab_c.condition[0], a_bc.condition[0]);
     EXPECT_EQ(ab_c.edge(0, 0).second, a_bc.edge(0, 0).second);
     EXPECT_EQ(ab_c.init[0].second, a_bc.init[0].second);
-    
+
     // a: 2 bits (10), b: 1 bit (1), c: 3 bits (101)
     // combined: ccc b aa -> 101 1 10 -> 0b101110 = 46
     EXPECT_EQ(ab_c.condition[0], 46ULL);
@@ -93,8 +106,8 @@ TEST(WeightedAutomatonTest, Trim) {
     a.add_init(0, 0);
     a.set_condition(0, 0ULL);
     a.set_condition(1, 1ULL);
-    a.set_condition(2, 0ULL); // unreachable
-    
+    a.set_condition(2, 0ULL);  // unreachable
+
     a.set_edge(0, 0, 1, 5);
     // 2 is not reachable from 0
 
@@ -123,4 +136,61 @@ TEST(WeightedAutomatonTest, BuildWeightedAutomaton) {
     EXPECT_EQ(res.condition_count, 4);
     // c: 0, b: 10, a: 1 -> 0 10 1 -> 0b0101 = 5
     EXPECT_EQ(res.condition[0], 5ULL);
+}
+
+TEST(WeightedAutomatonTest, ProductWithRightIdentityAt64Conditions) {
+    using M = sum_monoid<i32>;
+    WeightedAutomaton<2, M> a(1, 64);
+    a.add_init(0, 7);
+    a.set_condition(0, ~u64{0});
+    a.set_edge(0, 0, 0, 3);
+    a.set_edge(0, 1, 0, 4);
+
+    const auto product = a * weighted_automaton_monoid<2, M>::e();
+
+    EXPECT_EQ(product.n, 1);
+    EXPECT_EQ(product.condition_count, 64);
+    EXPECT_EQ(product.condition[0], ~u64{0});
+    EXPECT_EQ(product.init[0].second, 7);
+    EXPECT_EQ(product.edge_weight(0, 0), 3);
+    EXPECT_TRUE(product.valid());
+
+    const auto left_product = weighted_automaton_monoid<2, M>::e() * a;
+    EXPECT_EQ(left_product.condition_count, 64);
+    EXPECT_EQ(left_product.condition[0], ~u64{0});
+    EXPECT_EQ(left_product.init[0].second, 7);
+    EXPECT_EQ(left_product.edge_weight(0, 0), 3);
+}
+
+TEST(WeightedAutomatonTest, ProductAtConditionBoundary) {
+    using M = sum_monoid<i32>;
+    WeightedAutomaton<2, M> a(1, 63);
+    a.add_init(0, 0);
+    a.set_condition(0, (u64{1} << 63) - 1);
+
+    WeightedAutomaton<2, M> b(1, 1);
+    b.add_init(0, 0);
+    b.set_condition(0, 1);
+
+    const auto product = a * b;
+
+    EXPECT_EQ(product.condition_count, 64);
+    EXPECT_EQ(product.condition[0], ~u64{0});
+}
+
+TEST(WeightedAutomatonTest, ProductPreservesNonCommutativeWeightOrder) {
+    WeightedAutomaton<2, concat_monoid> a(1, 1);
+    a.add_init(0, "A");
+    a.set_condition(0, 1);
+    a.set_edge(0, 0, 0, "a");
+
+    WeightedAutomaton<2, concat_monoid> b(1, 1);
+    b.add_init(0, "B");
+    b.set_condition(0, 1);
+    b.set_edge(0, 0, 0, "b");
+
+    const auto product = a * b;
+
+    EXPECT_EQ(product.init[0].second, "AB");
+    EXPECT_EQ(product.edge_weight(0, 0), "ab");
 }

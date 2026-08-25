@@ -10,15 +10,17 @@ documentation_of: //include/gwen/automaton/digit_dp.hpp
 
 ## 制約
 
-- 結果の集計に用いる型 `T` は `gwen::ring` を満たす必要があります。
+- 結果の集計に用いる型 `T` は `gwen::digit_dp_value` を満たす必要があります。
+- `T` は `T(0)`、`T(1)`、コピー、`+=`、等値比較を提供する必要があります。
 - 各桁の値 $c$ は $0 \le c < \text{base}$ を満たしている必要があります。
+- `a.valid()` が `true` である必要があります。
 
 ## 関数
 
 ### run_digit_dp
 
 ```cpp
-template <ring T, i32 base>
+template <digit_dp_value T, i32 base>
 T run_digit_dp(const std::vector<i32>& N, const Automaton<base>& a)
 ```
 
@@ -33,3 +35,5 @@ T run_digit_dp(const std::vector<i32>& N, const Automaton<base>& a)
 
 **戻り値**
 - 上限 $N$ 以下の値で、オートマトン `a` の初期状態から受理状態に到達する条件を満たす数の総和（`T` 型）。
+
+`init` または `accept` に同じ状態が複数回含まれる場合、その回数を多重度として結果へ加算します。入力は常に `N` と同じ桁数の固定長数字列として処理され、先頭ゼロもオートマトンへ入力されます。

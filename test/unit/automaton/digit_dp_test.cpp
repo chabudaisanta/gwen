@@ -33,6 +33,19 @@ struct TestRing {
     bool operator==(const TestRing& rhs) const { return val == rhs.val; }
 };
 
+struct MinimalDigitDpValue {
+    i64 val;
+
+    MinimalDigitDpValue(i64 value) : val(value) {}
+    MinimalDigitDpValue& operator+=(const MinimalDigitDpValue& rhs) {
+        val += rhs.val;
+        return *this;
+    }
+    bool operator==(const MinimalDigitDpValue&) const = default;
+};
+
+static_assert(digit_dp_value<MinimalDigitDpValue>);
+
 // Automaton that checks if the string does NOT contain the digit '3'.
 // States: 0 (valid), 1 (invalid)
 Automaton<10> build_no_3_automaton() {
@@ -93,3 +106,39 @@ TEST(DigitDPTest, LargeBound) {
 
     EXPECT_EQ(ans.val, expected);
 }
+
+TEST(DigitDPTest, RequiresOnlyDigitDpValueOperations) {
+    Automaton<2> a(1);
+    a.init = {0};
+    a.accept = {0};
+    a.set_edge(0, 0, 0);
+    a.set_edge(0, 1, 0);
+
+    const auto ans = run_digit_dp<MinimalDigitDpValue, 2>({1, 1}, a);
+
+    EXPECT_EQ(ans.val, 4);
+}
+
+TEST(DigitDPTest, DuplicateStatesActAsMultiplicity) {
+    Automaton<2> a(1);
+    a.init = {0, 0};
+    a.accept = {0, 0};
+    a.set_edge(0, 0, 0);
+    a.set_edge(0, 1, 0);
+
+    const auto ans = run_digit_dp<MinimalDigitDpValue, 2>({1}, a);
+
+    EXPECT_EQ(ans.val, 8);
+}
+
+#ifndef NDEBUG
+TEST(DigitDPTest, RejectsOutOfRangeDigit) {
+    Automaton<2> a(1);
+    a.init = {0};
+    a.accept = {0};
+    a.set_edge(0, 0, 0);
+    a.set_edge(0, 1, 0);
+
+    EXPECT_DEATH((run_digit_dp<MinimalDigitDpValue, 2>({2}, a)), "");
+}
+#endif

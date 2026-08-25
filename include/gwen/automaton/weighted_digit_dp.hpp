@@ -1,8 +1,10 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <concepts>
 #include <functional>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -13,35 +15,48 @@
 namespace gwen {
 
 /**
- * @brief 重み付きオートマトン上の桁 DP を実行する
- * @tparam T DPで保持する値の型（加法 `+` が定義されていること）
- * @tparam base n の進数
- * @tparam WeightMonoid オートマトンの重みのモノイド
- * @tparam F 最終的な値の集約関数の型。シグネチャは `T(T dp_val, u64 condition_mask)` を想定。
- * @tparam OpAct 遷移重みをDP値に作用させる関数の型。シグネチャは `T(T dp_val, Weight w)` を想定。
- * @param upper_bound 上限の値 (各桁の値が上位から順に格納されている配列)
- * @param a 条件と重み遷移を表すオートマトン
- * @param f 最終的な集約関数。各状態について得られたDP値と、その状態の達成条件マスクを受け取り、最終的なスコアを返す。
- * @param op_act DP値に対して遷移の重みを作用させる関数。デフォルトは乗算を想定。
- * @return T 集約された総和
+ * @brief 重み付き桁 DP の値型に必要な操作を表す Concept
+ * @tparam T DP値型
  */
-template <typename T, i32 base, monoid WeightMonoid, 
-          std::invocable<T, u64> F, 
-          std::invocable<T, typename WeightMonoid::S> OpAct = std::multiplies<>>
-T run_weighted_digit_dp(const std::vector<i32>& upper_bound, 
-                        const WeightedAutomaton<base, WeightMonoid>& a, 
-                        F f, 
-                        OpAct op_act = OpAct{}) {
+template <typename T>
+concept weighted_digit_dp_value = std::copy_constructible<T> && requires(T value, const T other) {
+    { T(0) } -> std::same_as<T>;
+    { value = other } -> std::same_as<T&>;
+    { value += other } -> std::same_as<T&>;
+    { value == other } -> std::convertible_to<bool>;
+};
+
+namespace automaton_detail {
+
+template <typename F, typename T>
+concept digit_dp_aggregator =
+    std::invocable<F&, const T&, u64> && std::convertible_to<std::invoke_result_t<F&, const T&, u64>, T>;
+
+template <typename OpAct, typename T, typename Weight>
+concept digit_dp_action = std::invocable<OpAct&, const T&, const Weight&> &&
+                          std::convertible_to<std::invoke_result_t<OpAct&, const T&, const Weight&>, T>;
+
+template <weighted_digit_dp_value T, i32 base, monoid WeightMonoid, typename Init, typename F, typename OpAct>
+    requires std::invocable<Init&, const typename WeightMonoid::S&> &&
+             std::convertible_to<std::invoke_result_t<Init&, const typename WeightMonoid::S&>, T> &&
+             digit_dp_aggregator<F, T> && digit_dp_action<OpAct, T, typename WeightMonoid::S>
+T run_weighted_digit_dp_impl(const std::vector<i32>& upper_bound,
+                             const WeightedAutomaton<base, WeightMonoid>& a,
+                             Init init_value,
+                             F f,
+                             OpAct op_act) {
+    assert(a.valid());
     std::vector<T> dp_tight(a.n, T(0));
     std::vector<T> dp_loose(a.n, T(0));
     std::vector<T> next_tight(a.n, T(0));
     std::vector<T> next_loose(a.n, T(0));
 
-    for (const auto& [s, w] : a.init) {
-        dp_tight[s] += static_cast<T>(w);
+    for (const auto& entry : a.init) {
+        dp_tight[entry.first] += static_cast<T>(std::invoke(init_value, entry.second));
     }
 
     for (i32 x : upper_bound) {
+        assert(0 <= x && x < base);
         std::fill(next_tight.begin(), next_tight.end(), T(0));
         std::fill(next_loose.begin(), next_loose.end(), T(0));
 
@@ -49,27 +64,25 @@ T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
             const T loose_val = dp_loose[u];
             const T tight_val = dp_tight[u];
 
-            if (loose_val != T(0)) {
+            if (!(loose_val == T(0))) {
                 for (i32 c = 0; c < base; ++c) {
-                    auto [v, w] = a.edge(u, c);
+                    const i32 v = a.edge_to(u, c);
                     if (v != -1) {
-                        next_loose[v] += op_act(loose_val, w);
+                        next_loose[v] += static_cast<T>(std::invoke(op_act, loose_val, a.edge_weight(u, c)));
                     }
                 }
             }
 
-            if (tight_val != T(0)) {
+            if (!(tight_val == T(0))) {
                 for (i32 c = 0; c < x; ++c) {
-                    auto [v, w] = a.edge(u, c);
+                    const i32 v = a.edge_to(u, c);
                     if (v != -1) {
-                        next_loose[v] += op_act(tight_val, w);
+                        next_loose[v] += static_cast<T>(std::invoke(op_act, tight_val, a.edge_weight(u, c)));
                     }
                 }
-                if (x < base) {
-                    auto [v, w] = a.edge(u, x);
-                    if (v != -1) {
-                        next_tight[v] += op_act(tight_val, w);
-                    }
+                const i32 v = a.edge_to(u, x);
+                if (v != -1) {
+                    next_tight[v] += static_cast<T>(std::invoke(op_act, tight_val, a.edge_weight(u, x)));
                 }
             }
         }
@@ -80,9 +93,68 @@ T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
 
     T ans = T(0);
     for (i32 u = 0; u < a.n; ++u) {
-        ans += f(dp_tight[u] + dp_loose[u], a.condition[u]);
+        T state_value = dp_tight[u];
+        state_value += dp_loose[u];
+        ans += static_cast<T>(std::invoke(f, state_value, a.condition[u]));
     }
     return ans;
+}
+
+}  // namespace automaton_detail
+
+/**
+ * @brief 重み付きオートマトン上の桁 DP を実行する
+ * @tparam T DPで保持する値の型（`weighted_digit_dp_value` を満たすこと）
+ * @tparam base n の進数
+ * @tparam WeightMonoid オートマトンの重みのモノイド
+ * @tparam F 最終的な値の集約関数の型。シグネチャは `T(T dp_val, u64 condition_mask)` を想定。
+ * @tparam OpAct 遷移重みをDP値に作用させる関数の型。シグネチャは `T(T dp_val, Weight w)` を想定。
+ * @param upper_bound 上限の値 (各桁の値が上位から順に格納されている配列)
+ * @param a 条件と重み遷移を表すオートマトン
+ * @param f 最終的な集約関数。各状態について得られたDP値と、その状態の達成条件マスクを受け取り、最終的なスコアを返す。
+ * @param op_act DP値に対して遷移の重みを作用させる関数。デフォルトは乗算を想定。
+ * @return T 集約された総和
+ */
+template <weighted_digit_dp_value T, i32 base, monoid WeightMonoid, typename F, typename OpAct = std::multiplies<>>
+    requires requires(const typename WeightMonoid::S& weight) {
+        { static_cast<T>(weight) } -> std::same_as<T>;
+    } && automaton_detail::digit_dp_aggregator<F, T> &&
+             automaton_detail::digit_dp_action<OpAct, T, typename WeightMonoid::S>
+T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
+                        const WeightedAutomaton<base, WeightMonoid>& a,
+                        F f,
+                        OpAct op_act = OpAct{}) {
+    auto init_value = [](const typename WeightMonoid::S& weight) -> T { return static_cast<T>(weight); };
+    return automaton_detail::run_weighted_digit_dp_impl<T>(upper_bound, a, init_value, std::move(f), std::move(op_act));
+}
+
+/**
+ * @brief 初期DP値を指定して重み付きオートマトン上の桁DPを実行する
+ * @details 初期状態 `(s, w)` は `op_act(initial_value, w)` で初期化される。
+ * @tparam T DP値型
+ * @tparam base 進数
+ * @tparam WeightMonoid 遷移重みのモノイド
+ * @tparam F 最終集約関数
+ * @tparam OpAct DP値への重みの作用
+ * @param upper_bound 上限を上位桁から格納した配列
+ * @param a 重み付きオートマトン
+ * @param initial_value 重みを適用する前の初期DP値
+ * @param f 最終集約関数
+ * @param op_act DP値への重みの作用
+ * @return 集約結果
+ */
+template <weighted_digit_dp_value T, i32 base, monoid WeightMonoid, typename F, typename OpAct>
+    requires automaton_detail::digit_dp_aggregator<F, T> &&
+             automaton_detail::digit_dp_action<OpAct, T, typename WeightMonoid::S>
+T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
+                        const WeightedAutomaton<base, WeightMonoid>& a,
+                        const T& initial_value,
+                        F f,
+                        OpAct op_act) {
+    auto init_value = [&](const typename WeightMonoid::S& weight) -> T {
+        return static_cast<T>(std::invoke(op_act, initial_value, weight));
+    };
+    return automaton_detail::run_weighted_digit_dp_impl<T>(upper_bound, a, init_value, std::move(f), std::ref(op_act));
 }
 
 }  // namespace gwen

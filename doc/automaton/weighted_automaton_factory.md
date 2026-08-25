@@ -7,6 +7,8 @@ documentation_of: //include/gwen/automaton/weighted_automaton_factory.hpp
 
 `WeightedAutomaton` 向けのファクトリ関数を提供するモジュールです。桁DPなどで使用される数字の種類を制限したり、特定の文字列（数字列）を含むという制約を記述するための重み付きオートマトンを生成します。
 
+遷移構造と条件は非重み付きファクトリと共通です。初期重みと有効な遷移重みには`WeightMonoid::e()`を設定します。各関数の引数制約、leading zero、不正な`k`、無効digitの扱いは[非重み付きファクトリ](factory.md)と同じです。
+
 ## used_digits_count_exact
 
 ```cpp
@@ -16,7 +18,7 @@ gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::used_digits_count_e
 
 ちょうど `k` 種類の数字が使われることを管理する重み付きオートマトンを生成します。
 
-- 状態数は $2^{\mathrm{base}}$ であり、各状態はこれまでに出現した数字の種類を bitmask として保持します。
+- 状態数は $2^{\mathrm{base}} + 1$ であり、bitmask状態に加えてleading-zero状態を持ちます。
 - 制約 `k` 種類を正確に満たす状態に対してのみ、`condition` が `1` (bit 0 が立つ) となります。
 - 全ての遷移の重みおよび初期状態の重みは `WeightMonoid::e()` となります。
 
@@ -32,7 +34,7 @@ gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::used_digits_count_l
 
 `k` 種類以下の数字が使われることを管理する重み付きオートマトンを生成します。
 
-- 状態数は $2^{\mathrm{base}}$ であり、各状態はこれまでに出現した数字の種類を bitmask として保持します。
+- 状態数は $2^{\mathrm{base}} + 1$ であり、bitmask状態に加えてleading-zero状態を持ちます。
 - 制約（出現した種類の数が `k` 以下）を満たす状態に対してのみ、`condition` が `1` (bit 0 が立つ) となります。
 - 全ての遷移の重みおよび初期状態の重みは `WeightMonoid::e()` となります。
 
@@ -128,4 +130,3 @@ gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::non_zero_count_leq(
 ```
 
 0 以外の数字が `M` 個以下現れるオートマトンを生成します。
-
