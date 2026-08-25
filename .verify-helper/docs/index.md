@@ -57,6 +57,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 ### 代数構造 (Algebra)
 - [モノイド (monoid.hpp)](include/gwen/alge/monoid.hpp)
 - [アーベル群 (abel.hpp)](include/gwen/alge/abel.hpp)
+- [半環 (semiring.hpp)](include/gwen/alge/semiring.hpp)
 - [環 (ring.hpp)](include/gwen/alge/ring.hpp)
 - [作用付きモノイド (acted_monoid.hpp)](include/gwen/alge/acted_monoid.hpp)
 - [区間アフィン変換・区間和モノイド (range_affine_range_sum_monoid.hpp)](include/gwen/alge/range_affine_range_sum_monoid.hpp)

@@ -1,5 +1,7 @@
 // clang-format off
+#include "gwen/alge/acted_monoid.hpp"
 #include "gwen/alge/range_affine_range_sum_monoid.hpp"
+#include "gwen/alge/ring.hpp"
 // clang-format on
 
 #include <gtest/gtest.h>
@@ -13,6 +15,25 @@ using mint = DynamicModInt64;
 using Monoid = range_affine_range_sum_monoid<mint>;
 using S = Monoid::S;
 using F = Monoid::F;
+
+namespace {
+
+struct TestSemiring {
+    i32 value;
+
+    constexpr explicit TestSemiring(i32 value_) : value(value_) {}
+
+    friend constexpr TestSemiring operator+(TestSemiring a, TestSemiring b) { return TestSemiring(a.value + b.value); }
+
+    friend constexpr TestSemiring operator*(TestSemiring a, TestSemiring b) { return TestSemiring(a.value * b.value); }
+};
+
+using SemiringMonoid = range_affine_range_sum_monoid<TestSemiring>;
+static_assert(semiring<TestSemiring>);
+static_assert(!ring<TestSemiring>);
+static_assert(acted_monoid<SemiringMonoid>);
+
+}  // namespace
 
 TEST(RangeAffineRangeSumMonoidTest, BasicOperations) {
     mint::set_mod(998244353);
@@ -56,4 +77,11 @@ TEST(RangeAffineRangeSumMonoidTest, BasicOperations) {
     F comp_id = Monoid::composition(f, id);
     EXPECT_EQ(comp_id.a.val(), f.a.val());
     EXPECT_EQ(comp_id.b.val(), f.b.val());
+}
+
+TEST(RangeAffineRangeSumMonoidTest, SemiringWithoutSubtraction) {
+    const auto x = SemiringMonoid::unit(TestSemiring(4));
+    const auto y = SemiringMonoid::mapping({TestSemiring(2), TestSemiring(3)}, x);
+    EXPECT_EQ(y.val.value, 11);
+    EXPECT_EQ(y.len.value, 1);
 }

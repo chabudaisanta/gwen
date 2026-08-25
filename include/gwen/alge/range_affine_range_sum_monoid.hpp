@@ -1,7 +1,6 @@
 #pragma once
 
-#include "gwen/alge/ring.hpp"
-#include "gwen/types.hpp"
+#include "gwen/alge/semiring.hpp"
 
 namespace gwen {
 
@@ -9,7 +8,7 @@ namespace gwen {
  * @brief 区間アフィン変換・区間和を管理する作用付きモノイド
  * @tparam T 要素の型（加法と乗法が定義されている必要がある）
  */
-template <ring T> struct range_affine_range_sum_monoid {
+template <semiring T> struct range_affine_range_sum_monoid {
     /**
      * @brief モノイドの要素
      */

@@ -3,45 +3,123 @@ title: 区間アフィン変換・区間和モノイド
 documentation_of: //include/gwen/alge/range_affine_range_sum_monoid.hpp
 ---
 
-# range_affine_range_sum_monoid
+# 区間アフィン変換・区間和モノイド
 
-遅延評価セグメント木（Lazy Segment Tree）などで、「区間に対するアフィン変換の作用」と「区間和の取得」を同時に行うための作用付きモノイド（代数構造）です。
-
-## コンストラクタ / テンプレート引数
+遅延評価セグメント木などで、区間アフィン変換と区間和取得を行う作用付きモノイドです。
 
 ```cpp
-template <ring T>
+#include "gwen/alge/range_affine_range_sum_monoid.hpp"
+```
+
+## range_affine_range_sum_monoid
+
+```cpp
+template <semiring T>
 struct range_affine_range_sum_monoid;
 ```
 
-- `T`: 値の型。`gwen::ring<T>` コンセプト（加法および乗法が定義されていること）を満たす必要があります。通常は `DynamicModInt64` や `StaticModInt` などが利用されます。
+モノイド要素 `S` は区間和 `val` と、半環の要素へ変換した区間長 `len` を保持します。作用素 `F` はアフィン変換 $f(x)=ax+b$ を表します。
 
-## モノイド要素 (`S`)
+**制約**
 
-区間和と区間の長さを保持します。
+- `T` は `gwen::semiring<T>` を満たす。
 
-```cpp
-struct S {
-    T val;  // 区間の和
-    T len;  // 区間の長さ
-};
-```
+**計算量**
 
-- **二項演算** `op(S a, S b)`: 二つの区間を結合します。`{a.val + b.val, a.len + b.len}` を返します。
-- **単位元** `e()`: 空の区間を表します。`{T(0), T(0)}` を返します。
-- **初期化** `unit(T x)`: 長さ1の区間（初期配列の要素）を生成します。`{x, T(1)}` を返します。
+- 型定義のみであり、実行時コストはありません。
 
-## 作用素 (`F`)
-
-区間に対するアフィン変換 $f(x) = ax + b$ を表します。
+## op(a, b)
 
 ```cpp
-struct F {
-    T a;  // 係数
-    T b;  // 定数項
-};
+static constexpr S op(S a, S b);
 ```
 
-- **作用** `mapping(F f, S x)`: 区間全体にアフィン変換を適用します。各要素に $f$ が作用すると、区間和は $a \times (\text{和}) + b \times (\text{長さ})$ に変化します。したがって `{f.a * x.val + f.b * x.len, x.len}` を返します。
-- **合成** `composition(F f, F g)`: 作用素を合成します（先に $g$、次に $f$ を適用）。$f(g(x)) = (f.a \times g.a) x + (f.a \times g.b + f.b)$ となるため `{f.a * g.a, f.a * g.b + f.b}` を返します。
-- **恒等写像** `id()`: 何も変化させない作用素（$f(x) = x$）です。`{T(1), T(0)}` を返します。
+隣接する2区間を結合し、区間和と区間長をそれぞれ加算します。
+
+**制約**
+
+- `a`、`b` は同じ配列上の隣接区間を表す。
+
+**計算量**
+
+- `T` の加算2回分です。
+
+## e()
+
+```cpp
+static constexpr S e();
+```
+
+空区間を表す `{T(0), T(0)}` を返します。
+
+**制約**
+
+- なし
+
+**計算量**
+
+- $O(1)$
+
+## unit(x)
+
+```cpp
+static constexpr S unit(T x);
+```
+
+値 `x` を持つ長さ1の区間を生成します。
+
+**制約**
+
+- `x` は配列の1要素を表す。
+
+**計算量**
+
+- $O(1)$
+
+## mapping(f, x)
+
+```cpp
+static constexpr S mapping(F f, S x);
+```
+
+区間 `x` の全要素へ $f(y)=ay+b$ を適用します。
+
+**制約**
+
+- `x.len` は区間長を `T` に変換した値である。
+
+**計算量**
+
+- `T` の乗算2回、加算1回分です。
+
+## composition(f, g)
+
+```cpp
+static constexpr F composition(F f, F g);
+```
+
+先に `g`、後に `f` を適用する合成 $f(g(x))$ を返します。
+
+**制約**
+
+- `f` と `g` は有効なアフィン変換を表す。
+
+**計算量**
+
+- `T` の乗算2回、加算1回分です。
+
+## id()
+
+```cpp
+static constexpr F id();
+```
+
+恒等写像 $f(x)=x$ を表す `{T(1), T(0)}` を返します。
+
+**制約**
+
+- なし
+
+**計算量**
+
+- $O(1)$

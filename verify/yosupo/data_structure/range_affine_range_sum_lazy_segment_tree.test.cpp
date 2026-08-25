@@ -11,6 +11,8 @@ using namespace gwen;
 using mint = DynamicModInt64;
 using Monoid = range_affine_range_sum_monoid<mint>;
 
+static_assert(semiring<mint>);
+
 int main() {
     mint::set_mod(998244353);
     ios_base::sync_with_stdio(false);
