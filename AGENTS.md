@@ -9,6 +9,7 @@
 ## ドキュメントとテストの必須対応
 - 新規実装・移植時は、必ず「Google Testによる単体テスト (`test/unit/`)」と「Verifyコード (`verify/`)」の両方を作成し、テストをパスさせてください。
 - AtCoderはテストケース非公開化に伴いcompetitive-verifierで明示的に対応されていないため、AtCoderの問題をVerifyコードに追加しないでください。
+- `competitive-verifier` のVerify対象は、対応サービスである Library Checker (`judge.yosupo.jp`)、AOJ (`onlinejudge.u-aizu.ac.jp`)、yukicoder (`yukicoder.me`) のいずれかを使用してください。その他のオンラインジャッジの問題はVerifyコードに追加しないでください。
 - ドキュメント (`doc/`) は必ず **AC Library スタイル**（メソッド名、制約、計算量を太字で記載する形式）で記述し、全てのドキュメントへのリンクを必ず `.verify-helper/docs/index.md` の目次に登録してください。
 </RULE>
 
