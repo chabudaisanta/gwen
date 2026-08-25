@@ -4,11 +4,15 @@
 #include <cassert>
 #include <concepts>
 #include <functional>
+#include <limits>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
+#include "gwen/alge/monoid.hpp"
 #include "gwen/alge/ring.hpp"
+#include "gwen/alge/semiring.hpp"
+#include "gwen/automaton/automaton.hpp"
 #include "gwen/automaton/weighted_automaton.hpp"
 #include "gwen/types.hpp"
 
@@ -26,7 +30,61 @@ concept weighted_digit_dp_value = std::copy_constructible<T> && requires(T value
     { value == other } -> std::convertible_to<bool>;
 };
 
+/**
+ * @brief 桁 DP で整数値の総和を求める値型に必要な操作を表す Concept
+ * @tparam T 集計値型
+ */
+template <typename T>
+concept digit_dp_sum_value =
+    semiring<T> && std::copyable<T> && std::constructible_from<T, i32> && requires(T value, const T other) {
+        { value += other } -> std::same_as<T&>;
+        { value == other } -> std::convertible_to<bool>;
+    };
+
 namespace automaton_detail {
+
+template <digit_dp_sum_value T> struct DigitDpSumState {
+    T count;
+    T sum;
+
+    DigitDpSumState(i32 value) : count(value), sum(0) {}
+    DigitDpSumState(T count, T sum) : count(std::move(count)), sum(std::move(sum)) {}
+
+    DigitDpSumState& operator+=(const DigitDpSumState& rhs) {
+        count += rhs.count;
+        sum += rhs.sum;
+        return *this;
+    }
+
+    bool operator==(const DigitDpSumState&) const = default;
+};
+
+template <semiring T> struct append_affine_monoid {
+    using S = typename affine_monoid<T>::S;
+
+    static constexpr S op(S first, S second) { return affine_monoid<T>::op(second, first); }
+    static constexpr S e() { return affine_monoid<T>::e(); }
+};
+
+template <digit_dp_sum_value T>
+DigitDpSumState<T> apply_digit_dp_sum_affine(const DigitDpSumState<T>& value,
+                                             const typename append_affine_monoid<T>::S& affine) {
+    return {value.count, affine.a * value.sum + affine.b * value.count};
+}
+
+template <digit_dp_sum_value T>
+DigitDpSumState<T> multiply_digit_dp_sum_state(DigitDpSumState<T> value, u64 multiplicity) {
+    DigitDpSumState<T> result(0);
+    while (multiplicity != 0) {
+        if (multiplicity & 1ULL) result += value;
+        multiplicity >>= 1;
+        if (multiplicity != 0) {
+            const DigitDpSumState<T> copy = value;
+            value += copy;
+        }
+    }
+    return result;
+}
 
 template <typename F, typename T>
 concept digit_dp_aggregator =
@@ -155,6 +213,52 @@ T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
         return static_cast<T>(std::invoke(op_act, initial_value, weight));
     };
     return automaton_detail::run_weighted_digit_dp_impl<T>(upper_bound, a, init_value, std::move(f), std::ref(op_act));
+}
+
+/**
+ * @brief オートマトンが受理する上限以下の整数の総和を求める
+ * @tparam T 集計値型
+ * @tparam base 進数
+ * @param upper_bound 上限を上位桁から格納した配列
+ * @param a 条件を表すオートマトン
+ * @return `a` が受理する `0` 以上 `upper_bound` 以下の整数の総和
+ */
+template <digit_dp_sum_value T, i32 base>
+T run_digit_dp_sum(const std::vector<i32>& upper_bound, const Automaton<base>& a) {
+    assert(a.valid());
+    using State = automaton_detail::DigitDpSumState<T>;
+    using WeightMonoid = automaton_detail::append_affine_monoid<T>;
+
+    WeightedAutomaton<base, WeightMonoid> weighted(a.n, 64);
+    for (i32 state : a.init) {
+        weighted.add_init(state, WeightMonoid::e());
+    }
+
+    std::vector<u64> accept_multiplicity(static_cast<usize>(a.n), 0ULL);
+    for (i32 state : a.accept) {
+        assert(accept_multiplicity[static_cast<usize>(state)] < std::numeric_limits<u64>::max());
+        ++accept_multiplicity[static_cast<usize>(state)];
+    }
+
+    for (i32 state = 0; state < a.n; ++state) {
+        weighted.set_condition(state, accept_multiplicity[static_cast<usize>(state)]);
+        for (i32 digit = 0; digit < base; ++digit) {
+            const i32 next = a.edge(state, digit);
+            if (next != -1) {
+                weighted.set_edge(state, digit, next, {T(base), T(digit)});
+            }
+        }
+    }
+
+    const auto aggregate = [](const State& value, u64 multiplicity) {
+        return automaton_detail::multiply_digit_dp_sum_state(value, multiplicity);
+    };
+    const auto act = [](const State& value, const typename WeightMonoid::S& affine) {
+        return automaton_detail::apply_digit_dp_sum_affine(value, affine);
+    };
+
+    const State result = run_weighted_digit_dp<State>(upper_bound, weighted, State{T(1), T(0)}, aggregate, act);
+    return result.sum;
 }
 
 }  // namespace gwen

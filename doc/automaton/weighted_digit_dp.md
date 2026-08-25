@@ -68,3 +68,37 @@ T run_weighted_digit_dp(
 **計算量**
 
 - $O(|upper\_bound| \times a.n \times base)$
+
+## run_digit_dp_sum
+
+```cpp
+template <digit_dp_sum_value T, i32 base>
+T run_digit_dp_sum(
+    const std::vector<i32>& upper_bound,
+    const Automaton<base>& a
+)
+```
+
+`Automaton` が受理する `0` 以上 `upper_bound` 以下の整数そのものの総和を求めます。内部では経路数と数値総和を同時に保持し、数字 `c` を末尾へ追加するたびに次の更新を行います。
+
+```text
+count' = count
+sum'   = base * sum + c * count
+```
+
+入力は `upper_bound` と同じ桁数の固定長数字列として処理され、先頭ゼロも `a` の遷移へ入力されます。`init` または `accept` に同じ状態が複数回含まれる場合、その回数を多重度として総和へ反映します。
+
+**制約**
+
+- `T` は `digit_dp_sum_value` を満たす。
+- `T` は半環であり、`i32` から構築でき、コピー、`+=`、等値比較を提供する。
+- `upper_bound` の各桁 `c` は $0 \leq c < base$ を満たす。
+- `a.valid()` が `true` である。
+- 加算および乗算の結果が `T` で正しく表現できる。
+
+**計算量**
+
+桁数を $L$、状態数を $n = a.n$、`accept` における1状態あたりの最大出現回数を $m$ とします。
+
+- 時間: $O(L n base + n base + |a.init| + |a.accept| + n \log(m + 1))$
+- 追加領域: $O(n base + |a.init|)$
