@@ -156,7 +156,7 @@ Automaton<base> contains_pattern(std::span<const i32> pattern);
 
 **計算量**
 
-- $O(|pattern| \times \mathrm{base})$
+- $O(\lvert pattern\rvert \times \mathrm{base})$
 
 ## leading zeroの扱い
 

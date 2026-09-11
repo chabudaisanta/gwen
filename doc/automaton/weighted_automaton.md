@@ -112,7 +112,7 @@ bool valid() const
 
 **計算量**
 
-- $O(N \times \mathrm{base} + |\mathrm{init}|)$
+- $O(N \times \mathrm{base} + \lvert \mathrm{init}\rvert)$
 
 ### trim
 

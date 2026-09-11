@@ -19,7 +19,7 @@ Csr(i32 n, const std::vector<E>& edges, bool directed = true)
 
 **計算量**
 
-- $O(n + |edges|)$
+- $O(n + \lvert edges\rvert)$
 
 ## edges
 

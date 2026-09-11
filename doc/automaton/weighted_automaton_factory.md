@@ -50,13 +50,13 @@ gwen::WeightedAutomaton<base, WeightMonoid> gwen::automaton::contains_pattern(st
 
 指定した文字列(数字列) `pattern` を含むことを管理する重み付きオートマトンを生成します。
 
-- 状態数は $|pattern| + 1$ であり、KMPオートマトンに基づく遷移を持ちます。
-- 状態 $|pattern|$ に到達すると、その後はどの文字を受け取っても状態 $|pattern|$ に留まります (受理状態でのループ)。
-- 指定されたパターンを含んだことを示す状態 $|pattern|$ に対してのみ、`condition` が `1` (bit 0 が立つ) となります。
+- 状態数は $\lvert pattern\rvert + 1$ であり、KMPオートマトンに基づく遷移を持ちます。
+- 状態 $\lvert pattern\rvert$ に到達すると、その後はどの文字を受け取っても状態 $\lvert pattern\rvert$ に留まります (受理状態でのループ)。
+- 指定されたパターンを含んだことを示す状態 $\lvert pattern\rvert$ に対してのみ、`condition` が `1` (bit 0 が立つ) となります。
 - 全ての遷移の重みおよび初期状態の重みは `WeightMonoid::e()` となります。
 
 **計算量**
-- $O(|pattern| \times \mathrm{base})$
+- $O(\lvert pattern\rvert \times \mathrm{base})$
 
 ## digit_sum_exact
 

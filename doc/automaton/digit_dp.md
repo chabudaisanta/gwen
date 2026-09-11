@@ -25,8 +25,8 @@ T run_digit_dp(const std::vector<i32>& N, const Automaton<base>& a)
 ```
 
 **計算量**
-- $ O(|N| \times \text{n} \times \text{base}) $
-- $ |N| $ は配列 `N` の要素数（桁数）
+- $ O(\lvert N\rvert \times \text{n} \times \text{base}) $
+- $ \lvert N\rvert $ は配列 `N` の要素数（桁数）
 - `n` はオートマトンの状態数
 
 **引数**

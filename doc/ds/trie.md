@@ -52,7 +52,7 @@ template <std::ranges::range Container> tree insert(const Container& str)
 
 **計算量**
 
-- $O(|S|)$ （$|S|$ は文字列の長さ）
+- $O(\lvert S\rvert)$ （$\lvert S\rvert$ は文字列の長さ）
 
 ### erase
 
@@ -69,7 +69,7 @@ $n \le 0$ の場合は該当する文字列をすべて削除し、$n > 0$ の�
 
 **計算量**
 
-- $O(|S|)$
+- $O(\lvert S\rvert)$
 
 ### count
 
@@ -85,7 +85,7 @@ template <std::ranges::range Container> i32 count(const Container& str) const
 
 **計算量**
 
-- $O(|S|)$
+- $O(\lvert S\rvert)$
 
 ### contains
 
@@ -101,7 +101,7 @@ template <std::ranges::range Container> bool contains(const Container& str) cons
 
 **計算量**
 
-- $O(|S|)$
+- $O(\lvert S\rvert)$
 
 ### match_count
 
@@ -117,7 +117,7 @@ template <std::ranges::range Container> i32 match_count(const Container& str) co
 
 **計算量**
 
-- $O(|S|)$
+- $O(\lvert S\rvert)$
 
 ### path
 
@@ -133,4 +133,4 @@ template <std::ranges::range Container> std::vector<tree> path(const Container& 
 
 **計算量**
 
-- $O(|S|)$
+- $O(\lvert S\rvert)$

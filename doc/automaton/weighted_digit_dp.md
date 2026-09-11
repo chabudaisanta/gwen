@@ -67,7 +67,7 @@ T run_weighted_digit_dp(
 
 **計算量**
 
-- $O(|upper\_bound| \times a.n \times base)$
+- $O(\lvert upper\_bound\rvert \times a.n \times base)$
 
 ## run_digit_dp_sum
 
@@ -100,5 +100,5 @@ sum'   = base * sum + c * count
 
 桁数を $L$、状態数を $n = a.n$、`accept` における1状態あたりの最大出現回数を $m$ とします。
 
-- 時間: $O(L n base + n base + |a.init| + |a.accept| + n \log(m + 1))$
-- 追加領域: $O(n base + |a.init|)$
+- 時間: $O(L n base + n base + \lvert a.init\rvert + \lvert a.accept\rvert + n \log(m + 1))$
+- 追加領域: $O(n base + \lvert a.init\rvert)$
