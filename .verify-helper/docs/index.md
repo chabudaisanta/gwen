@@ -50,6 +50,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [ランレングス圧縮 (runlength.hpp)](include/gwen/algo/runlength.hpp)
 - [カウンティングソート (counting_sort.hpp)](include/gwen/algo/counting_sort.hpp)
 - [最長増加部分列 (lis.hpp)](include/gwen/algo/lis.hpp)
+- [過半数要素 (majority_vote.hpp)](include/gwen/algo/majority_vote.hpp)
 
 ### ハッシュ (Hash)
 - [ローリングハッシュ (rolling_hash.hpp)](include/gwen/hash/rolling_hash.hpp)
