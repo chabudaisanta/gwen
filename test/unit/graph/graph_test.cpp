@@ -50,6 +50,24 @@ TEST(GraphTest, NonDirectedGraph) {
     EXPECT_EQ(v1, (std::vector<i32>{0, 2}));
 }
 
+#ifndef NDEBUG
+TEST(GraphTest, RejectsOutOfRangeEndpoints) {
+    EXPECT_DEATH(
+        {
+            DirectedGraph<i32> g(2);
+            g.add_edge(0, 2);
+        },
+        "");
+    EXPECT_DEATH(
+        {
+            DirectedGraph<i32> g(2);
+            g.add_edge(Edge<i32>{2, 0, 1});
+        },
+        "");
+    EXPECT_DEATH(DirectedGraph<i32>(2, std::vector<Edge<i32>>{{0, 2, 1}}), "");
+}
+#endif
+
 TEST(GraphTest, ConceptCheck) {
     static_assert(edge<Edge<i32>>);
     static_assert(graph<DirectedGraph<i32>>);

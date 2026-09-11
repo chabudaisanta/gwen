@@ -47,9 +47,11 @@ private:
 
 public:
     GraphBase() : GraphBase(0) {}
-    explicit GraphBase(i32 n) : n_(n), built_(false) {}
-    GraphBase(i32 n, const std::vector<EdgeType>& edges)
-        : n_(n), built_(true), edge_buf_(edges), csr_(n, edges, IsDirected) {}
+    explicit GraphBase(i32 n) : n_(n), built_(false) { assert(n_ >= 0); }
+    GraphBase(i32 n, const std::vector<EdgeType>& edges) : GraphBase(n) {
+        for (const EdgeType& e : edges) add_edge(e);
+        build();
+    }
 
     /**
      * @brief グラフにエッジを追加する
@@ -57,11 +59,13 @@ public:
      */
     void add_edge(const EdgeType& e) {
         assert(!built_);
+        assert(0 <= e.u && e.u < n_);
+        assert(0 <= e.v && e.v < n_);
         edge_buf_.push_back(e);
     }
     void add_edge(i32 u, i32 v) {
         assert(0 <= u && u < n_);
-        assert(0 <= v && u < n_);
+        assert(0 <= v && v < n_);
         add_edge(EdgeType(u, v));
     }
     void add_edge(i32 u, i32 v, weight_type w) {

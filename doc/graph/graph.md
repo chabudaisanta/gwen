@@ -20,6 +20,7 @@ GraphBase(i32 n, const std::vector<EdgeType>& edges)
 **制約**
 
 - $n \ge 0$
+- `edges` の両端点が $0 \le u, v < n$ を満たすこと
 
 **計算量**
 
@@ -38,6 +39,7 @@ void add_edge(i32 u, i32 v, weight_type w)
 **制約**
 
 - `build()` 呼び出し前であること
+- 追加する辺の両端点が $0 \le u, v < N$ を満たすこと
 
 **計算量**
 
