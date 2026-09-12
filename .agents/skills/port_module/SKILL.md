@@ -17,7 +17,7 @@ AIエージェントは必ず以下のステップに従って作業を進行し
 > 1. All classes/structs must use PascalCase (e.g., `FenwickTree`).
 > 2. All methods/variables must use snake_case (e.g., `add`).
 > 3. Doxygen comments (`@brief`, `@tparam`, etc.) must be provided for all public APIs.
-> 4. C++23 `concept` must be used for type constraints (e.g., `abel`, `monoid`). Do not append `_concept` to concept names (e.g., use `edge`, not `edge_concept`).
+> 4. C++23 `concept` must be used for type constraints on fundamental domain concepts (e.g., `abel`, `monoid`, `field`, `graph`). Do not create ad-hoc concepts that merely check applicability to a specific function or struct. Do not append `_concept` to concept names (e.g., use `edge`, not `edge_concept`).
 > 5. Markdown documentation must follow the AC Library style (with `## メソッド名`, `**制約**`, `**計算量**`).
 > 6. Google Tests (`test/unit/`) and Verify codes (`verify/`) must be properly planned and implemented.
 > Please rigorously point out any violations. If everything is perfect, explicitly approve it.
