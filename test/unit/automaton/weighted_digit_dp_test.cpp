@@ -21,8 +21,6 @@ struct MinimalWeightedDigitDpValue {
     bool operator==(const MinimalWeightedDigitDpValue&) const = default;
 };
 
-static_assert(weighted_digit_dp_value<MinimalWeightedDigitDpValue>);
-
 struct MinimalDigitDpSumValue {
     i64 val;
 
@@ -36,7 +34,7 @@ struct MinimalDigitDpSumValue {
     bool operator==(const MinimalDigitDpSumValue&) const = default;
 };
 
-static_assert(digit_dp_sum_value<MinimalDigitDpSumValue>);
+static_assert(semiring<MinimalDigitDpSumValue>);
 
 struct MatrixSemiring2x2 {
     i64 a00;
@@ -68,7 +66,7 @@ struct MatrixSemiring2x2 {
     bool operator==(const MatrixSemiring2x2&) const = default;
 };
 
-static_assert(digit_dp_sum_value<MatrixSemiring2x2>);
+static_assert(semiring<MatrixSemiring2x2>);
 
 TEST(WeightedDigitDpTest, BasicCounting) {
     std::vector<i32> upper_bound = {1, 2};  // 12

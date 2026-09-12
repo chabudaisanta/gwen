@@ -44,8 +44,6 @@ struct MinimalDigitDpValue {
     bool operator==(const MinimalDigitDpValue&) const = default;
 };
 
-static_assert(digit_dp_value<MinimalDigitDpValue>);
-
 // Automaton that checks if the string does NOT contain the digit '3'.
 // States: 0 (valid), 1 (invalid)
 Automaton<10> build_no_3_automaton() {

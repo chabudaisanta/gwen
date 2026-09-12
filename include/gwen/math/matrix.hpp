@@ -6,25 +6,10 @@
 #include <utility>
 #include <vector>
 
+#include "gwen/alge/field.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
-
-/**
- * @brief 行列の要素として必要な演算要件を定義するコンセプト
- */
-template <typename T>
-concept matrix_field = requires(T a, T b) {
-    { T(0) } -> std::same_as<T>;
-    { T(1) } -> std::same_as<T>;
-    { -a } -> std::convertible_to<T>;
-    { a + b } -> std::convertible_to<T>;
-    { a - b } -> std::convertible_to<T>;
-    { a * b } -> std::convertible_to<T>;
-    { a / b } -> std::convertible_to<T>;
-    { a == b } -> std::convertible_to<bool>;
-    { a != T(0) } -> std::convertible_to<bool>;
-};
 
 /**
  * @brief 行列 (Matrix)
@@ -189,7 +174,7 @@ public:
      * @brief 行列式を取得する
      */
     T det() const
-        requires matrix_field<T>
+        requires field<T>
     {
         assert(is_square());
         Matrix b = *this;
@@ -200,7 +185,7 @@ public:
      * @brief 階数 (rank) を取得する
      */
     i32 rank() const
-        requires matrix_field<T>
+        requires field<T>
     {
         Matrix b = *this;
         return gauss(b, m, false).first;
@@ -221,7 +206,7 @@ public:
      * @return Matrix 逆行列が存在しない場合は空の行列を返す
      */
     Matrix inverse() const
-        requires matrix_field<T>
+        requires field<T>
     {
         assert(is_square());
         Matrix aug(n, 2 * n);

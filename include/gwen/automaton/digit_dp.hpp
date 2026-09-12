@@ -12,27 +12,14 @@
 namespace gwen {
 
 /**
- * @brief 桁 DP の値型に必要な操作を表す Concept
- * @tparam T DP値型
- */
-template <typename T>
-concept digit_dp_value = std::copy_constructible<T> && requires(T value, const T other) {
-    { T(0) } -> std::same_as<T>;
-    { T(1) } -> std::same_as<T>;
-    { value = other } -> std::same_as<T&>;
-    { value += other } -> std::same_as<T&>;
-    { value == other } -> std::convertible_to<bool>;
-};
-
-/**
  * @brief オートマトン上の桁 DP を実行する
- * @tparam T DP値型 (`digit_dp_value` を満たすこと)
+ * @tparam T DP値型 (デフォルトは `i64`)
  * @tparam base N の進数
  * @param N 上限の値 (各桁の値が上位から順に格納されている配列)
  * @param a 条件を表すオートマトン
  * @return T 条件を満たす N 以下の値の総和 (オートマトンの遷移コストの積の和)
  */
-template <digit_dp_value T, i32 base> T run_digit_dp(const std::vector<i32>& N, const Automaton<base>& a) {
+template <typename T = i64, i32 base> T run_digit_dp(const std::vector<i32>& N, const Automaton<base>& a) {
     assert(a.valid());
     std::vector<T> dp_tight(a.n, T(0));
     std::vector<T> dp_loose(a.n, T(0));

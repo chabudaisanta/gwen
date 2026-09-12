@@ -18,32 +18,9 @@
 
 namespace gwen {
 
-/**
- * @brief 重み付き桁 DP の値型に必要な操作を表す Concept
- * @tparam T DP値型
- */
-template <typename T>
-concept weighted_digit_dp_value = std::copy_constructible<T> && requires(T value, const T other) {
-    { T(0) } -> std::same_as<T>;
-    { value = other } -> std::same_as<T&>;
-    { value += other } -> std::same_as<T&>;
-    { value == other } -> std::convertible_to<bool>;
-};
-
-/**
- * @brief 桁 DP で整数値の総和を求める値型に必要な操作を表す Concept
- * @tparam T 集計値型
- */
-template <typename T>
-concept digit_dp_sum_value =
-    semiring<T> && std::copyable<T> && std::constructible_from<T, i32> && requires(T value, const T other) {
-        { value += other } -> std::same_as<T&>;
-        { value == other } -> std::convertible_to<bool>;
-    };
-
 namespace automaton_detail {
 
-template <digit_dp_sum_value T> struct DigitDpSumState {
+template <typename T> struct DigitDpSumState {
     T count;
     T sum;
 
@@ -66,13 +43,13 @@ template <semiring T> struct append_affine_monoid {
     static constexpr S e() { return affine_monoid<T>::e(); }
 };
 
-template <digit_dp_sum_value T>
+template <typename T>
 DigitDpSumState<T> apply_digit_dp_sum_affine(const DigitDpSumState<T>& value,
                                              const typename append_affine_monoid<T>::S& affine) {
     return {value.count, affine.a * value.sum + affine.b * value.count};
 }
 
-template <digit_dp_sum_value T>
+template <typename T>
 DigitDpSumState<T> multiply_digit_dp_sum_state(DigitDpSumState<T> value, u64 multiplicity) {
     DigitDpSumState<T> result(0);
     while (multiplicity != 0) {
@@ -86,18 +63,7 @@ DigitDpSumState<T> multiply_digit_dp_sum_state(DigitDpSumState<T> value, u64 mul
     return result;
 }
 
-template <typename F, typename T>
-concept digit_dp_aggregator =
-    std::invocable<F&, const T&, u64> && std::convertible_to<std::invoke_result_t<F&, const T&, u64>, T>;
-
-template <typename OpAct, typename T, typename Weight>
-concept digit_dp_action = std::invocable<OpAct&, const T&, const Weight&> &&
-                          std::convertible_to<std::invoke_result_t<OpAct&, const T&, const Weight&>, T>;
-
-template <weighted_digit_dp_value T, i32 base, monoid WeightMonoid, typename Init, typename F, typename OpAct>
-    requires std::invocable<Init&, const typename WeightMonoid::S&> &&
-             std::convertible_to<std::invoke_result_t<Init&, const typename WeightMonoid::S&>, T> &&
-             digit_dp_aggregator<F, T> && digit_dp_action<OpAct, T, typename WeightMonoid::S>
+template <typename T, i32 base, monoid WeightMonoid, typename Init, typename F, typename OpAct>
 T run_weighted_digit_dp_impl(const std::vector<i32>& upper_bound,
                              const WeightedAutomaton<base, WeightMonoid>& a,
                              Init init_value,
@@ -162,7 +128,7 @@ T run_weighted_digit_dp_impl(const std::vector<i32>& upper_bound,
 
 /**
  * @brief 重み付きオートマトン上の桁 DP を実行する
- * @tparam T DPで保持する値の型（`weighted_digit_dp_value` を満たすこと）
+ * @tparam T DPで保持する値の型
  * @tparam base n の進数
  * @tparam WeightMonoid オートマトンの重みのモノイド
  * @tparam F 最終的な値の集約関数の型。シグネチャは `T(T dp_val, u64 condition_mask)` を想定。
@@ -173,11 +139,7 @@ T run_weighted_digit_dp_impl(const std::vector<i32>& upper_bound,
  * @param op_act DP値に対して遷移の重みを作用させる関数。デフォルトは乗算を想定。
  * @return T 集約された総和
  */
-template <weighted_digit_dp_value T, i32 base, monoid WeightMonoid, typename F, typename OpAct = std::multiplies<>>
-    requires requires(const typename WeightMonoid::S& weight) {
-        { static_cast<T>(weight) } -> std::same_as<T>;
-    } && automaton_detail::digit_dp_aggregator<F, T> &&
-             automaton_detail::digit_dp_action<OpAct, T, typename WeightMonoid::S>
+template <typename T, i32 base, monoid WeightMonoid, typename F, typename OpAct = std::multiplies<>>
 T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
                         const WeightedAutomaton<base, WeightMonoid>& a,
                         F f,
@@ -201,9 +163,7 @@ T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
  * @param op_act DP値への重みの作用
  * @return 集約結果
  */
-template <weighted_digit_dp_value T, i32 base, monoid WeightMonoid, typename F, typename OpAct>
-    requires automaton_detail::digit_dp_aggregator<F, T> &&
-             automaton_detail::digit_dp_action<OpAct, T, typename WeightMonoid::S>
+template <typename T, i32 base, monoid WeightMonoid, typename F, typename OpAct>
 T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
                         const WeightedAutomaton<base, WeightMonoid>& a,
                         const T& initial_value,
@@ -217,13 +177,13 @@ T run_weighted_digit_dp(const std::vector<i32>& upper_bound,
 
 /**
  * @brief オートマトンが受理する上限以下の整数の総和を求める
- * @tparam T 集計値型
+ * @tparam T 集計値型 (`semiring` を満たすこと)
  * @tparam base 進数
  * @param upper_bound 上限を上位桁から格納した配列
  * @param a 条件を表すオートマトン
  * @return `a` が受理する `0` 以上 `upper_bound` 以下の整数の総和
  */
-template <digit_dp_sum_value T, i32 base>
+template <semiring T, i32 base>
 T run_digit_dp_sum(const std::vector<i32>& upper_bound, const Automaton<base>& a) {
     assert(a.valid());
     using State = automaton_detail::DigitDpSumState<T>;

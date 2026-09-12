@@ -11,7 +11,7 @@ documentation_of: //include/gwen/automaton/weighted_digit_dp.hpp
 
 ```cpp
 template <
-    weighted_digit_dp_value T,
+    typename T,
     gwen::i32 base, 
     gwen::monoid WeightMonoid, 
     typename F,
@@ -41,7 +41,7 @@ T gwen::run_weighted_digit_dp(
 ### 初期DP値を指定するオーバーロード
 
 ```cpp
-template <weighted_digit_dp_value T, i32 base, monoid WeightMonoid,
+template <typename T, i32 base, monoid WeightMonoid,
           typename F, typename OpAct>
 T run_weighted_digit_dp(
     const std::vector<i32>& upper_bound,
@@ -56,14 +56,14 @@ T run_weighted_digit_dp(
 
 **共通制約**
 
-- `T`は`weighted_digit_dp_value`を満たし、`T(0)`、コピー構築・代入、`+=`、等値比較を提供する必要があります。
-- `f`は`T(const T& dp_val, u64 condition_mask)`と互換性のあるシグネチャを持つ必要があります。
+- `T` は `T(0)`、コピー構築・代入、`+=`、等値比較を提供する必要があります。
+- `f` は `T(const T& dp_val, u64 condition_mask)` と互換性のあるシグネチャを持つ必要があります。
 - `op_act` の戻り値は `T` へ変換可能である必要があります。
 - `op_act(x, WeightMonoid::e()) == x` を満たす必要があります。
 - `op_act(op_act(x, a), b) == op_act(x, WeightMonoid::op(a, b))` を満たす必要があります。
 - `op_act` はDP値の加算に対して分配可能である必要があります。
-- `upper_bound`の各桁は`0 <= digit < base`を満たす必要があります。
-- `a.valid()`が`true`である必要があります。
+- `upper_bound` の各桁は `0 <= digit < base` を満たす必要があります。
+- `a.valid()` が `true` である必要があります。
 
 **計算量**
 
@@ -72,7 +72,7 @@ T run_weighted_digit_dp(
 ## run_digit_dp_sum
 
 ```cpp
-template <digit_dp_sum_value T, i32 base>
+template <semiring T, i32 base>
 T run_digit_dp_sum(
     const std::vector<i32>& upper_bound,
     const Automaton<base>& a
@@ -90,8 +90,8 @@ sum'   = base * sum + c * count
 
 **制約**
 
-- `T` は `digit_dp_sum_value` を満たす。
-- `T` は半環であり、`i32` から構築でき、コピー、`+=`、等値比較を提供する。
+- `T` は `semiring<T>` を満たす。
+- `T` は `i32` から構築でき、コピー、`+=`、等値比較を提供する。
 - `upper_bound` の各桁 `c` は $0 \leq c < base$ を満たす。
 - `a.valid()` が `true` である。
 - 加算および乗算の結果が `T` で正しく表現できる。

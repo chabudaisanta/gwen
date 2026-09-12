@@ -10,8 +10,7 @@ documentation_of: //include/gwen/automaton/digit_dp.hpp
 
 ## 制約
 
-- 結果の集計に用いる型 `T` は `gwen::digit_dp_value` を満たす必要があります。
-- `T` は `T(0)`、`T(1)`、コピー、`+=`、等値比較を提供する必要があります。
+- 結果の集計に用いる型 `T` は `T(0)`、`T(1)`、コピー、`+=`、等値比較を提供する必要があります（デフォルトは `i64`）。
 - 各桁の値 $c$ は $0 \le c < \text{base}$ を満たしている必要があります。
 - `a.valid()` が `true` である必要があります。
 
@@ -20,7 +19,7 @@ documentation_of: //include/gwen/automaton/digit_dp.hpp
 ### run_digit_dp
 
 ```cpp
-template <digit_dp_value T, i32 base>
+template <typename T = i64, i32 base>
 T run_digit_dp(const std::vector<i32>& N, const Automaton<base>& a)
 ```
 

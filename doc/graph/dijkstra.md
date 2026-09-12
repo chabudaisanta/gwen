@@ -10,7 +10,7 @@ documentation_of: //include/gwen/graph/dijkstra.hpp
 ## **コンストラクタ**
 
 ```cpp
-template <dijkstra_graph G>
+template <graph G>
 class Dijkstra;
 
 Dijkstra(const G& g)
@@ -20,7 +20,7 @@ Dijkstra(const G& g)
 
 **制約**
 
-- なし
+- $G$ は `graph` コンセプトを満たすこと。
 
 **計算量**
 
