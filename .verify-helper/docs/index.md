@@ -122,5 +122,16 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [重み付きオートマトンファクトリ (weighted_automaton_factory.hpp)](include/gwen/automaton/weighted_automaton_factory.hpp)
 - [重み付き桁DP (weighted_digit_dp.hpp)](include/gwen/automaton/weighted_digit_dp.hpp)
 
+### 開発用資料
+- [リポジトリ全体README(README.md)](README.md)
+- [作業手順 (WORKFLOW.md)](doc/WORKFLOW.md)
+- [開発手順書 (DEVELOPMENT.md)](doc/DEVELOPMENT.md)
+- [CI/CDとドキュメントの仕組み (COMPETITIVE_VERIFIER.md)](doc/COMPETITIVE_VERIFIER.md)
+- [コーディング規則およびドキュメント作成規則(RULES.md)](doc/RULES.md)
+- [testlib.hの使用方法(test/third_party/README.md)](test/third_party/README.md)
+- [テスト用ユーティリティの使用方法(test/utils/README.md)](test/utils/README.md)
+- [スクリプト使用方法(scripts/README.md)](scripts/README.md)
+- [モジュールへのdump適用ルール(DUMP_RULES.md)](doc/DUMP_RULES.md)
+
 ---
 *GitHubリポジトリ: [chabudaisanta/gwen](https://github.com/chabudaisanta/gwen)*
