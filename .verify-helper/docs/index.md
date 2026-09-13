@@ -36,6 +36,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [998244353用内部NTT (internal/ntt998.hpp)](include/gwen/math/internal/ntt998.hpp)
 - [XOR基底 (xor_basis.hpp)](include/gwen/math/xor_basis.hpp)
 - [整数演算 (integer.hpp)](include/gwen/math/integer.hpp)
+- [Stern-Brocot 木 (stern_brocot_tree.hpp)](include/gwen/math/stern_brocot_tree.hpp)
 - [基本数学 (basic.hpp)](include/gwen/math/basic.hpp)
 
 ### 剰余演算 (Mod)
