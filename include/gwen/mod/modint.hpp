@@ -10,6 +10,10 @@
 
 namespace gwen {
 
+namespace detail {
+struct ntt998_access;
+}
+
 /**
  * @brief modint型としての要件を定義するコンセプト
  * ACLのmodintと互換性のあるインターフェースを持つことを要求する。
@@ -167,26 +171,44 @@ public:
 template <u64 Mod> struct StaticModInt64 {
 private:
     using m64 = StaticModInt64;
+    static constexpr bool use_u32 = Mod < (1ull << 30);
+    using word = std::conditional_t<use_u32, u32, u64>;
     static_assert(Mod < (1ull << 62), "Mod must be less than 2^62");
     static_assert(Mod & 1, "Mod must be odd");
 
-    static constexpr u64 n = Mod;
-    static constexpr u64 ns = []() {
-        u64 inv = Mod;
-        for (i32 i = 0; i < 5; ++i) inv *= 2 - inv * Mod;
+    static constexpr word n = static_cast<word>(Mod);
+    static constexpr word ns = []() {
+        word inv = n;
+        for (i32 i = 0; i < 5; ++i) inv *= static_cast<word>(2) - inv * n;
         return -inv;
     }();
-    static constexpr u64 r2 = -static_cast<u128>(Mod) % Mod;
-    static constexpr u64 msk = -1;
+    static constexpr word r2 = []() {
+        if constexpr (use_u32) {
+            return static_cast<word>(-static_cast<u64>(n) % n);
+        }
+        else {
+            return static_cast<word>(-static_cast<u128>(n) % n);
+        }
+    }();
 
-    constexpr u64 reduce_mul(u64 a, u64 b) const {
-        u128 t = static_cast<u128>(a) * b;
-        u128 m = (t * ns) & msk;
-        a = (m * n + t) >> 64;
-        return a < n ? a : a - n;
+    static constexpr word reduce_mul(word a, word b) {
+        if constexpr (use_u32) {
+            const u64 t = static_cast<u64>(a) * b;
+            const u32 m = static_cast<u32>(t) * ns;
+            const u32 res = static_cast<u32>((t + static_cast<u64>(m) * n) >> 32);
+            return res < n ? res : res - n;
+        }
+        else {
+            const u128 t = static_cast<u128>(a) * b;
+            const u64 m = static_cast<u64>(t) * ns;
+            const u64 res = static_cast<u64>((static_cast<u128>(m) * n + t) >> 64);
+            return res < n ? res : res - n;
+        }
     }
 
-    u64 tr;
+    word tr;
+
+    friend struct detail::ntt998_access;
 
 public:
     /**
@@ -205,7 +227,7 @@ public:
      */
     template <std::unsigned_integral T> constexpr StaticModInt64(T x) {
         static_assert(sizeof(T) <= sizeof(u64), "T must be 64-bit or smaller");
-        tr = reduce_mul(static_cast<u64>(x), r2);
+        tr = reduce_mul(static_cast<word>(static_cast<u64>(x) % Mod), r2);
     }
 
     /**
@@ -213,12 +235,9 @@ public:
      */
     template <std::signed_integral T> constexpr StaticModInt64(T x) : tr(0) {
         static_assert(sizeof(T) <= sizeof(u64), "T must be 64-bit or smaller");
-        if (x < 0) {
-            sub(m64{static_cast<u64>(-static_cast<i64>(x))});
-        }
-        else {
-            tr = reduce_mul(static_cast<u64>(x), r2);
-        }
+        i64 y = static_cast<i64>(x) % static_cast<i64>(Mod);
+        if (y < 0) y += static_cast<i64>(Mod);
+        tr = reduce_mul(static_cast<word>(y), r2);
     }
 
     /**

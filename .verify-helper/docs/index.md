@@ -32,6 +32,8 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [素数・素因数分解 (prime.hpp)](include/gwen/math/prime.hpp)
 - [順列・組合せ (combination.hpp)](include/gwen/math/combination.hpp)
 - [行列 (matrix.hpp)](include/gwen/math/matrix.hpp)
+- [形式的冪級数 (formal_power_series.hpp)](include/gwen/math/formal_power_series.hpp)
+- [998244353用内部NTT (internal/ntt998.hpp)](include/gwen/math/internal/ntt998.hpp)
 - [XOR基底 (xor_basis.hpp)](include/gwen/math/xor_basis.hpp)
 - [整数演算 (integer.hpp)](include/gwen/math/integer.hpp)
 - [基本数学 (basic.hpp)](include/gwen/math/basic.hpp)
@@ -40,6 +42,13 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [モジュラ演算基盤 (mod.hpp)](include/gwen/mod/mod.hpp)
 - [ModInt (modint.hpp)](include/gwen/mod/modint.hpp)
 - [ModInt61 (mod61.hpp)](include/gwen/mod/mod61.hpp)
+
+### 開発資料
+- [開発手順](doc/DEVELOPMENT.md)
+- [作業フロー](doc/WORKFLOW.md)
+- [コーディング規約](doc/RULES.md)
+- [Verify運用](doc/COMPETITIVE_VERIFIER.md)
+- [dump実装規約](doc/DUMP_RULES.md)
 
 ### 入出力 (IO)
 - [std::vector入出力 (vector.hpp)](include/gwen/io/vector.hpp)

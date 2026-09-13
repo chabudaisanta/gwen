@@ -4,6 +4,8 @@
 
 #include <gtest/gtest.h>
 
+#include <limits>
+
 using namespace gwen;
 
 // コンセプトの検証
@@ -52,6 +54,29 @@ TEST(StaticModInt64Test, ModuloBehavior) {
 
     modint1000000007 b(-1000000008);
     EXPECT_EQ(b.val(), 1000000007 - 1);
+}
+
+TEST(StaticModInt64Test, StorageAndIntegerBoundaries) {
+    static_assert(sizeof(modint998244353) == sizeof(u32));
+    constexpr u64 large_mod = 2305843009213693951ULL;
+    using large_mint = StaticModInt64<large_mod>;
+    static_assert(sizeof(large_mint) == sizeof(u64));
+
+    constexpr u64 unsigned_max = std::numeric_limits<u64>::max();
+    constexpr i64 signed_min = std::numeric_limits<i64>::min();
+    EXPECT_EQ(modint998244353(unsigned_max).val(), unsigned_max % modint998244353::mod());
+    EXPECT_EQ(modint998244353(signed_min).val(),
+              static_cast<u64>((static_cast<i128>(signed_min) % modint998244353::mod() + modint998244353::mod()) %
+                               modint998244353::mod()));
+    EXPECT_EQ(large_mint(unsigned_max).val(), unsigned_max % large_mod);
+    EXPECT_EQ(large_mint(signed_min).val(),
+              static_cast<u64>((static_cast<i128>(signed_min) % large_mod + large_mod) % large_mod));
+
+    const large_mint a(large_mod - 2);
+    const large_mint b(large_mod - 3);
+    EXPECT_EQ((a * b).val(), 6);
+    EXPECT_EQ((a / b * b).val(), a.val());
+    EXPECT_EQ(large_mint(2).pow(60).val(), (u64{1} << 60) % large_mod);
 }
 
 TEST(DynamicModInt64Test, BasicOperations) {
