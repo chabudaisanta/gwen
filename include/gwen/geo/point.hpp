@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cmath>
 #include <concepts>
 
@@ -191,6 +192,10 @@ struct CompareXy {
 };
 
 namespace internal {
+template <std::floating_point T> void assert_finite(const Point<T>& p) {
+    assert(std::isfinite(p.x) && std::isfinite(p.y));
+}
+
 /**
  * @brief 点が属する象限を返す (内部用)
  * @tparam T 座標の型
@@ -205,6 +210,20 @@ template <typename T> i32 quadrant(const Point<T>& p) {
     return -1;  // origin
 }
 }  // namespace internal
+
+/**
+ * @brief 2点間の距離を計算する
+ * @tparam T 浮動小数点型
+ * @param a 始点
+ * @param b 終点
+ * @pre 座標は有限で、座標差が T で表現できること
+ * @return 2点間のユークリッド距離。計算量 O(1)
+ */
+template <std::floating_point T> T distance(const Point<T>& a, const Point<T>& b) {
+    internal::assert_finite(a);
+    internal::assert_finite(b);
+    return std::hypot(a.x - b.x, a.y - b.y);
+}
 
 /**
  * @brief 偏角を基準に比較するファンクタ

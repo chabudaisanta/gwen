@@ -113,6 +113,9 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 
 ### 幾何 (Geometry)
 - [幾何モジュール (Point) (point.hpp)](include/gwen/geo/point.hpp)
+- [直線 (line.hpp)](include/gwen/geo/line.hpp)
+- [線分 (segment.hpp)](include/gwen/geo/segment.hpp)
+- [円と円の交点 (circle.hpp)](include/gwen/geo/circle.hpp)
 - [凸包 (convex_polygon.hpp)](include/gwen/geo/convex_polygon.hpp)
 
 ### オートマトン (Automaton)

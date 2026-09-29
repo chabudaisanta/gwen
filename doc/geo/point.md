@@ -81,3 +81,19 @@ documentation_of: //include/gwen/geo/point.hpp
 - `2`: `c-a-b` 直線
 - `-2`: `a-b-c` 直線
 - `0`: `a-c-b` 直線
+
+## **distance(a, b)**
+
+```cpp
+template <std::floating_point T>
+T distance(const Point<T>& a, const Point<T>& b);
+```
+
+2点間のユークリッド距離を `std::hypot` で計算します。`Point<T>::norm()` は距離の**2乗**であり、この関数とは異なります。
+
+**制約**
+- `T` は浮動小数点型です（`f64`、`f80` など）。
+- 座標は有限で、座標差と結果が `T` で表現できる必要があります。
+
+**計算量**
+- $O(1)$
