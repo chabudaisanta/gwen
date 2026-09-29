@@ -301,6 +301,50 @@ public:
     S all_prod() const { return prod_(root); }
 
     /**
+     * @brief 0-indexedでk番目に小さいキーを返す。
+     * @details Compareによって等価なキーの相対順序は保証しない。遅延作用はキー順に影響しない。計算量は期待 O(log N)。
+     * @param k 取得するキーの順位
+     * @return k 番目に小さいキー
+     * @pre `0 <= k && k < size()`
+     */
+    K kth(i32 k) const {
+        assert(0 <= k && k < size());
+        tree t = root;
+        while (t != NIL) {
+            i32 left_size = size_(d[t].left);
+            if (k < left_size) {
+                t = d[t].left;
+            }
+            else if (k == left_size) {
+                return d[t].key;
+            }
+            else {
+                k -= left_size + 1;
+                t = d[t].right;
+            }
+        }
+        assert(false);
+        return K{};
+    }
+
+    /**
+     * @brief 順位区間 [l, r) の要素の積を返す。
+     * @param l 区間の左端の順位
+     * @param r 区間の右端の順位
+     * @return 順位区間の要素の積
+     * @pre `0 <= l && l <= r && r <= size()`
+     */
+    S prod_by_index(i32 l, i32 r) {
+        assert(0 <= l && l <= r && r <= size());
+        auto [left, mid_right] = split_idx(root, l);
+        auto [mid, right] = split_idx(mid_right, r - l);
+        S res = prod_(mid);
+        root = merge(merge(left, mid), right);
+        if (root != NIL) d[root].parent = NIL;
+        return res;
+    }
+
+    /**
      * @brief 指定キーと等価な要素が存在するか判定する。
      * @param x 検索するキー
      * @return 存在すればtrue

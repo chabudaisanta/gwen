@@ -4,9 +4,17 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+
 #include "gwen/alge/monoid.hpp"
 
 using namespace gwen;
+
+struct concat_monoid {
+    using S = std::string;
+    static S op(const S& l, const S& r) { return l + r; }
+    static S e() { return {}; }
+};
 
 TEST(ProdSortedTreapTest, BasicOperations) {
     ProdSortedTreap<int, sum_monoid<int>> t;
@@ -24,12 +32,19 @@ TEST(ProdSortedTreapTest, BasicOperations) {
     // [5, 10, 20] -> [50, 100, 200]
     EXPECT_EQ(t.prod(5, 11), 150);
     EXPECT_EQ(t.prod(0, 100), 350);
+    EXPECT_EQ(t.prod_by_index(0, 3), 350);
+    EXPECT_EQ(t.prod_by_index(1, 3), 300);
+    EXPECT_EQ(t.prod_by_index(2, 2), 0);
     EXPECT_EQ(t.all_prod(), 350);
+
+    EXPECT_EQ(t.kth(0), 5);
+    EXPECT_EQ(t.kth(2), 20);
 
     t.insert(10, 100);  // multiple keys
     EXPECT_EQ(t.count(10), 2);
     const auto& const_t = t;
     EXPECT_EQ(const_t.count(10), 2);
+    EXPECT_EQ(const_t.kth(2), 10);
     EXPECT_EQ(t.prod(10, 11), 200);
 
     t.erase(10);  // erase one
@@ -69,4 +84,14 @@ TEST(ProdSortedTreapTest, EraseAllReleasesNodes) {
 
     EXPECT_TRUE(t.empty());
     EXPECT_EQ(Treap::d.size(), initial_pool_size);
+}
+
+TEST(ProdSortedTreapTest, ProductByIndexPreservesOrder) {
+    ProdSortedTreap<int, concat_monoid> t;
+    t.insert(1, "a");
+    t.insert(3, "c");
+    t.insert(2, "b");
+
+    EXPECT_EQ(t.prod_by_index(0, 3), "abc");
+    EXPECT_EQ(t.prod_by_index(1, 3), "bc");
 }

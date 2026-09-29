@@ -37,6 +37,22 @@ void apply(const K& lower, const K& upper, const F& f);
 - 区間 `[lower, upper)` に含まれるキーを持つ要素に対して、作用素 `f` を適用します。
 - **計算量**: $O(\log N)$
 
+### kth
+```cpp
+K kth(i32 k) const;
+```
+- 0-indexedで `k` 番目に小さいキーを取得します。Compareによって等価なキーの相対順序は保証しません。遅延作用はキー順に影響しません。
+- **制約**: $0 \le k < \text{size}()$
+- **計算量**: 期待 $O(\log N)$
+
+### prod_by_index
+```cpp
+S prod_by_index(i32 l, i32 r);
+```
+- 順位区間 $[l, r)$ に含まれる要素の積を取得します。
+- **制約**: $0 \le l \le r \le \text{size}()$
+- **計算量**: 期待 $O(\log N)$
+
 ### begin / end
 ```cpp
 iterator begin() const;

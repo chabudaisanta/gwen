@@ -42,6 +42,16 @@ TEST(LazySortedTreapTest, BasicOperations) {
     EXPECT_EQ(p_all.val.val(), 30);  // 7 + 13 + 10
     EXPECT_EQ(p_all.len.val(), 3);
 
+    auto p_index = t.prod_by_index(0, 2);
+    EXPECT_EQ(p_index.val.val(), 20);  // 7 + 13
+    EXPECT_EQ(p_index.len.val(), 2);
+    auto p_empty = t.prod_by_index(1, 1);
+    EXPECT_EQ(p_empty.val.val(), 0);
+    EXPECT_EQ(p_empty.len.val(), 0);
+
+    EXPECT_EQ(t.kth(0), 5);
+    EXPECT_EQ(t.kth(2), 20);
+
     auto it_begin = t.begin();
     EXPECT_NE(it_begin, t.end());
     EXPECT_EQ(*it_begin, 5);
@@ -59,6 +69,7 @@ TEST(LazySortedTreapTest, BasicOperations) {
     const auto& const_t = t;
     EXPECT_EQ(const_t.all_prod().val.val(), 30);
     EXPECT_EQ(const_t.count(10), 1);
+    EXPECT_EQ(const_t.kth(1), 10);
 }
 
 TEST(LazySortedTreapTest, EraseAllReleasesNodes) {
