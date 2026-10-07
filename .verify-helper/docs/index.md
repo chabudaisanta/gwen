@@ -102,6 +102,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [エッジ (edge.hpp)](include/gwen/graph/edge.hpp)
 - [単一始点最短経路 (dijkstra.hpp)](include/gwen/graph/dijkstra.hpp)
 - [HL分解 (hld.hpp)](include/gwen/graph/hld.hpp)
+- [全方位木 DP (rerooting.hpp)](include/gwen/graph/rerooting.hpp)
 - [重み付きUnion-Find (weighted_dsu.hpp)](include/gwen/graph/weighted_dsu.hpp)
 - [森のLCA・ダブリング (forest.hpp)](include/gwen/graph/forest.hpp)
 - [木のLCA・ダブリング (tree_lca.hpp)](include/gwen/graph/tree_lca.hpp)
