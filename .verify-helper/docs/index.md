@@ -73,6 +73,9 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [体 (field.hpp)](include/gwen/alge/field.hpp)
 - [作用付きモノイド (acted_monoid.hpp)](include/gwen/alge/acted_monoid.hpp)
 - [区間アフィン変換・区間和モノイド (range_affine_range_sum_monoid.hpp)](include/gwen/alge/range_affine_range_sum_monoid.hpp)
+- [区間加算・区間和モノイド (range_add_range_sum_monoid.hpp)](include/gwen/alge/range_add_range_sum_monoid.hpp)
+- [区間加算・区間最小値モノイド (range_add_range_min_monoid.hpp)](include/gwen/alge/range_add_range_min_monoid.hpp)
+- [区間加算・区間最大値モノイド (range_add_range_max_monoid.hpp)](include/gwen/alge/range_add_range_max_monoid.hpp)
 
 ### 平衡二分探索木 (BBST)
 - [ImplicitTreap (implicit_treap.hpp)](include/gwen/bbst/implicit_treap.hpp)
@@ -110,6 +113,10 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 
 ### クエリ (Query)
 - [Range Add Update Sum (range_add_update_sum.hpp)](include/gwen/query/range_add_update_sum.hpp)
+- [Range Add Range Sum (range_add_range_sum.hpp)](include/gwen/query/range_add_range_sum.hpp)
+- [Range Add Range Min (range_add_range_min.hpp)](include/gwen/query/range_add_range_min.hpp)
+- [Range Add Range Max (range_add_range_max.hpp)](include/gwen/query/range_add_range_max.hpp)
+- [Range Min (range_min.hpp)](include/gwen/query/range_min.hpp)
 - [Mo's Algorithm (mo.hpp)](include/gwen/query/mo.hpp)
 - [SWAG (swag.hpp)](include/gwen/query/swag.hpp)
 

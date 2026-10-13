@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "gwen/ds/segment_tree.hpp"
+#include "gwen/query/range_min.hpp"
 #include "gwen/types.hpp"
 
 using namespace std;
@@ -16,7 +16,7 @@ int main() {
     i32 N, Q;
     cin >> N >> Q;
 
-    SegmentTree<min_monoid<i32>> Seg(N);
+    RangeMin<i32> Seg(N);
     while (Q--) {
         i32 t, a, b;
         cin >> t >> a >> b;
