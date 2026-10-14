@@ -1,3 +1,4 @@
+#define GITHUB "https://github.com/chabudaisanta/gwen"
 #pragma once
 #ifdef LOCAL
 #define _GLIBCXX_DEBUG

@@ -117,6 +117,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [Range Add Range Min (range_add_range_min.hpp)](include/gwen/query/range_add_range_min.hpp)
 - [Range Add Range Max (range_add_range_max.hpp)](include/gwen/query/range_add_range_max.hpp)
 - [Range Min (range_min.hpp)](include/gwen/query/range_min.hpp)
+- [Range Max (range_max.hpp)](include/gwen/query/range_max.hpp)
 - [Mo's Algorithm (mo.hpp)](include/gwen/query/mo.hpp)
 - [SWAG (swag.hpp)](include/gwen/query/swag.hpp)
 
