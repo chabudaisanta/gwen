@@ -1,4 +1,3 @@
-#define GITHUB "https://github.com/chabudaisanta/gwen"
 #pragma once
 #ifdef LOCAL
 #define _GLIBCXX_DEBUG
@@ -7,6 +6,8 @@
 #define NDEBUG
 #endif
 #endif
+
+#define GITHUB "https://github.com/chabudaisanta/gwen"
 
 // STL includes
 #include <bits/stdc++.h>
