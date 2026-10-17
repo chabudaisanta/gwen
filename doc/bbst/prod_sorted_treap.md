@@ -113,6 +113,16 @@ iterator upper_bound(const K& x) const;
 - 指定したキー `x` より真に大きい最初の要素を指すイテレータを返します。
 - **計算量**: $O(\log N)$
 
+### **dump**
+
+```cpp
+std::string dump() const;
+```
+
+要素数と、キー順に並べたキー・値の組を文字列として返します。`DUMP_SIZE_LIMIT` が定義されている場合は、出力する組の数を制限します。
+
+- **計算量**: $O(N)$
+
 ### 最大・最小要素の取得について
 `largest` や `smallest` のような専用のメソッドの代わりに、イテレータ演算を利用して前後の要素にアクセスできます。
 - `x` 以下の最大の要素: `auto it = t.upper_bound(x); if (it != t.begin()) --it;`

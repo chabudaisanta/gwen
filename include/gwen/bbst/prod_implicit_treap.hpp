@@ -1,10 +1,13 @@
 #pragma once
 
 #include <cassert>
+#include <format>
+#include <string>
 #include <utility>
 #include <vector>
 
 #include "gwen/alge/monoid.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
@@ -243,6 +246,15 @@ public:
         res.reserve(size());
         to_vec_(root, res);
         return res;
+    }
+
+    /**
+     * @brief Treap の論理要素列を文字列として返す。
+     * @return 要素数と要素列の文字列表現
+     */
+    std::string dump() const {
+        std::vector<S> vec = const_cast<ProdImplicitTreap*>(this)->to_vec();
+        return std::format("ProdImplicitTreap{{\n  size = {},\n  data = {}\n}}", size(), internal::format_range(vec));
     }
 
 private:

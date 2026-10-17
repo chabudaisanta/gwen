@@ -1,12 +1,15 @@
 #pragma once
 
 #include <cassert>
+#include <format>
 #include <functional>
 #include <optional>
+#include <string>
 #include <utility>
 #include <vector>
 
 #include "gwen/alge/monoid.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 #include "gwen/utils/xorshift.hpp"
@@ -379,6 +382,22 @@ public:
             }
         }
         return iterator(res, this);
+    }
+
+    /**
+     * @brief キーと値を昇順に並べた論理要素列を文字列として返す。
+     * @return 要素数とキー・値の列の文字列表現
+     */
+    std::string dump() const {
+        std::vector<std::string> entries;
+        auto collect = [&](auto&& self, tree t) -> void {
+            if (t == NIL) return;
+            self(self, d[t].left);
+            entries.push_back(std::format("({}, {})", d[t].key, d[t].val));
+            self(self, d[t].right);
+        };
+        collect(collect, root);
+        return std::format("ProdSortedTreap{{\n  size = {},\n  data = {}\n}}", size(), internal::format_range(entries));
     }
 
 private:

@@ -118,14 +118,22 @@ git diff
 
 ## 8. 今後の候補
 
-優先度を固定しない改善候補です。実装に着手するときは、この一覧ではなく当該変更の作業記録で設計と検証計画を明確にします。
+以下は公開ヘッダーの一覧をもとにした未実装候補です。利用頻度と既存機能との重なりを見て整理しており、実装順を確定するものではありません。着手時は個別の作業記録で対象範囲、API、Verify先を決めます。
 
-- 検証基盤: 既存モジュールの competitive-verifier 向け verify とランダム化単体テストの拡充。
-- dump: 各データ構造の dump 対応を進める。
-- ハッシュ: `hash/zobrist.hpp` の設計改善・実装。
-- 幾何: 凸包、偏角ソート、線分交差、多角形操作。
-- データ構造: 永続データ構造、Static RMQ、SegTree Beats、両端優先度付きキュー、Binary Trie、Splay Tree、区間 set、連想 Treap、平方分割。
-- グラフ・木: 木の基本アルゴリズム、Rerooting、SCC と DAG 縮約、Range Edge Graph。
-- 文字列: Suffix Array、LCP、Z-algorithm、Manacher、Aho-Corasick。
-- 数学: NTT/FFT、形式的冪級数、Stern-Brocot Tree、Barrett reduction、任意法の二項係数。
-- ユーティリティ: 高速ハッシュマップ、Zobrist Hash、型ハッシュ、FastIO、多次元配列、特殊クエリ。
+### 基礎アルゴリズムの補完
+
+- グラフ: 通常のDSU、BFS・0-1 BFS、トポロジカルソート、SCCとDAG縮約、最小全域木、最大流。
+- 文字列: Z-algorithm、Manacher、Suffix ArrayとLCP、Aho-Corasick。
+
+### データ構造と領域機能の拡張
+
+- データ構造: Static RMQ、永続データ構造、SegTree Beats、Binary Trie、区間 set、平方分割。
+- グラフ: Range Edge Graph。
+- 幾何: 偏角ソート、線分交差判定、多角形の基本操作。
+- 数学: 任意法の畳み込み、任意法の二項係数、Barrett reduction。
+
+### 保守・補助機能
+
+- 検証基盤: 既存モジュールの competitive-verifier 対応とランダム化単体テストを拡充する。
+- dump: 各データ構造の `dump()` 対応を進める。
+- ハッシュとユーティリティ: Zobrist Hash、高速ハッシュマップ、型ハッシュ、FastIO、多次元配列。
