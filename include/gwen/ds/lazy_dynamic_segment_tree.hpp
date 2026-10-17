@@ -1,8 +1,12 @@
 #pragma once
 
 #include <cassert>
+#include <format>
+#include <string>
+#include <vector>
 
 #include "gwen/alge/acted_monoid.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 
@@ -139,6 +143,26 @@ public:
         assert(0 <= l && l <= r && r <= n);
         if (l >= r) return;
         root = apply_(root, 0, n, l, r, f);
+    }
+
+    /**
+     * @brief 遅延評価付き動的セグメント木の状態を文字列として返す
+     * @details ノードごとの区間、集約値、未伝播の作用を出力する。
+     * @return 木の定義域と割り当て済みノードの文字列表現
+     */
+    std::string dump() const {
+        std::vector<std::string> nodes;
+        auto collect = [&](auto&& self, tree t, i64 l, i64 r) -> void {
+            if (t == NIL) return;
+            nodes.push_back(std::format("[{}, {}){{value={}, lazy={}}}", l, r, d[t].val, d[t].lz));
+            if (r - l == 1) return;
+            i64 m = l + (r - l) / 2;
+            self(self, d[t].left, l, m);
+            self(self, d[t].right, m, r);
+        };
+        collect(collect, root, 0, n);
+        return std::format("LazyDynamicSegmentTree{{\n  N = {},\n  size = {},\n  nodes = {}\n}}", n, nodes.size(),
+                           internal::format_range(nodes));
     }
 };
 

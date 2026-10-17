@@ -2,10 +2,13 @@
 
 #include <algorithm>
 #include <concepts>
+#include <format>
 #include <optional>
+#include <string>
 #include <vector>
 
 #include "gwen/ds/bit_vector.hpp"
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -184,6 +187,14 @@ template <std::integral T> struct WaveletMatrix {
      * @return 配列の長さ
      */
     i32 size() const { return n; }
+
+    /**
+     * @brief 元の整数列を文字列として返す
+     * @return 要素数と元の整数列の文字列表現
+     */
+    std::string dump() const {
+        return std::format("WaveletMatrix{{\n  N = {},\n  data = {}\n}}", n, internal::format_range(a));
+    }
 };
 
 }  // namespace gwen

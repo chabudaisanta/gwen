@@ -2,9 +2,12 @@
 
 #include <algorithm>
 #include <cassert>
+#include <format>
 #include <ranges>
+#include <string>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 #include "gwen/utils/node_pool.hpp"
 
@@ -171,6 +174,28 @@ public:
             if (cur == NIL) break;
         }
         return ret;
+    }
+
+    /**
+     * @brief 登録されている文字列と個数を文字列として返す
+     * @return Trie 内の登録内容の文字列表現
+     */
+    std::string dump() const {
+        std::vector<std::string> entries;
+        std::string word;
+        auto collect = [&](auto&& self, tree t) -> void {
+            if (d[t].cnt > 0) entries.push_back(std::format("\"{}\": {}", word, d[t].cnt));
+            for (i32 i = 0; i < Width; ++i) {
+                tree child = d[t].ch[i];
+                if (child == NIL) continue;
+                word.push_back(static_cast<char>(Offset + i));
+                self(self, child);
+                word.pop_back();
+            }
+        };
+        collect(collect, root);
+        return std::format("Trie{{\n  size = {},\n  entries = {}\n}}", d[root].subtree_cnt,
+                           internal::format_range(entries));
     }
 };
 

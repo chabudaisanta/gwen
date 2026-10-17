@@ -1,9 +1,12 @@
 #pragma once
 #include <array>
 #include <cassert>
+#include <format>
+#include <string>
 #include <utility>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -184,6 +187,17 @@ public:
             }
         }
         return res;
+    }
+
+    /**
+     * @brief 現在の見た目の行列を文字列として返す
+     * @return 行列サイズと要素の文字列表現
+     */
+    std::string dump() const {
+        std::vector<std::string> rows;
+        for (const auto& row : to_vec()) rows.push_back(internal::format_range(row));
+        return std::format("TransformableMatrix{{\n  H = {},\n  W = {},\n  data = {}\n}}", h(), w(),
+                           internal::format_range(rows));
     }
 };
 

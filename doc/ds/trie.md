@@ -134,3 +134,16 @@ template <std::ranges::range Container> std::vector<tree> path(const Container& 
 **計算量**
 
 - $O(\lvert S\rvert)$
+
+### **dump**
+
+```cpp
+std::string dump() const
+```
+
+登録されている文字列と各文字列の登録数を文字列として返します。`DUMP_SIZE_LIMIT` が定義されている場合は、出力する文字列数を制限します。
+
+**計算量**
+
+- 時間計算量: ノード数を $V$、文字の種類数を $W$ として $O(VW)$
+- 空間計算量: $O(V)$

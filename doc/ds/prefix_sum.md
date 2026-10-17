@@ -65,3 +65,15 @@ T get(i32 l, i32 r, i32 u, i32 d) const
 **計算量**
 
 - $O(1)$
+
+### **dump**
+
+```cpp
+std::string PrefixSum2d<T>::dump() const
+```
+
+行数、列数、内部の累積和配列を文字列として返します。`DUMP_SIZE_LIMIT` が定義されている場合は、各行と行数の出力を制限します。
+
+**計算量**
+
+- $O(HW)$

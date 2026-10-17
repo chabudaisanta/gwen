@@ -1,7 +1,10 @@
 #pragma once
 #include <cassert>
+#include <format>
+#include <string>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -53,6 +56,18 @@ template <typename T> struct PrefixSum2d {
         assert(0 <= l && l <= r && r <= W);
         assert(0 <= u && u <= d && d <= H);
         return dat[d][r] - dat[d][l] - dat[u][r] + dat[u][l];
+    }
+
+    /**
+     * @brief 2次元累積和の状態を文字列として返す
+     * @return 行数、列数、累積和配列の文字列表現
+     */
+    std::string dump() const {
+        std::vector<std::string> rows;
+        rows.reserve(dat.size());
+        for (const auto& row : dat) rows.push_back(internal::format_range(row));
+        return std::format("PrefixSum2d{{\n  H = {},\n  W = {},\n  data(prefix_sum) = {}\n}}", H, W,
+                           internal::format_range(rows));
     }
 };
 

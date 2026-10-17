@@ -82,6 +82,13 @@ usize capacity() const
 要素数、空かどうか、現在確保されている容量を返します。
 - **計算量**: $O(1)$
 
+### **dump**
+```cpp
+std::string dump() const
+```
+要素数と先頭からの論理要素列を文字列として返します。`DUMP_SIZE_LIMIT` が定義されている場合は、出力する要素数を制限します。
+- **計算量**: $O(\mathrm{size()})$
+
 ### イテレータ
 ```cpp
 iterator begin()

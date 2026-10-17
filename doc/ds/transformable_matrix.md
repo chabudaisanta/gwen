@@ -102,3 +102,13 @@ std::vector<std::vector<T>> to_vec() const
 現在の見た目における 2 次元配列を構築して返します。
 
 - **計算量**: $O(HW)$
+
+### **dump**
+
+```cpp
+std::string dump() const
+```
+
+現在の見た目の行列サイズと要素を文字列として返します。`DUMP_SIZE_LIMIT` が定義されている場合は、各行と行数の出力を制限します。
+
+- **計算量**: $O(HW)$

@@ -85,3 +85,14 @@ void LazyDynamicSegmentTree<M>::apply(gwen::i64 l, gwen::i64 r, typename M::F f)
 
 **計算量**
 - 時間・空間計算量: $O(\log n)$
+
+### **dump**
+
+```cpp
+std::string LazyDynamicSegmentTree<M>::dump() const
+```
+
+定義域の大きさ、割り当て済みノード数、各ノードの区間・集約値・未伝播の作用を文字列として返します。`DUMP_SIZE_LIMIT` が定義されている場合は、出力するノード数を制限します。
+
+**計算量**
+- 時間・空間計算量: 割り当て済みノード数を $K$ として $O(K)$

@@ -2,12 +2,16 @@
 
 #include <algorithm>
 #include <cassert>
+#include <format>
 #include <initializer_list>
 #include <iterator>
 #include <memory>
+#include <string>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -422,6 +426,17 @@ public:
      * @return usize 確保済みの最大要素数
      */
     usize capacity() const noexcept { return cap_; }
+
+    /**
+     * @brief Deque の論理要素列を文字列として返す
+     * @return 要素数と先頭からの要素列の文字列表現
+     */
+    std::string dump() const {
+        std::vector<std::string> elements;
+        elements.reserve(size_);
+        for (usize i = 0; i < size_; ++i) elements.push_back(std::format("{}", (*this)[i]));
+        return std::format("Deque{{\n  size = {},\n  data = {}\n}}", size_, internal::format_range(elements));
+    }
 
     /**
      * @brief 全要素を削除する

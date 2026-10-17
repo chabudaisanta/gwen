@@ -3,8 +3,11 @@
 #include <algorithm>
 #include <bit>
 #include <cassert>
+#include <format>
+#include <string>
 #include <vector>
 
+#include "gwen/dump.hpp"
 #include "gwen/types.hpp"
 
 namespace gwen {
@@ -124,6 +127,16 @@ struct BitVector {
      * @return ビット長
      */
     i32 size() const { return n; }
+
+    /**
+     * @brief ビット列の状態を文字列として返す
+     * @return ビット長と論理ビット列の文字列表現
+     */
+    std::string dump() const {
+        std::vector<i32> bits(n);
+        for (i32 i = 0; i < n; ++i) bits[i] = get(i) ? 1 : 0;
+        return std::format("BitVector{{\n  N = {},\n  data = {}\n}}", n, internal::format_range(bits));
+    }
 };
 
 }  // namespace gwen
