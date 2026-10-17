@@ -61,6 +61,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [カウンティングソート (counting_sort.hpp)](include/gwen/algo/counting_sort.hpp)
 - [最長増加部分列 (lis.hpp)](include/gwen/algo/lis.hpp)
 - [過半数要素 (majority_vote.hpp)](include/gwen/algo/majority_vote.hpp)
+- [Manacher (manacher.hpp)](include/gwen/algo/manacher.hpp)
 
 ### ハッシュ (Hash)
 - [ローリングハッシュ (rolling_hash.hpp)](include/gwen/hash/rolling_hash.hpp)
@@ -131,6 +132,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 ### オートマトン (Automaton)
 - [オートマトン (automaton.hpp)](include/gwen/automaton/automaton.hpp)
 - [オートマトンファクトリ (factory.hpp)](include/gwen/automaton/factory.hpp)
+- [Aho-Corasick (aho_corasick.hpp)](include/gwen/automaton/aho_corasick.hpp)
 - [桁dp (digit_dp.hpp)](include/gwen/automaton/digit_dp.hpp)
 - [重み付きオートマトン (weighted_automaton.hpp)](include/gwen/automaton/weighted_automaton.hpp)
 - [重み付きオートマトンファクトリ (weighted_automaton_factory.hpp)](include/gwen/automaton/weighted_automaton_factory.hpp)
