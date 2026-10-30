@@ -90,6 +90,8 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [累積和 (prefix_sum.hpp)](include/gwen/ds/prefix_sum.hpp)
 - [Fenwick Tree (fenwick_tree.hpp)](include/gwen/ds/fenwick_tree.hpp)
 - [Segment Tree (segment_tree.hpp)](include/gwen/ds/segment_tree.hpp)
+- [Sparse Table (sparse_table.hpp)](include/gwen/ds/sparse_table.hpp)
+- [Disjoint Sparse Table (disjoint_sparse_table.hpp)](include/gwen/ds/disjoint_sparse_table.hpp)
 - [Lazy Segment Tree (lazy_segment_tree.hpp)](include/gwen/ds/lazy_segment_tree.hpp)
 - [Dynamic Segment Tree (dynamic_segment_tree.hpp)](include/gwen/ds/dynamic_segment_tree.hpp)
 - [Lazy Dynamic Segment Tree (lazy_dynamic_segment_tree.hpp)](include/gwen/ds/lazy_dynamic_segment_tree.hpp)
