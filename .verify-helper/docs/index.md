@@ -113,6 +113,7 @@ Chaby(https://x.com/chbdi)の競技プログラミング用 C++23 ライブラ�
 - [重み付きUnion-Find (weighted_dsu.hpp)](include/gwen/graph/weighted_dsu.hpp)
 - [森のLCA・ダブリング (forest.hpp)](include/gwen/graph/forest.hpp)
 - [木のLCA・ダブリング (tree_lca.hpp)](include/gwen/graph/tree_lca.hpp)
+- [木の直径・中心 (tree_diameter.hpp)](include/gwen/graph/tree_diameter.hpp)
 
 ### クエリ (Query)
 - [Range Add Update Sum (range_add_update_sum.hpp)](include/gwen/query/range_add_update_sum.hpp)
