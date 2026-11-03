@@ -59,4 +59,18 @@ template <std::integral T> inline bool isOut(T x, T l, T r) { return (x < l) || 
  */
 template <std::integral T> inline bool isOverlap(T l0, T r0, T l1, T r1) { return !(r1 <= l0 || r0 <= l1); }
 
+/** *
+ * @brief コンパイル時計算のpow
+*/
+template<typename T0, std::integral T1>
+constexpr T0 pow_(T0 k, T1 n) {
+    T0 res = T(1);
+    while(n) {
+        if(n & 1) res *= k;
+        k *= k;
+        n >>= 1;
+    }
+    return res;
+}
+
 }  // namespace gwen
