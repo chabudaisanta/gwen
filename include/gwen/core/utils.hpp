@@ -64,7 +64,7 @@ template <std::integral T> inline bool isOverlap(T l0, T r0, T l1, T r1) { retur
 */
 template<typename T0, std::integral T1>
 constexpr T0 pow_(T0 k, T1 n) {
-    T0 res = T(1);
+    T0 res = T0(1);
     while(n) {
         if(n & 1) res *= k;
         k *= k;
