@@ -1,4 +1,6 @@
 #define PROBLEM "https://yukicoder.me/problems/no/599"
+// テストケースの期待出力で末尾改行の有無が混在するため、誤差ゼロで数値を比較する。
+#define ERROR 0
 
 #include <iostream>
 #include <vector>
